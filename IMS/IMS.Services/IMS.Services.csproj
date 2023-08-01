@@ -64,12 +64,17 @@
   <ItemGroup>
     <Compile Include="Class1.cs" />
     <Compile Include="Helpers\FluentNhibernateConfiguration.cs" />
+    <Compile Include="PaymentTypeService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\IMS.BusinessModel\IMS.BusinessModel.csproj">
+      <Project>{077AD203-18E3-4803-8BFD-2C83E5561D1F}</Project>
+      <Name>IMS.BusinessModel</Name>
+    </ProjectReference>
     <ProjectReference Include="..\IMS.Dao\IMS.Dao.csproj">
       <Project>{00498425-A8BB-434B-AA08-A05734CA054D}</Project>
       <Name>IMS.Dao</Name>

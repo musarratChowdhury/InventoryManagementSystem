@@ -62,6 +62,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BaseDao.cs" />
     <Compile Include="Class1.cs" />
     <Compile Include="Mappings\BillMap.cs" />
     <Compile Include="Mappings\BillTypeMap.cs" />
@@ -73,6 +74,7 @@
     <Compile Include="Mappings\ShipmentTypeMap.cs" />
     <Compile Include="Mappings\UnitOfMeasurementMap.cs" />
     <Compile Include="Mappings\VendorTypeMap.cs" />
+    <Compile Include="PaymentTypeDao.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

@@ -1,0 +1,52 @@
+﻿using IMS.BusinessModel.Entity;
+using NHibernate;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace IMS.Dao
+{
+    public interface IBaseDao<TEntity> where TEntity : BaseEntity
+    {
+        TEntity GetById(long id);
+        IEnumerable<TEntity> GetAll();
+        void Add(TEntity entity);
+        void Update(TEntity entity);
+        void Delete(TEntity entity);
+    }
+
+    public class BaseDao<TEntity> : IBaseDao<TEntity> where TEntity : BaseEntity
+    {
+        private readonly ISession _session;
+
+        public BaseDao(ISession session)
+        {
+            _session = session;
+        }
+
+        public TEntity GetById(long id)
+        {
+            return _session.Get<TEntity>(id);
+        }
+
+        public IEnumerable<TEntity> GetAll()
+        {
+            return _session.Query<TEntity>().ToList();
+        }
+
+        public void Add(TEntity entity)
+        {
+            _session.Save(entity);
+        }
+
+        public void Update(TEntity entity)
+        {
+            _session.Update(entity);
+        }
+
+        public void Delete(TEntity entity)
+        {
+            _session.Delete(entity);
+        }
+    }
+
+}
