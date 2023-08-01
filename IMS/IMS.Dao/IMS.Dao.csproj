@@ -63,17 +63,24 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Class1.cs" />
+    <Compile Include="Mappings\BillMap.cs" />
+    <Compile Include="Mappings\BillTypeMap.cs" />
+    <Compile Include="Mappings\CashBankMap.cs" />
+    <Compile Include="Mappings\CustomerTypeMap.cs" />
+    <Compile Include="Mappings\InvoiceTypeMap.cs" />
     <Compile Include="Mappings\PaymentTypeMap.cs" />
+    <Compile Include="Mappings\ProductCategoryMap.cs" />
     <Compile Include="Mappings\ShipmentTypeMap.cs" />
+    <Compile Include="Mappings\UnitOfMeasurementMap.cs" />
+    <Compile Include="Mappings\VendorTypeMap.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup />
   <ItemGroup>
     <ProjectReference Include="..\IMS.BusinessModel\IMS.BusinessModel.csproj">
-      <Project>{0A174ACF-EB2A-43F7-8AEF-AB0C12FCE082}</Project>
+      <Project>{077AD203-18E3-4803-8BFD-2C83E5561D1F}</Project>
       <Name>IMS.BusinessModel</Name>
     </ProjectReference>
   </ItemGroup>
