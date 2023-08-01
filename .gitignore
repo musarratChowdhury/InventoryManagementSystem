@@ -36,3 +36,10 @@ src/Applications/Hms.Api/Logs/*
 **/Logs/*
 # Visual Studio 2015
 .vs/
+
+**/obj
+**/bin
+**/Prep
+**/*.user
+**/Logs
+**/temp
