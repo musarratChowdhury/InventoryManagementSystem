@@ -12,10 +12,5 @@ namespace IMS.BusinessModel.Entity
         public virtual BillType BillType { get; set; }
         //public virtual PurchaseOrder {get;set;}
         //public virtual PurchaseOrderId {get; set;}
-        public virtual long CreatedBy { get; set; }
-        public virtual int PaymentStatus { get; set; }
-        public virtual bool IsArchived { get; set; }
-        public virtual long? ModifiedBy { get; set; }
-        public virtual DateTime? ModificationDate { get; set; }
     }
 }
