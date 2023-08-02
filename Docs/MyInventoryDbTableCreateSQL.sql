@@ -127,6 +127,7 @@ CREATE TABLE CashBank(
 );
 
 
+use MyInventoryDb;
 
 
 CREATE TABLE Customer (
@@ -148,7 +149,7 @@ CREATE TABLE Customer (
     CONSTRAINT FK_Customer_CustomerType FOREIGN KEY (CustomerTypeId) REFERENCES CustomerType(Id)
 );
 
-
+use MyInventoryDb;
 -- Create SalesOrder table with foreign key constraints
 CREATE TABLE SalesOrder (
     Id BIGINT PRIMARY KEY,
@@ -164,7 +165,7 @@ CREATE TABLE SalesOrder (
     ModificationDate DATE,
     Rank INT NOT NULL  DEFAULT(0),
     BusinessId NVARCHAR(MAX),
-    VersionNumber INT NOT NULL,
+    Version INT NOT NULL,
     CONSTRAINT FK_SalesOrder_Customer FOREIGN KEY (CustomerId) REFERENCES Customer(Id)
 );
 
@@ -183,7 +184,7 @@ CREATE TABLE Invoice (
     ModificationDate DATE,
     Rank INT NOT NULL  DEFAULT(0),
     BusinessId NVARCHAR(MAX),
-    VersionNumber INT NOT NULL,
+    Version INT NOT NULL,
     CONSTRAINT FK_Invoice_SalesOrder FOREIGN KEY (SalesOrderId) REFERENCES SalesOrder(Id),
     CONSTRAINT FK_Invoice_InvoiceType FOREIGN KEY (InvoiceTypeId) REFERENCES InvoiceType(Id)
 );
@@ -200,7 +201,7 @@ CREATE TABLE Shipment (
     ModificationDate DATE,
     Rank INT NOT NULL  DEFAULT(0),
     BusinessId NVARCHAR(MAX),
-    VersionNumber INT NOT NULL,
+    Version INT NOT NULL,
     CONSTRAINT FK_Shipment_SalesOrder FOREIGN KEY (SalesOrderId) REFERENCES SalesOrder(Id), 
     CONSTRAINT FK_Shipment_ShipmentType FOREIGN KEY (ShipmentTypeId) REFERENCES ShipmentType(Id)
 );
@@ -219,7 +220,7 @@ CREATE TABLE PaymentReceived (
     ModificationDate DATE,
     Rank INT NOT NULL  DEFAULT(0),
     BusinessId NVARCHAR(MAX),
-    VersionNumber INT NOT NULL,
+    Version INT NOT NULL,
     CONSTRAINT FK_PaymentReceived_Invoice FOREIGN KEY (InvoiceId) REFERENCES Invoice(Id),
     CONSTRAINT FK_PaymentReceived_PaymentType FOREIGN KEY (PaymentTypeId) REFERENCES PaymentType(Id)
 );
@@ -337,9 +338,9 @@ CREATE TABLE Product (
 --CREATE TABLE UserProfile (
 --    UserProfileId BIGINT PRIMARY KEY,
 --    AspNetUserId BIGINT,
---    FirstName NVARCHAR(MAX),
---    LastName NVARCHAR(MAX),
+--    FirstName NVARCHAR(100),
+--    LastName NVARCHAR(100),
 --    ProfilePicture NVARCHAR(MAX),
---    CONSTRAINT FK_UserProfile_AspNetUser FOREIGN KEY (AspNetUserId) REFERENCES AspNetUser(Id)
+--    CONSTRAINT FK_UserProfile_AspNetUser FOREIGN KEY (AspNetUserId) REFERENCES AspNetUsers(Id)
 --);
 

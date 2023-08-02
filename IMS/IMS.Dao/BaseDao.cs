@@ -7,46 +7,46 @@ namespace IMS.Dao
 {
     public interface IBaseDao<TEntity> where TEntity : BaseEntity
     {
-        TEntity GetById(long id);
-        IEnumerable<TEntity> GetAll();
-        void Add(TEntity entity);
-        void Update(TEntity entity);
-        void Delete(TEntity entity);
+        //TEntity GetById(long id);
+        IEnumerable<TEntity> GetAll(ISession Session);
+        //void Add(TEntity entity);
+        //void Update(TEntity entity);
+        //void Delete(TEntity entity);
     }
 
     public class BaseDao<TEntity> : IBaseDao<TEntity> where TEntity : BaseEntity
     {
-        private readonly ISession _session;
+        //private readonly ISession _session;
 
-        public BaseDao(ISession session)
+        public BaseDao()
         {
-            _session = session;
+          
         }
 
-        public TEntity GetById(long id)
+        //public TEntity GetById(long id)
+        //{
+        //    return _session.Get<TEntity>(id);
+        //}
+
+        public IEnumerable<TEntity> GetAll(ISession session)
         {
-            return _session.Get<TEntity>(id);
+            return session.Query<TEntity>().ToList();
         }
 
-        public IEnumerable<TEntity> GetAll()
-        {
-            return _session.Query<TEntity>().ToList();
-        }
+        //public void Add(TEntity entity)
+        //{
+        //    _session.Save(entity);
+        //}
 
-        public void Add(TEntity entity)
-        {
-            _session.Save(entity);
-        }
+        //public void Update(TEntity entity)
+        //{
+        //    _session.Update(entity);
+        //}
 
-        public void Update(TEntity entity)
-        {
-            _session.Update(entity);
-        }
-
-        public void Delete(TEntity entity)
-        {
-            _session.Delete(entity);
-        }
+        //public void Delete(TEntity entity)
+        //{
+        //    _session.Delete(entity);
+        //}
     }
 
 }

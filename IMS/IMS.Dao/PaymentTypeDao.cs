@@ -16,7 +16,7 @@ namespace IMS.Dao
 
     public class PaymentTypeDao : BaseDao<PaymentType>, IPaymentTypeDao
     {
-        public PaymentTypeDao(ISession session) : base(session)
+        public PaymentTypeDao() : base()
         {
         }
 

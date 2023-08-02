@@ -1,7 +1,10 @@
 ﻿using IMS.BusinessModel.Entity;
 using IMS.Services.Helpers;
+using log4net;
+using log4net.Repository.Hierarchy;
 using System;
 using System.Linq;
+using System.Reflection;
 using System.Web;
 using System.Web.Mvc;
 
@@ -9,6 +12,8 @@ namespace IMS.WEB.Controllers
 {
     public class HomeController : Controller
     {
+        protected static readonly ILog _logger = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
+
         public ActionResult Index()
         {
             try
@@ -33,6 +38,9 @@ namespace IMS.WEB.Controllers
             {
                 ViewBag.Message = "Error: " + ex.Message;
             }
+            Console.WriteLine("hello");
+            _logger.Info("hello from home");
+
 
             return View();
         }
