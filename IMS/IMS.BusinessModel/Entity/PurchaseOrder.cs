@@ -15,5 +15,6 @@ namespace IMS.BusinessModel.Entity
 
         // Navigation property for the foreign key
         public virtual Vendor Vendor { get; set; }
+        public virtual Bill Bill { get; set; }
     }
 }

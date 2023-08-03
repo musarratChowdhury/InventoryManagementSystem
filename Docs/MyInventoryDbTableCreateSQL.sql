@@ -151,23 +151,6 @@ CREATE TABLE Customer (
 
 use MyInventoryDb;
 -- Create SalesOrder table with foreign key constraints
-CREATE TABLE SalesOrder (
-    Id BIGINT PRIMARY KEY,
-    CustomerId BIGINT NOT NULL,
-    TotalAmount DECIMAL(10, 2) NOT NULL,
-    IsArchived BIT NOT NULL DEFAULT(0),
-	InvoiceId BIGINT,
-	ShipmentStatus INT NOT NULL DEFAULT(0),
-	PaymentStatus  INT NOT NULL DEFAULT(0),
-    CreatedBy BIGINT NOT NULL,
-    CreationDate DATE NOT NULL,
-    ModifiedBy BIGINT,
-    ModificationDate DATE,
-    Rank INT NOT NULL  DEFAULT(0),
-    BusinessId NVARCHAR(MAX),
-    Version INT NOT NULL,
-    CONSTRAINT FK_SalesOrder_Customer FOREIGN KEY (CustomerId) REFERENCES Customer(Id)
-);
 
 -- Create Invoice table with foreign key constraints
 CREATE TABLE Invoice (
@@ -330,6 +313,32 @@ CREATE TABLE Product (
     Version INT NOT NULL DEFAULT(1),
     CONSTRAINT FK_Product_UnitOfMeasurement FOREIGN KEY (UnitOfMeasurementId) REFERENCES UnitOfMeasurement(Id),
     CONSTRAINT FK_Product_ProductCategory FOREIGN KEY (ProductCategoryId) REFERENCES ProductCategory(Id)
+);
+
+use MyInventoryDb;
+CREATE TABLE SalesOrderLine (
+    SalesOrderId BIGINT NOT NULL,
+    ProductId BIGINT NOT NULL,
+    Quantity INT,
+    UnitPrice DECIMAL(10, 2),
+    DiscountedAmount DECIMAL(10, 2),
+    Amount DECIMAL(10, 2),
+    Total DECIMAL(10, 2),
+    PRIMARY KEY (SalesOrderId, ProductId),
+    FOREIGN KEY (SalesOrderId) REFERENCES SalesOrder(Id),
+    FOREIGN KEY (ProductId) REFERENCES Product(ProductId)
+);
+CREATE TABLE PurchaseOrderLine (
+    PurchaseOrderId BIGINT NOT NULL,
+    ProductId BIGINT NOT NULL,
+    Quantity INT,
+    UnitPrice DECIMAL(10, 2),
+    DiscountedAmount DECIMAL(10, 2),
+    Amount DECIMAL(10, 2),
+    Total DECIMAL(10, 2),
+    PRIMARY KEY (PurchaseOrderId, ProductId),
+    FOREIGN KEY (PurchaseOrderId) REFERENCES PurchaseOrder(Id),
+    FOREIGN KEY (ProductId) REFERENCES Product(ProductId)
 );
 
 

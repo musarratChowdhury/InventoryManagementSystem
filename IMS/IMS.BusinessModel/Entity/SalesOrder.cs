@@ -16,5 +16,6 @@ namespace IMS.BusinessModel.Entity
 
         // Navigation property for the foreign key
         public virtual Customer Customer { get; set; }
+        public virtual Invoice Invoice { get; set; }
     }
 }
