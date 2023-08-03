@@ -1,6 +1,4 @@
-﻿using IMS.Services.Helpers;
-using IMS.Services;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -8,56 +6,27 @@ using System.Web.Mvc;
 
 namespace IMS.WEB.Areas.Admin.Controllers
 {
-    public class PaymentTypeController : Controller
+    public class VendorTypeController : Controller
     {
-        private IPaymentTypeService _paymentTypeService;
-
-        public PaymentTypeController()
-        {
-
-        }
-
-        public PaymentTypeController(IPaymentTypeService paymentTypeService)
-        {
-            _paymentTypeService = paymentTypeService;
-        }
-
+        // GET: Admin/VendorType
         public ActionResult Index()
         {
-            try
-            {
-                using (var session = NHibernateConfig.OpenSession())
-                {
-                    _paymentTypeService = new PaymentTypeService();
-
-                    var paymentTypes = _paymentTypeService.GetAllPaymentTypes(session);
-                    return View(paymentTypes);
-                }
-            }
-            catch (Exception ex)
-            {
-                ViewBag.Message = "Error: " + ex.Message;
-            }
-            Console.WriteLine("hello");
-            //_logger.Info("hello from home");
-
-
             return View();
         }
 
-        // GET: Admin/PaymentType/Details/5
+        // GET: Admin/VendorType/Details/5
         public ActionResult Details(int id)
         {
             return View();
         }
 
-        // GET: Admin/PaymentType/Create
+        // GET: Admin/VendorType/Create
         public ActionResult Create()
         {
             return View();
         }
 
-        // POST: Admin/PaymentType/Create
+        // POST: Admin/VendorType/Create
         [HttpPost]
         public ActionResult Create(FormCollection collection)
         {
@@ -73,13 +42,13 @@ namespace IMS.WEB.Areas.Admin.Controllers
             }
         }
 
-        // GET: Admin/PaymentType/Edit/5
+        // GET: Admin/VendorType/Edit/5
         public ActionResult Edit(int id)
         {
             return View();
         }
 
-        // POST: Admin/PaymentType/Edit/5
+        // POST: Admin/VendorType/Edit/5
         [HttpPost]
         public ActionResult Edit(int id, FormCollection collection)
         {
@@ -95,13 +64,13 @@ namespace IMS.WEB.Areas.Admin.Controllers
             }
         }
 
-        // GET: Admin/PaymentType/Delete/5
+        // GET: Admin/VendorType/Delete/5
         public ActionResult Delete(int id)
         {
             return View();
         }
 
-        // POST: Admin/PaymentType/Delete/5
+        // POST: Admin/VendorType/Delete/5
         [HttpPost]
         public ActionResult Delete(int id, FormCollection collection)
         {
