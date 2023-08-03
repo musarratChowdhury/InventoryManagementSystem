@@ -12,8 +12,8 @@ namespace IMS.BusinessModel.Entity
         public virtual DateTime InvoiceDueDate { get; set; }
         public virtual long InvoiceTypeId { get; set; }
         public virtual InvoiceType InvoiceType { get; set; }
-        public virtual SalesOrder SalesOrder { get; set; }
         public virtual long SalesOrderId { get; set; }
+        public virtual SalesOrder SalesOrder { get; set; }
 
         public virtual List<PaymentReceived> PaymentReceivedList { get; set; }
     }

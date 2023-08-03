@@ -31,6 +31,9 @@ namespace IMS.Dao.Mappings
             //    .Cascade.All() // You can specify cascade options if necessary
             //    .PropertyRef(nameof(SalesOrder.Invoice)); // Specify the property in SalesOrder that maps back to Invoice
 
+            References(x => x.SalesOrder)
+                .Column("SalesOrderId");
+
             HasMany(x => x.PaymentReceivedList) // One-to-many relationship with PaymentReceived
                 .KeyColumn("InvoiceId")
                 .Cascade.All()

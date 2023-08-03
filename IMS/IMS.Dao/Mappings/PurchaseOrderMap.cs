@@ -16,7 +16,6 @@ namespace IMS.Dao.Mappings
 
             Id(x => x.Id).Column("Id").GeneratedBy.Identity(); // Primary key
             Map(x => x.VendorId).Column("VendorId").Not.Nullable();
-            Map(x => x.BillId).Column("BillId");
             Map(x => x.PaymentStatus).Column("PaymentStatus").Not.Nullable();
             Map(x => x.TotalAmount).Column("TotalAmount").Not.Nullable();
             Map(x => x.IsArchived).Column("IsArchived").Not.Nullable();
@@ -32,8 +31,9 @@ namespace IMS.Dao.Mappings
             //    .Constrained() // Optional - adds a foreign key constraint
             //    .Cascade.All() // You can specify cascade options if necessary
             //    .PropertyRef(nameof(Bill.PurchaseOrder)); // Specify the property in Bill that maps back to PurchaseOrder
-                                                          // Note: You might need to adjust the property names if the mapping is different in Bill
-
+            // Note: You might need to adjust the property names if the mapping is different in Bill
+            References(x => x.Bill)
+                .Column("BillId");
             // BaseEntity properties
             Map(x => x.CreatedBy).Column("CreatedBy").Not.Nullable();
             Map(x => x.CreationDate).Column("CreationDate").Not.Nullable();

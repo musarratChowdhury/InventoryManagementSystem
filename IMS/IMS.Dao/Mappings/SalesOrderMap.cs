@@ -32,7 +32,9 @@ namespace IMS.Dao.Mappings
             //    .PropertyRef(nameof(Invoice.SalesOrder)) // Specify the property in Invoice that maps back to SalesOrder
             //    .Cascade.All() // You can specify cascade options if necessary
             //    .Constrained(); // Optional - adds a foreign key constraint
-                                // Note: You might need to adjust the property names if the mapping is different in Invoice
+            // Note: You might need to adjust the property names if the mapping is different in Invoice
+            References(x => x.Invoice)
+                .Column("InvoiceId");
 
             // BaseEntity properties
             Map(x => x.CreatedBy).Column("CreatedBy").Not.Nullable();

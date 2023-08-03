@@ -154,7 +154,7 @@ use MyInventoryDb;
 
 -- Create Invoice table with foreign key constraints
 CREATE TABLE Invoice (
-    Id BIGINT PRIMARY KEY,
+    Id BIGINT PRIMARY KEY IDENTITY(1,1),
     InvoiceDate DATE NOT NULL,
     InvoiceDueDate DATE NOT NULL,
     SalesOrderId BIGINT NOT NULL,
@@ -191,7 +191,7 @@ CREATE TABLE Shipment (
 
 -- Create PaymentReceived table with foreign key constraints
 CREATE TABLE PaymentReceived (
-    Id BIGINT PRIMARY KEY,
+    Id BIGINT PRIMARY KEY IDENTITY(1,1),
     PaymentDate DATE NOT NULL,
     PaymentAmount DECIMAL(10, 2) NOT NULL,
     Status INT NOT NULL,
@@ -210,7 +210,7 @@ CREATE TABLE PaymentReceived (
 
 -- Create Vendor table with foreign key constraint
 CREATE TABLE Vendor (
-    Id BIGINT PRIMARY KEY,
+    Id BIGINT PRIMARY KEY IDENTITY(1,1),
     VendorTypeId BIGINT NOT NULL,
     FirstName NVARCHAR(55) NOT NULL,
     LastName NVARCHAR(55) NOT NULL,
@@ -229,7 +229,7 @@ CREATE TABLE Vendor (
 );
 
 CREATE TABLE SalesOrder (
-    Id BIGINT PRIMARY KEY,
+    Id BIGINT PRIMARY KEY IDENTITY(1,1),
     CustomerId BIGINT NOT NULL,
     TotalAmount DECIMAL(10, 2) NOT NULL,
     IsArchived BIT NOT NULL DEFAULT(0),
@@ -248,7 +248,7 @@ CREATE TABLE SalesOrder (
 
 -- Create PurchaseOrder table with foreign key constraint
 CREATE TABLE PurchaseOrder (
-    Id BIGINT PRIMARY KEY,
+    Id BIGINT PRIMARY KEY IDENTITY(1,1),
     VendorId BIGINT NOT NULL,
 	BillId BIGINT,
 	PaymentStatus  INT NOT NULL DEFAULT(0),
@@ -266,7 +266,7 @@ CREATE TABLE PurchaseOrder (
 
 -- Create Bill table with foreign key constraint
 CREATE TABLE Bill (
-    Id BIGINT PRIMARY KEY,
+    Id BIGINT PRIMARY KEY IDENTITY(1,1),
     BillDate DATE NOT NULL,
     BillDueDate DATE NOT NULL,
     BillTypeId BIGINT NOT NULL,
@@ -287,7 +287,7 @@ CREATE TABLE Bill (
 
 -- Create PaymentVoucher table with foreign key constraints
 CREATE TABLE PaymentVoucher (
-    Id BIGINT PRIMARY KEY,
+    Id BIGINT PRIMARY KEY IDENTITY(1,1),
     PaymentDate DATE NOT NULL,
     PaymentAmount DECIMAL(10, 2) NOT NULL,
     Status INT NOT NULL,
@@ -309,7 +309,7 @@ CREATE TABLE PaymentVoucher (
 
 -- Create Product table with foreign key constraints
 CREATE TABLE Product (
-    ProductId BIGINT PRIMARY KEY,
+    Id BIGINT PRIMARY KEY IDENTITY(1,1),
     ProductName NVARCHAR(55) NOT NULL,
     ProductImageUrl NVARCHAR(100),
     UnitOfMeasurementId BIGINT NOT NULL,
@@ -355,6 +355,7 @@ CREATE TABLE PurchaseOrderLine (
     FOREIGN KEY (PurchaseOrderId) REFERENCES PurchaseOrder(Id),
     FOREIGN KEY (ProductId) REFERENCES Product(ProductId)
 );
+
 
 
 ---- Create UserProfile table with foreign key constraint
