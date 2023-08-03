@@ -68,7 +68,7 @@
   <ItemGroup>
     <Compile Include="Class1.cs" />
     <Compile Include="Helpers\FluentNhibernateConfiguration.cs" />
-    <Compile Include="PaymentTypeService.cs" />
+    <Compile Include="ConfigurationServices\PaymentTypeService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

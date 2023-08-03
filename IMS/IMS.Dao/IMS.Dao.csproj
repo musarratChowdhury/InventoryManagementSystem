@@ -85,7 +85,7 @@
     <Compile Include="Mappings\ShipmentMap.cs" />
     <Compile Include="Mappings\VendorMap.cs" />
     <Compile Include="Mappings\Configuration\VendorTypeMap.cs" />
-    <Compile Include="PaymentTypeDao.cs" />
+    <Compile Include="ConfigurationDaos\PaymentTypeDao.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

@@ -1,14 +1,20 @@
-﻿@Model List<IMS.Dao.PaymentTypeDao>
-
-@{
-    ViewBag.Title = "Index";
+﻿@{
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
 }
 
-<h1>List of Data</h1>
-<ul id="data-list">
-    @foreach (var item in Model)
-    {
-        <li>@item.Id: @item.Name</li>
-    }
-</ul>
+<!-- View content goes here -->
 
+
+@Model List<IMS.Dao.PaymentTypeDao>
+
+    @{
+        ViewBag.Title = "Index";
+    }
+
+    <h1>List of Data</h1>
+    <ul id="data-list">
+        @foreach (var item in Model)
+        {
+            <li>@item.Id: @item.Name</li>
+        }
+    </ul>
