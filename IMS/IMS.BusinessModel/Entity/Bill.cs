@@ -1,6 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
+using IMS.BusinessModel.Entity.Common;
+using IMS.BusinessModel.Entity.Configuration;
 
 namespace IMS.BusinessModel.Entity
 {

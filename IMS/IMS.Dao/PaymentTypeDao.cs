@@ -1,4 +1,4 @@
-﻿using IMS.BusinessModel.Entity;
+﻿using IMS.BusinessModel.Entity.Configuration;
 using NHibernate;
 using System;
 using System.Collections.Generic;

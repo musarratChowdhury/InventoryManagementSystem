@@ -1,4 +1,4 @@
-﻿using IMS.BusinessModel.Entity;
+﻿using IMS.BusinessModel.Entity.Configuration;
 using IMS.Services.Helpers;
 using log4net;
 using log4net.Repository.Hierarchy;

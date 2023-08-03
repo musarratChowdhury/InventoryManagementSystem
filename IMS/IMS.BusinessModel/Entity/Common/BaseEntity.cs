@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace IMS.BusinessModel.Entity
+namespace IMS.BusinessModel.Entity.Common
 {
     public class BaseEntity
     {

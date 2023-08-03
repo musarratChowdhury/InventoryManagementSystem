@@ -1,5 +1,6 @@
-﻿using FluentNHibernate.Mapping;
-using IMS.BusinessModel.Entity;
+﻿using FluentNHibernate.Cfg;
+using FluentNHibernate.Mapping;
+using IMS.BusinessModel.Entity.Configuration;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,11 +9,11 @@ using System.Threading.Tasks;
 
 namespace IMS.Dao.Mappings
 {
-    public class VendorTypeMap : ClassMap<VendorType>
+    public class PaymentTypeMap : ClassMap<PaymentType>
     {
-        public VendorTypeMap()
+        public PaymentTypeMap()
         {
-            Table("VendorType");
+            Table("PaymentType");
 
             Id(x => x.Id).Column("Id").GeneratedBy.Identity();
             Map(x => x.Name).Column("Name").Length(55).Not.Nullable();
@@ -28,3 +29,11 @@ namespace IMS.Dao.Mappings
         }
     }
 }
+
+
+
+
+
+
+
+

@@ -1,5 +1,5 @@
 ﻿using FluentNHibernate.Mapping;
-using IMS.BusinessModel.Entity;
+using IMS.BusinessModel.Entity.Configuration;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,11 +8,11 @@ using System.Threading.Tasks;
 
 namespace IMS.Dao.Mappings
 {
-    public class CashBankMap : ClassMap<CashBank>
+    public class ProductCategoryMap : ClassMap<ProductCategory>
     {
-        public CashBankMap()
+        public ProductCategoryMap()
         {
-            Table("CashBank");
+            Table("ProductCategory");
 
             Id(x => x.Id).Column("Id").GeneratedBy.Identity();
             Map(x => x.Name).Column("Name").Length(55).Not.Nullable();

@@ -1,5 +1,5 @@
 ﻿using FluentNHibernate.Mapping;
-using IMS.BusinessModel.Entity;
+using IMS.BusinessModel.Entity.Configuration;
 
 namespace IMS.Dao.Mappings
 {
