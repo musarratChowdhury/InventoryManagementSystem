@@ -21,22 +21,30 @@ namespace IMS.Services.Helpers
 
                 if (_sessionFactory == null)
                 {
-                    ConfigureLog4Net();
-                    _sessionFactory = Fluently.Configure()
-                        .Database(MsSqlConfiguration.MsSql2012.ConnectionString(connectionString))
-                        .Mappings(mapper =>
-                        {
-                            mapper.FluentMappings.AddFromAssemblyOf<PaymentTypeMap>();
-                        })
-                        .ExposeConfiguration(config =>
-                        {
-                            config.SetProperty(Environment.ShowSql, "true"); // Enable ShowSql
-                            config.SetProperty(Environment.FormatSql, "true");
-                        })
-                        .BuildSessionFactory();
+                    try
+                    {
+                        ConfigureLog4Net();
+                        _sessionFactory = Fluently.Configure()
+                            .Database(MsSqlConfiguration.MsSql2012.ConnectionString(connectionString))
+                            .Mappings(mapper =>
+                            {
+                                mapper.FluentMappings.AddFromAssemblyOf<PaymentTypeMap>();
+                            })
+                            .ExposeConfiguration(config =>
+                            {
+                                config.SetProperty(Environment.ShowSql, "true"); // Enable ShowSql
+                                config.SetProperty(Environment.FormatSql, "true");
+                            })
+                            .BuildSessionFactory();
 
-                    log.Info("HELLO FROM SERVICE CONFIG CLASS");
-
+                        log.Info("Nhibernate Configuration was successfull");
+                    }
+                    catch (System.Exception ex)
+                    {
+                        log.Error("Error occurred during NHibernate configuration: " + ex.Message);
+                        log.Error("InnerException"+ex.InnerException.Message);
+                        throw; // Re-throw the exception to let it propagate to the caller
+                    }
                 }
                 return _sessionFactory;
             }

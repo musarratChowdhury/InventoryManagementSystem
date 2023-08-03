@@ -67,6 +67,7 @@
     <Compile Include="Mappings\BillMap.cs" />
     <Compile Include="Mappings\BillTypeMap.cs" />
     <Compile Include="Mappings\CashBankMap.cs" />
+    <Compile Include="Mappings\CustomerMap.cs" />
     <Compile Include="Mappings\CustomerTypeMap.cs" />
     <Compile Include="Mappings\InvoiceTypeMap.cs" />
     <Compile Include="Mappings\PaymentTypeMap.cs" />

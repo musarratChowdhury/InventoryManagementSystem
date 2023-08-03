@@ -145,7 +145,7 @@ CREATE TABLE Customer (
     ModificationDate DATETIME,
     Rank INT NOT NULL DEFAULT(0),
     BusinessId NVARCHAR(MAX),
-    VersionNumber INT NOT NULL DEFAULT(1),
+    Version INT NOT NULL DEFAULT(1),
     CONSTRAINT FK_Customer_CustomerType FOREIGN KEY (CustomerTypeId) REFERENCES CustomerType(Id)
 );
 
