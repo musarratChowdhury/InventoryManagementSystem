@@ -16,5 +16,7 @@ namespace IMS.BusinessModel.Entity
         public virtual string Email { get; set; }
         public virtual string Phone { get; set; }
         public virtual int Status { get; set; }
+
+        public virtual List<PurchaseOrder> PurchaseOrders { get; set;}
     }
 }

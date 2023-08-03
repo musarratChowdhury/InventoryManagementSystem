@@ -74,6 +74,13 @@
     <Compile Include="Mappings\Configuration\ProductCategoryMap.cs" />
     <Compile Include="Mappings\Configuration\ShipmentTypeMap.cs" />
     <Compile Include="Mappings\Configuration\UnitOfMeasurementMap.cs" />
+    <Compile Include="Mappings\InvoiceMap.cs" />
+    <Compile Include="Mappings\PaymentReceivedMap.cs" />
+    <Compile Include="Mappings\PaymentVoucherMap.cs" />
+    <Compile Include="Mappings\ProductMap.cs" />
+    <Compile Include="Mappings\PurchaseOrderMap.cs" />
+    <Compile Include="Mappings\SalesOrderMap.cs" />
+    <Compile Include="Mappings\ShipmentMap.cs" />
     <Compile Include="Mappings\VendorMap.cs" />
     <Compile Include="Mappings\Configuration\VendorTypeMap.cs" />
     <Compile Include="PaymentTypeDao.cs" />
