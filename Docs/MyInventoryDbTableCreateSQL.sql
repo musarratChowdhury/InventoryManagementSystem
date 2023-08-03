@@ -228,7 +228,23 @@ CREATE TABLE Vendor (
     CONSTRAINT FK_Vendor_VendorType FOREIGN KEY (VendorTypeId) REFERENCES VendorType(Id)
 );
 
-
+CREATE TABLE SalesOrder (
+    Id BIGINT PRIMARY KEY,
+    CustomerId BIGINT NOT NULL,
+    TotalAmount DECIMAL(10, 2) NOT NULL,
+    IsArchived BIT NOT NULL DEFAULT(0),
+	InvoiceId BIGINT,
+	ShipmentStatus INT NOT NULL DEFAULT(0),
+	PaymentStatus  INT NOT NULL DEFAULT(0),
+    CreatedBy BIGINT NOT NULL,
+    CreationDate DATE NOT NULL,
+    ModifiedBy BIGINT,
+    ModificationDate DATE,
+    Rank INT NOT NULL  DEFAULT(0),
+    BusinessId NVARCHAR(MAX),
+    Version INT NOT NULL,
+    CONSTRAINT FK_SalesOrder_Customer FOREIGN KEY (CustomerId) REFERENCES Customer(Id)
+);
 
 -- Create PurchaseOrder table with foreign key constraint
 CREATE TABLE PurchaseOrder (
@@ -314,7 +330,6 @@ CREATE TABLE Product (
     CONSTRAINT FK_Product_UnitOfMeasurement FOREIGN KEY (UnitOfMeasurementId) REFERENCES UnitOfMeasurement(Id),
     CONSTRAINT FK_Product_ProductCategory FOREIGN KEY (ProductCategoryId) REFERENCES ProductCategory(Id)
 );
-
 use MyInventoryDb;
 CREATE TABLE SalesOrderLine (
     SalesOrderId BIGINT NOT NULL,
@@ -340,7 +355,6 @@ CREATE TABLE PurchaseOrderLine (
     FOREIGN KEY (PurchaseOrderId) REFERENCES PurchaseOrder(Id),
     FOREIGN KEY (ProductId) REFERENCES Product(ProductId)
 );
-
 
 
 ---- Create UserProfile table with foreign key constraint

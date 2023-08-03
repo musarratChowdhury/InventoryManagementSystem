@@ -25,7 +25,11 @@ namespace IMS.Dao.Mappings
             Map(x => x.BusinessId).Column("BusinessId").Length(256);
             Map(x => x.Version).Column("Version").Not.Nullable();
 
-            References(x => x.VendorType).Column("VendorTypeId"); // Navigation property mapping
+            References(x => x.VendorType)
+                .Column("VendorTypeId")
+                .LazyLoad()
+                .Not.Insert()
+                .Not.Update(); ; // Many to one
         }
     }
 }

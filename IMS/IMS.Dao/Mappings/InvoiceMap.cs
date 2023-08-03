@@ -1,4 +1,6 @@
-﻿using System;
+﻿using FluentNHibernate.Mapping;
+using IMS.BusinessModel.Entity;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -6,7 +8,43 @@ using System.Threading.Tasks;
 
 namespace IMS.Dao.Mappings
 {
-    internal class InvoiceMap
+    public class InvoiceMap : ClassMap<Invoice>
     {
+        public InvoiceMap()
+        {
+            Table("Invoice"); // Specify the table name
+
+            Id(x => x.Id).Column("Id").GeneratedBy.Identity(); // Primary key
+            Map(x => x.InvoiceDate).Column("InvoiceDate").Not.Nullable();
+            Map(x => x.InvoiceDueDate).Column("InvoiceDueDate").Not.Nullable();
+            Map(x => x.InvoiceTypeId).Column("InvoiceTypeId").Not.Nullable();
+
+            References(x => x.InvoiceType) // Many-to-one relationship with InvoiceType
+                .Column("InvoiceTypeId")
+                .LazyLoad()
+                .Not.Insert()
+                .Not.Update();
+
+            //// One-to-one relationship with SalesOrder
+            //HasOne(x => x.SalesOrder)
+            //    .Constrained() // Optional - adds a foreign key constraint
+            //    .Cascade.All() // You can specify cascade options if necessary
+            //    .PropertyRef(nameof(SalesOrder.Invoice)); // Specify the property in SalesOrder that maps back to Invoice
+
+            HasMany(x => x.PaymentReceivedList) // One-to-many relationship with PaymentReceived
+                .KeyColumn("InvoiceId")
+                .Cascade.All()
+                .Inverse()
+                .LazyLoad();
+
+            // BaseEntity properties
+            Map(x => x.CreatedBy).Column("CreatedBy").Not.Nullable();
+            Map(x => x.CreationDate).Column("CreationDate").Not.Nullable();
+            Map(x => x.ModifiedBy).Column("ModifiedBy");
+            Map(x => x.ModificationDate).Column("ModificationDate");
+            Map(x => x.Rank).Column("Rank").Not.Nullable();
+            Map(x => x.BusinessId).Column("BusinessId").Length(256); // Specify the length for BusinessId column
+            Map(x => x.Version).Column("Version").Not.Nullable();
+        }
     }
 }
