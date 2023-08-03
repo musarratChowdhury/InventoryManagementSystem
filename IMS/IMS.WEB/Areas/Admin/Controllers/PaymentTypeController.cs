@@ -3,7 +3,7 @@ using System.Web.Mvc;
 using IMS.Services; // Add the namespace for your service interfaces
 using IMS.Services.Helpers;
 
-namespace IMS.WEB.Controllers.Admin
+namespace IMS.WEB.Areas.Admin.Controllers
 {
     public class PaymentTypeController : Controller
     {
