@@ -25,12 +25,6 @@ namespace IMS.Dao.Mappings
                 .Not.Insert()
                 .Not.Update();
 
-            //// One-to-one relationship with SalesOrder
-            //HasOne(x => x.SalesOrder)
-            //    .Constrained() // Optional - adds a foreign key constraint
-            //    .Cascade.All() // You can specify cascade options if necessary
-            //    .PropertyRef(nameof(SalesOrder.Invoice)); // Specify the property in SalesOrder that maps back to Invoice
-
             References(x => x.SalesOrder)
                 .Column("SalesOrderId");
 

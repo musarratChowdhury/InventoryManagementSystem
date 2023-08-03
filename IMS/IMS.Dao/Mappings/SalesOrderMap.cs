@@ -1,10 +1,5 @@
 ﻿using FluentNHibernate.Mapping;
 using IMS.BusinessModel.Entity;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace IMS.Dao.Mappings
 {
@@ -27,12 +22,6 @@ namespace IMS.Dao.Mappings
                 .Not.Insert()
                 .Not.Update();
 
-            //// One-to-one relationship with Invoice
-            //HasOne(x => x.Invoice)
-            //    .PropertyRef(nameof(Invoice.SalesOrder)) // Specify the property in Invoice that maps back to SalesOrder
-            //    .Cascade.All() // You can specify cascade options if necessary
-            //    .Constrained(); // Optional - adds a foreign key constraint
-            // Note: You might need to adjust the property names if the mapping is different in Invoice
             References(x => x.Invoice)
                 .Column("InvoiceId");
 
