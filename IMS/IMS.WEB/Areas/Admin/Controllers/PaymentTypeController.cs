@@ -5,6 +5,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using System.Data.Entity;
+using IMS.BusinessModel.Dto.Configuration;
+using System.Threading;
 
 namespace IMS.WEB.Areas.Admin.Controllers
 {
@@ -38,39 +41,70 @@ namespace IMS.WEB.Areas.Admin.Controllers
             {
                 ViewBag.Message = "Error: " + ex.Message;
             }
-            Console.WriteLine("hello");
+           
             //_logger.Info("hello from home");
 
 
             return View();
         }
-
-        // GET: Admin/PaymentType/Details/5
-        public ActionResult Details(int id)
+        public ActionResult GetPaymentTypes()
         {
-            return View();
-        }
+            try
+            {
+                using (var session = NHibernateConfig.OpenSession())
+                {
+                    _paymentTypeService = new PaymentTypeService();
 
-        // GET: Admin/PaymentType/Create
-        public ActionResult Create()
-        {
-            return View();
+                    var paymentTypes = _paymentTypeService.GetAllPaymentTypes(session);
+
+                    // Check if paymentTypes is null or empty
+                    if (paymentTypes == null || !paymentTypes.Any())
+                    {
+                        // Return an empty JSON array to indicate no data found
+                        return Json(new List<PaymentTypeDto>(), JsonRequestBehavior.AllowGet);
+                    }
+
+                    return Json(paymentTypes, JsonRequestBehavior.AllowGet);
+                }
+            }
+            catch (Exception ex)
+            {
+                ViewBag.Message = "Error: " + ex.Message;
+            }
+            // Handle any other error scenarios and return appropriate responses
+            return Json(new { error = "An error occurred while fetching data." });
+
         }
 
         // POST: Admin/PaymentType/Create
         [HttpPost]
-        public ActionResult Create(FormCollection collection)
+        public ActionResult Create(PaymentTypeDto paymentTypeDto)
         {
             try
             {
-                // TODO: Add insert logic here
+                // Perform validation if needed
+                if (ModelState.IsValid)
+                {
+                    using (var session = NHibernateConfig.OpenSession())
+                    {
+                        _paymentTypeService = new PaymentTypeService();
+                        // Call the PaymentType service to add the new PaymentType to the database
+                        _paymentTypeService.CreatePaymentType(paymentTypeDto, session);
 
-                return RedirectToAction("Index");
+
+                        // Return a JSON response indicating success
+                        return Json(new { success = true, message = "PaymentType added successfully." });
+                    }
+                }
+                var errors = ModelState.Values.SelectMany(v => v.Errors.Select(e => e.ErrorMessage)).ToList();
+                return Json(new { success = false, message = "Validation failed.", errors });
             }
-            catch
+            catch (Exception ex)
             {
-                return View();
+                // Handle exceptions if necessary
+                return Json(new { success = false, message = "Error occurred while adding PaymentType.",ex.Message });
             }
+
         }
 
         // GET: Admin/PaymentType/Edit/5

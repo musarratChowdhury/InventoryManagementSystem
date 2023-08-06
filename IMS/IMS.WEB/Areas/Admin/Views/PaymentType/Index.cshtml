@@ -1,20 +1,169 @@
-﻿@{
-    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+﻿
+@{
+    ViewData["Title"] = "Payment Type";
+}
+<!-- Content Wrapper. Contains page content -->
+<div class="content-wrapper">
+
+    <!-- Main content -->
+    <section class="content">
+        <!-- Default box -->
+        <div class="box">
+            <div class="box-header with-border">
+                <h3 class="box-title text-primary"><i class="fa fa-gear"></i> @ViewData["Title"]</h3>
+                <div class="box-tools pull-right">
+                    <button type="button" class="btn btn-box-tool" data-widget="collapse" data-toggle="tooltip"
+                            title="Collapse">
+                        <i class="fa fa-minus"></i>
+                    </button>
+                    <button type="button" class="btn btn-box-tool" data-widget="remove" data-toggle="tooltip" title="Remove">
+                        <i class="fa fa-times"></i>
+                    </button>
+                </div>
+            </div>
+            <div class="box-body">
+                <div id="Grid"></div>
+            </div>
+            <!-- /.box-body -->
+            <div class="box-footer">
+
+            </div>
+            <!-- /.box-footer-->
+        </div>
+        <!-- /.box -->
+    </section>
+    <!-- /.content -->
+</div>
+<!-- /.content-wrapper -->
+
+@section Styles{
+
 }
 
-<!-- View content goes here -->
+@section Scripts{
 
+    <script type="text/javascript">
+        $(function () {
+            // AJAX call to fetch PaymentType data
+            $.ajax({
+                url: "/PaymentType/GetPaymentTypes",
+                method: "GET",
+                dataType: "json",
+                success: function (data) {
+                    // Initialize EJ2 Grid with the fetched PaymentType data
+                    console.log("received data from the server, payment types : ", data)
+                    
+                    $("#Grid").ejGrid({
+                        dataSource: ej.DataManager({
+                            json: data, // Use the fetched PaymentType data
+                            adaptor: new ej.remoteSaveAdaptor(),
+                            insertUrl: "/Admin/PaymentType/Create", // Specify the insert URL
+                            updateUrl: "/Admin/PaymentType/Update", // Specify the update URL
+                            removeUrl: "/Admin/PaymentType/Remove", // Specify the remove URL
+                        }),
+                        loadingIndicator: { indicatorType: 'Shimmer' },
+                        toolbarSettings: {
+                            showToolbar: true,
+                            toolbarItems: ["add", "edit", "delete", "cancel", "search", "printGrid"]
+                        },
+                        editSettings: {
+                            allowEditing: true,
+                            allowAdding: true,
+                            allowDeleting: true,
+                            showDeleteConfirmDialog: true,
+                            editMode: "dialog",
+                        },
+                        isResponsive: true,
+                        enableResponsiveRow: true,
+                        allowSorting: true,
+                        allowSearching: true,
+                        allowFiltering: true,
+                        filterSettings: {
+                            filterType: "excel",
+                            maxFilterChoices: 100,
+                            enableCaseSensitivity: false
+                        },
+                        allowPaging: true,
+                        pageSettings: { pageSize: 10, printMode: ej.Grid.PrintMode.CurrentPage },
+                        columns: [
+                            { field: "Id", headerText: 'Payment Type Id', isPrimaryKey: true, isIdentity: true, visible: false },
+                            { field: "Name", headerText: 'Payment Type Name', validationRules: { required: true } },
+                            { field: "Description", headerText: 'Description', validationRules: { required: true } },
+                            { field : "Status", headerText: 'Status'}
+                        ],
+                        actionComplete: "complete",
+                        rowDataBound: rowBound
+                    });
+                },
+                error: function (error) {
+                    console.error("Error fetching payment types:", error);
+                }
+            });
+        });
+        function rowBound(args) {
+            if (args.data['Status'] == 1) {
+                args.row[0].cells[3].innerText = "Active";
+            } else {
+                args.row[0].cells[3].innerText = "Inactive";
 
-@Model List<IMS.Dao.PaymentTypeDao>
-
-    @{
-        ViewBag.Title = "Index";
-    }
-
-    <h1>List of Data</h1>
-    <ul id="data-list">
-        @foreach (var item in Model)
-        {
-            <li>@item.Id: @item.Name</li>
+            }
         }
-    </ul>
+        
+        function complete(args) {
+            if (args.requestType == 'beginedit' || args.requestType == 'add') {
+                if (args.requestType == 'add') {
+                    console.log("Add Action Triggered", args)
+                    $("#" + this._id + "_dialogEdit").ejDialog({ title: "Add New Payment Type" });
+                    $("#EditDialog_Grid_Save").on("click", function (event) {
+                        event.preventDefault(); // Prevent the default form submission behavior
+
+                        // Place your form submission logic here
+                        // For example, you can perform AJAX form submission or any other processing
+
+                        // If you need to access form fields or data, you can do so using jQuery selectors
+                        var formData = $("#GridEditForm").serialize();
+                        var formDataObject = parseQueryString(formData)
+
+                        console.log(formDataObject);
+                        console.log("Form data:", formData);
+                        // Make an AJAX POST request to the create action
+                        $.ajax({
+                            url: "/Admin/PaymentType/Create", // Replace with the actual URL for your create action
+                            method: "POST",
+                            data: formDataObject, // The JavaScript object containing form data
+                            success: function (data) {
+                                // Handle the success response from the server
+                                console.log("Create action successful:", data);
+                            },
+                            error: function (error) {
+                                // Handle the error response from the server
+                                console.error("Error in create action:", error);
+                            }
+                        });
+
+                        // You can perform any additional checks or validation before submitting the form
+                        // If you want to allow the form submission, remove the event.preventDefault() line
+                    });
+                } else {
+                    $("#" + this._id + "_dialogEdit").ejDialog({ title: "Edit Payment Type" }) 
+                }
+            }
+        }
+
+        function parseQueryString(queryString) {
+            var params = {};
+            var pairs = queryString.split('&');
+
+            for (var i = 0; i < pairs.length; i++) {
+                var pair = pairs[i].split('=');
+                var key = decodeURIComponent(pair[0]);
+                var value = decodeURIComponent(pair[1]);
+                params[key] = value;
+            }
+
+            return params;
+        }
+
+    </script>
+}
+

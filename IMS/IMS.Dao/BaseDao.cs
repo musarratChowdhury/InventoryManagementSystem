@@ -7,11 +7,11 @@ namespace IMS.Dao
 {
     public interface IBaseDao<TEntity> where TEntity : BaseEntity
     {
-        //TEntity GetById(long id);
+        TEntity GetById(long id, ISession session);
         IEnumerable<TEntity> GetAll(ISession Session);
-        //void Add(TEntity entity);
-        //void Update(TEntity entity);
-        //void Delete(TEntity entity);
+        void Create(TEntity entity, ISession session);
+        void Update(TEntity entity, ISession session);
+        void Delete(TEntity entity, ISession session);
     }
 
     public class BaseDao<TEntity> : IBaseDao<TEntity> where TEntity : BaseEntity
@@ -23,30 +23,33 @@ namespace IMS.Dao
           
         }
 
-        //public TEntity GetById(long id)
-        //{
-        //    return _session.Get<TEntity>(id);
-        //}
+        public TEntity GetById(long id, ISession session)
+        {
+            return session.Get<TEntity>(id);
+        }
 
         public IEnumerable<TEntity> GetAll(ISession session)
         {
             return session.Query<TEntity>().ToList();
         }
 
-        //public void Add(TEntity entity)
-        //{
-        //    _session.Save(entity);
-        //}
+        public void Create(TEntity entity, ISession session)
+        {
+            session.Save(entity);
+        }
 
-        //public void Update(TEntity entity)
-        //{
-        //    _session.Update(entity);
-        //}
 
-        //public void Delete(TEntity entity)
-        //{
-        //    _session.Delete(entity);
-        //}
+        public void Update(TEntity entity, ISession session)
+        {
+            session.Update(entity);
+        }
+
+
+        public void Delete(TEntity entity, ISession session)
+        {
+            session.Delete(entity);
+        }
+
     }
 
 }

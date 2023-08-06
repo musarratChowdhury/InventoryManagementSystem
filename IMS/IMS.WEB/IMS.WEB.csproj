@@ -197,6 +197,8 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Helpers\HtmlHelpers.cs" />
+    <Compile Include="Helpers\MainMenu.cs" />
     <Compile Include="Migrations\202308010510432_Initial.cs" />
     <Compile Include="Migrations\202308010510432_Initial.designer.cs">
       <DependentUpon>202308010510432_Initial.cs</DependentUpon>
@@ -239,9 +241,18 @@
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
     <Content Include="Areas\Admin\Views\web.config" />
-    <Content Include="Areas\Admin\Views\Shared\_Layout.cshtml" />
     <Content Include="Areas\Admin\Views\_ViewStart.cshtml" />
     <Content Include="Areas\Admin\Views\CustomerType\Index.cshtml" />
+    <Content Include="Areas\Admin\Views\Shared\_AdminLTE.cshtml" />
+    <Content Include="Areas\Admin\Views\Shared\_AdminlteBlank.cshtml" />
+    <Content Include="Areas\Admin\Views\Shared\_AdminlteControlSidebar.cshtml" />
+    <Content Include="Areas\Admin\Views\Shared\_AdminlteFooter.cshtml" />
+    <Content Include="Areas\Admin\Views\Shared\_AdminlteLayoutBoxed.cshtml" />
+    <Content Include="Areas\Admin\Views\Shared\_AdminlteLayoutCollapsed.cshtml" />
+    <Content Include="Areas\Admin\Views\Shared\_AdminlteLayoutFixed.cshtml" />
+    <Content Include="Areas\Admin\Views\Shared\_AdminlteMainHeader.cshtml" />
+    <Content Include="Areas\Admin\Views\Shared\_AdminlteMainSidebar.cshtml" />
+    <Content Include="Areas\Admin\Views\Shared\_ValidationScriptsPartial.cshtml" />
     <None Include="Scripts\jquery-3.4.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.4.1.js" />
     <Content Include="Scripts\jquery-3.4.1.min.js" />
@@ -288,6 +299,16 @@
     <Content Include="Views\Shared\Lockout.cshtml" />
     <Content Include="Views\Shared\_LoginPartial.cshtml" />
     <Content Include="Areas\Admin\Views\PaymentType\Index.cshtml" />
+    <Content Include="Views\Shared\_AdminLTE.cshtml" />
+    <Content Include="Views\Shared\_AdminlteBlank.cshtml" />
+    <Content Include="Views\Shared\_AdminlteControlSidebar.cshtml" />
+    <Content Include="Views\Shared\_AdminlteFooter.cshtml" />
+    <Content Include="Views\Shared\_AdminlteLayoutBoxed.cshtml" />
+    <Content Include="Views\Shared\_AdminlteLayoutCollapsed.cshtml" />
+    <Content Include="Views\Shared\_AdminlteLayoutFixed.cshtml" />
+    <Content Include="Views\Shared\_AdminlteMainHeader.cshtml" />
+    <Content Include="Views\Shared\_AdminlteMainSidebar.cshtml" />
+    <Content Include="Views\Shared\_ValidationScriptsPartial.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

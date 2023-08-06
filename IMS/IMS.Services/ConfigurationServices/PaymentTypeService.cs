@@ -12,12 +12,12 @@ namespace IMS.Services
 {
     public interface IPaymentTypeService
     {
-        IEnumerable<PaymentTypeDto> GetAllPaymentTypes(ISession Session);
-        //PaymentTypeDto GetPaymentTypeById(long id);
-        //void AddPaymentType(PaymentTypeDto paymentTypeDto);
-        //void UpdatePaymentType(PaymentTypeDto paymentTypeDto);
-        //void DeletePaymentType(long id);
+        IEnumerable<PaymentTypeDto> GetAllPaymentTypes(ISession session);
+        void CreatePaymentType(PaymentTypeDto paymentTypeDto, ISession session);
+        void UpdatePaymentType(PaymentTypeDto paymentTypeDto, ISession session);
+        void DeletePaymentType(long paymentTypeId, ISession session);
     }
+
 
 
     public class PaymentTypeService : IPaymentTypeService
@@ -40,34 +40,33 @@ namespace IMS.Services
             return paymentTypes.Select(MapToDto);
         }
 
-       
+        public void CreatePaymentType(PaymentTypeDto paymentTypeDto, ISession session)
+        {
+            // Map the DTO to the entity
+            var paymentTypeEntity = MapToEntity(paymentTypeDto);
+            _paymentTypeDao = new PaymentTypeDao();
 
-        //public PaymentTypeDto GetPaymentTypeById(long id)
-        //{
-        //    var paymentType = _paymentTypeDao.GetById(id);
-        //    return MapToDto(paymentType);
-        //}
+            // Call the DAO to save the new PaymentType entity to the database
+            _paymentTypeDao.Create(paymentTypeEntity, session);
+        }
 
-        //public void AddPaymentType(PaymentTypeDto paymentTypeDto)
-        //{
-        //    var paymentType = MapToEntity(paymentTypeDto);
-        //    _paymentTypeDao.Add(paymentType);
-        //}
 
-        //public void UpdatePaymentType(PaymentTypeDto paymentTypeDto)
-        //{
-        //    var paymentType = MapToEntity(paymentTypeDto);
-        //    _paymentTypeDao.Update(paymentType);
-        //}
+        public void UpdatePaymentType(PaymentTypeDto paymentTypeDto, ISession session)
+        {
+            var paymentTypeEntity = MapToEntity(paymentTypeDto);
+            _paymentTypeDao = new PaymentTypeDao();
+            _paymentTypeDao.Update(paymentTypeEntity, session);
+        }
 
-        //public void DeletePaymentType(long id)
-        //{
-        //    var paymentType = _paymentTypeDao.GetById(id);
-        //    if (paymentType != null)
-        //    {
-        //        _paymentTypeDao.Delete(paymentType);
-        //    }
-        //}
+        public void DeletePaymentType(long paymentTypeId, ISession session)
+        {
+            var paymentTypeEntity = _paymentTypeDao.GetById(paymentTypeId, session);
+            if (paymentTypeEntity != null)
+            {
+                _paymentTypeDao = new PaymentTypeDao();
+                _paymentTypeDao.Delete(paymentTypeEntity, session);
+            }
+        }
 
         // Helper methods to map between DTO and entity
         private PaymentTypeDto MapToDto(PaymentType paymentType)
