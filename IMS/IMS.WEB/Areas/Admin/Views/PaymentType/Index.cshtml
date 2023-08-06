@@ -71,6 +71,7 @@
                             allowAdding: true,
                             allowDeleting: true,
                             showDeleteConfirmDialog: true,
+                            showAddNewDialog: true,
                             editMode: "dialog",
                         },
                         isResponsive: true,
@@ -88,12 +89,38 @@
                         columns: [
                             { field: "Id", headerText: 'Payment Type Id', isPrimaryKey: true, isIdentity: true, visible: false },
                             { field: "Name", headerText: 'Payment Type Name', validationRules: { required: true } },
-                            { field: "Description", headerText: 'Description', validationRules: { required: true } },
+                            {
+                                field: "Description", headerText: 'Description', validationRules: {
+                                    required: true,
+                                    //customRule: function (value, column, record) {
+                                    //    // Define your custom validation logic here
+                                    //    // For example, let's say you want the description to be at least 5 characters long
+                                    //    console.log(value);
+                                    //},
+                                    //customMessage: "Description must be at least 5 characters long.",
+                                },
+},
                             { field : "Status", headerText: 'Status'}
                         ],
                         actionComplete: "complete",
+                        actionBegin: function (args) {
+                            // Check if the action is "add" or "edit"
+                            if (args.requestType === "save") {
+                                // Prevent the default action (form submission)
+                                args.cancel = true;
+
+                                // Your custom logic to handle the "Save" button press
+                                // For example, you can manually save the data using AJAX
+                                // and update the Grid after successful save.
+                                // Or you can perform any other actions before saving the data.
+                                // Implement your own logic here.
+                            }
+                        },
                         rowDataBound: rowBound
                     });
+
+
+                   
                 },
                 error: function (error) {
                     console.error("Error fetching payment types:", error);
