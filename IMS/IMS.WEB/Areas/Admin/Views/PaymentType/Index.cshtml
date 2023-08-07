@@ -43,23 +43,172 @@
 @section Scripts{
 
     <script type="text/javascript">
+        var currentAction = "";
         $(function () {
+               let  url = "/PaymentType/GetPaymentTypes"
             // AJAX call to fetch PaymentType data
+            renderEjGrid(url)
+        });
+        function rowBound(args) {
+            if (args.data['Status'] == 1) {
+                args.row[0].cells[3].innerText = "Active";
+            } else {
+                args.row[0].cells[3].innerText = "Inactive";
+            }
+            if(args.data['CreationDate'] != null &&  args.row[0].cells[6]){
+                var jsonDate = args.row[0].cells[6].innerText;
+                var dateObject = parseJsonDate(jsonDate);
+                args.row[0].cells[6].innerText = dateObject;
+                console.log(dateObject)
+            }
+        }
+        function addButtonAction(args)
+        {
+            console.log("hello",args.model)
+        }
+        function deleteButtonAction(args)
+        {
+            args.cancel = true;
+            let  fetchurl = "/PaymentType/GetPaymentTypes"
+            console.log(args);
+            let id = args.data.Id;
             $.ajax({
-                url: "/PaymentType/GetPaymentTypes",
+                url: "/Admin/PaymentType/Delete/" + id, // Replace with the actual URL for your delete action
+                method: "POST",
+                success: function (data) {
+                    // Handle the success response from the server
+                    console.log("Record deleted successfully:", data);
+                    
+                    renderEjGrid(fetchurl)
+                },
+                error: function (error) {
+                    // Handle the error response from the server
+                    console.error("Error deleting record:", error);
+                }
+            });
+        }
+       
+        function saveButtonAction(args)
+        {
+            if (args.requestType === "save" && currentAction == 'create') {
+                    @* args.cancel = true *@
+                    var formData = $("#GridEditForm").serialize();
+                        var formDataObject = parseQueryString(formData)
+
+                        console.log(formDataObject);
+                        console.log("Form data:", formData);
+                        // Make an AJAX POST request to the create action
+                    $.ajax({
+                        url: "/Admin/PaymentType/Create", // Replace with the actual URL for your create action
+                        method: "POST",
+                        data: formDataObject, // The JavaScript object containing form data
+                        success: function (data) {
+                            // Handle the success response from the server
+                             let  fetchurl = "/PaymentType/GetPaymentTypes"
+
+                            console.log("Create action successful:", data);
+                            @* $("#Grid_dialogEdit_wrapper").hide();
+                            $("#Grid_dialogEdit_overLay").hide(); *@
+
+                            renderEjGrid(fetchurl)
+                            currentAction = "";
+                        },
+                        error: function (error) {
+                            // Handle the error response from the server
+                            console.error("Error in create action:", error);
+                        }
+                    });
+            }
+             if (args.requestType === "save" && currentAction == 'edit')
+             {
+                    var formData = $("#GridEditForm").serialize();
+                        var formDataObject = parseQueryString(formData)
+                        formDataObject.Id = args.rowData.Id
+                        console.log(formDataObject);
+                        console.log("Form data:", formData);
+                        // Make an AJAX POST request to the create action
+                    $.ajax({
+                        url: "/Admin/PaymentType/Edit", // Replace with the actual URL for your create action
+                        method: "POST",
+                        data: formDataObject, // The JavaScript object containing form data
+                        success: function (data) {
+                            // Handle the success response from the server
+                             let  fetchurl = "/PaymentType/GetPaymentTypes"
+
+                            console.log("Edit action successful:", data);
+                            @* $("#Grid_dialogEdit_wrapper").hide();
+                            $("#Grid_dialogEdit_overLay").hide(); *@
+
+                            renderEjGrid(fetchurl)
+                            currentAction = "";
+                        },
+                        error: function (error) {
+                            // Handle the error response from the server
+                            console.error("Error in edit action:", error);
+                        }
+                    });
+             }
+        }
+        
+        function complete(args) {
+            if (args.requestType == 'beginedit' || args.requestType == 'add') {
+                if (args.requestType == 'add') {
+                    console.log("Add Action Triggered", this)
+                    $("#" + this._id + "_dialogEdit").ejDialog({ title: "Add New Payment Type" , });
+                    $("#GridCreatedBy").parent().parent().hide()
+                    $("#GridCreationDate").parent().parent().hide()
+                    currentAction = 'create'
+                } else {
+                    $("#" + this._id + "_dialogEdit").ejDialog({ title: "Edit Payment Type" }) 
+                    console.log("Edit Action Triggered", args)
+                    $("#GridCreatedBy").parent().parent().hide()
+                    $("#GridCreationDate").parent().parent().hide()
+                    currentAction = 'edit'
+                }
+            }
+        }
+
+        function parseQueryString(queryString) {
+            var params = {};
+            var pairs = queryString.split('&');
+
+            for (var i = 0; i < pairs.length; i++) {
+                var pair = pairs[i].split('=');
+                var key = decodeURIComponent(pair[0]);
+                var value = decodeURIComponent(pair[1]);
+                params[key] = value;
+            }
+
+            return params;
+        }
+
+        function cancelButtonAction(args)
+        {
+            args.cancel = true;
+            currentAction = "";
+        }
+      
+        function renderEjGrid(api)
+        {
+                $.ajax({
+                url: api,
                 method: "GET",
                 dataType: "json",
                 success: function (data) {
                     // Initialize EJ2 Grid with the fetched PaymentType data
-                    console.log("received data from the server, payment types : ", data)
+                    console.log("received data from the server, payment types : ", data);
+                    @* data.forEach(data =>{
+                        var formattedDate = parseJsonDate(data.CreationDate)
+                        data.CreationDate = formattedDate;
+                    }) *@
                     
                     $("#Grid").ejGrid({
                         dataSource: ej.DataManager({
                             json: data, // Use the fetched PaymentType data
                             adaptor: new ej.remoteSaveAdaptor(),
-                            insertUrl: "/Admin/PaymentType/Create", // Specify the insert URL
-                            updateUrl: "/Admin/PaymentType/Update", // Specify the update URL
-                            removeUrl: "/Admin/PaymentType/Remove", // Specify the remove URL
+                            insertUrl: "", // Specify the insert URL
+                            updateUrl: "", // Specify the update URL
+                            removeUrl: "", // Specify the remove URL
                         }),
                         loadingIndicator: { indicatorType: 'Shimmer' },
                         toolbarSettings: {
@@ -88,7 +237,8 @@
                         pageSettings: { pageSize: 10, printMode: ej.Grid.PrintMode.CurrentPage },
                         columns: [
                             { field: "Id", headerText: 'Payment Type Id', isPrimaryKey: true, isIdentity: true, visible: false },
-                            { field: "Name", headerText: 'Payment Type Name', validationRules: { required: true } },
+                            { field: "Name", headerText: 'Payment Type Name', validationRules: { required: true },
+                            },
                             {
                                 field: "Description", headerText: 'Description', validationRules: {
                                     required: true,
@@ -99,21 +249,30 @@
                                     //},
                                     //customMessage: "Description must be at least 5 characters long.",
                                 },
-},
-                            { field : "Status", headerText: 'Status'}
+                                allowSorting:false,
+                                width : 220
+                            },
+                            { field : "Status", headerText: 'Status', allowSorting:false, editType:'numericedit', defaultValue: 1},
+                            { field : "Rank", headerText: 'Rank', editType:'numericedit'},
+                            { field : "CreatedBy", headerText : 'CreatedBy', allowSorting: false},
+                            { field : "CreationDate", headerText : "Creation Date",}
+
                         ],
                         actionComplete: "complete",
-                        actionBegin: function (args) {
-                            // Check if the action is "add" or "edit"
-                            if (args.requestType === "save") {
-                                // Prevent the default action (form submission)
-                                args.cancel = true;
-
-                                // Your custom logic to handle the "Save" button press
-                                // For example, you can manually save the data using AJAX
-                                // and update the Grid after successful save.
-                                // Or you can perform any other actions before saving the data.
-                                // Implement your own logic here.
+                        actionBegin: function(args)
+                        {
+                            switch(args.requestType)
+                            {
+                                case 'save' : saveButtonAction(args);
+                                break;
+                                case 'delete' : deleteButtonAction(args);
+                                break;
+                                case 'add' : addButtonAction(args);
+                                break;
+                                case 'edit': editButtonAction(args);
+                                break;
+                                case 'cancel':cancelButtonAction(args);
+                                break;
                             }
                         },
                         rowDataBound: rowBound
@@ -126,69 +285,27 @@
                     console.error("Error fetching payment types:", error);
                 }
             });
-        });
-        function rowBound(args) {
-            if (args.data['Status'] == 1) {
-                args.row[0].cells[3].innerText = "Active";
-            } else {
-                args.row[0].cells[3].innerText = "Inactive";
-
-            }
-        }
-        
-        function complete(args) {
-            if (args.requestType == 'beginedit' || args.requestType == 'add') {
-                if (args.requestType == 'add') {
-                    console.log("Add Action Triggered", args)
-                    $("#" + this._id + "_dialogEdit").ejDialog({ title: "Add New Payment Type" });
-                    $("#EditDialog_Grid_Save").on("click", function (event) {
-                        event.preventDefault(); // Prevent the default form submission behavior
-
-                        // Place your form submission logic here
-                        // For example, you can perform AJAX form submission or any other processing
-
-                        // If you need to access form fields or data, you can do so using jQuery selectors
-                        var formData = $("#GridEditForm").serialize();
-                        var formDataObject = parseQueryString(formData)
-
-                        console.log(formDataObject);
-                        console.log("Form data:", formData);
-                        // Make an AJAX POST request to the create action
-                        $.ajax({
-                            url: "/Admin/PaymentType/Create", // Replace with the actual URL for your create action
-                            method: "POST",
-                            data: formDataObject, // The JavaScript object containing form data
-                            success: function (data) {
-                                // Handle the success response from the server
-                                console.log("Create action successful:", data);
-                            },
-                            error: function (error) {
-                                // Handle the error response from the server
-                                console.error("Error in create action:", error);
-                            }
-                        });
-
-                        // You can perform any additional checks or validation before submitting the form
-                        // If you want to allow the form submission, remove the event.preventDefault() line
-                    });
-                } else {
-                    $("#" + this._id + "_dialogEdit").ejDialog({ title: "Edit Payment Type" }) 
-                }
-            }
         }
 
-        function parseQueryString(queryString) {
-            var params = {};
-            var pairs = queryString.split('&');
+        function parseJsonDate(jsonDate) {
+            // Extract the timestamp from the JSON date format
+            var timestamp = parseInt(jsonDate.substr(6));
+            var currentDate = new Date(timestamp)
+            // Create a new Date object using the timestamp
+            const formattedDate = formatDate(currentDate)
 
-            for (var i = 0; i < pairs.length; i++) {
-                var pair = pairs[i].split('=');
-                var key = decodeURIComponent(pair[0]);
-                var value = decodeURIComponent(pair[1]);
-                params[key] = value;
-            }
+            return formattedDate;
+        }
+        function formatDate(date) {
+            const months = [
+                "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"
+            ];
 
-            return params;
+            const day = date.getDate().toString().padStart(2, "0");
+            const month = months[date.getMonth()];
+            const year = date.getFullYear().toString().slice(-2);
+
+            return `${day}-${month}-${year}`;
         }
 
     </script>

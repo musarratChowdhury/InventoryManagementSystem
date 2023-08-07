@@ -13,8 +13,8 @@ namespace IMS.Services
     public interface IPaymentTypeService
     {
         IEnumerable<PaymentTypeDto> GetAllPaymentTypes(ISession session);
-        void CreatePaymentType(PaymentTypeDto paymentTypeDto, ISession session);
-        void UpdatePaymentType(PaymentTypeDto paymentTypeDto, ISession session);
+        void CreatePaymentType(PaymentTypeFormData paymentTypeFormData, ISession session);
+        void UpdatePaymentType(PaymentTypeFormData paymentTypeFormData, ISession session);
         void DeletePaymentType(long paymentTypeId, ISession session);
     }
 
@@ -40,32 +40,70 @@ namespace IMS.Services
             return paymentTypes.Select(MapToDto);
         }
 
-        public void CreatePaymentType(PaymentTypeDto paymentTypeDto, ISession session)
+        public void CreatePaymentType(PaymentTypeFormData paymentTypeFormData, ISession session)
         {
-            // Map the DTO to the entity
-            var paymentTypeEntity = MapToEntity(paymentTypeDto);
-            _paymentTypeDao = new PaymentTypeDao();
+            using (var transaction = session.BeginTransaction())
+            {
+                try
+                {
+                    // Map the DTO to the entity
+                    var paymentTypeEntity = MapToEntity(paymentTypeFormData);
+                    _paymentTypeDao = new PaymentTypeDao();
 
-            // Call the DAO to save the new PaymentType entity to the database
-            _paymentTypeDao.Create(paymentTypeEntity, session);
+                    // Call the DAO to save the new PaymentType entity to the database
+                    _paymentTypeDao.Create(paymentTypeEntity, session);
+                    transaction.Commit();
+                }
+                catch (Exception ex)
+                {
+                    transaction.Rollback();
+                    throw ex;
+                }
+            }
         }
 
-
-        public void UpdatePaymentType(PaymentTypeDto paymentTypeDto, ISession session)
+        public void UpdatePaymentType(PaymentTypeFormData paymentTypeFormData, ISession session)
         {
-            var paymentTypeEntity = MapToEntity(paymentTypeDto);
-            _paymentTypeDao = new PaymentTypeDao();
-            _paymentTypeDao.Update(paymentTypeEntity, session);
+            using (var transaction = session.BeginTransaction())
+            {
+                try
+                {
+                    // Map the DTO to the entity
+                    var paymentTypeEntity = MapToEntity(paymentTypeFormData);
+                    _paymentTypeDao = new PaymentTypeDao();
+
+                    // Call the DAO to save the new PaymentType entity to the database
+                    _paymentTypeDao.Update(paymentTypeEntity, session);
+                    transaction.Commit();
+                }
+                catch (Exception ex)
+                {
+                    transaction.Rollback();
+                    throw ex;
+                }
+            }
         }
 
         public void DeletePaymentType(long paymentTypeId, ISession session)
         {
-            var paymentTypeEntity = _paymentTypeDao.GetById(paymentTypeId, session);
-            if (paymentTypeEntity != null)
+            using (var transaction = session.BeginTransaction())
             {
-                _paymentTypeDao = new PaymentTypeDao();
-                _paymentTypeDao.Delete(paymentTypeEntity, session);
-            }
+                try
+                {
+                    _paymentTypeDao = new PaymentTypeDao();
+                    var paymentTypeEntity = _paymentTypeDao.GetById(paymentTypeId, session);
+                    if (paymentTypeEntity != null)
+                    {
+                        _paymentTypeDao.Delete(paymentTypeEntity, session);
+                    }
+                    transaction.Commit();
+                }
+                catch (Exception ex)
+                {
+                    transaction.Rollback();
+                    throw ex;
+                }
+            }        
         }
 
         // Helper methods to map between DTO and entity
@@ -76,7 +114,12 @@ namespace IMS.Services
                 Id = paymentType.Id,
                 Name = paymentType.Name,
                 Description = paymentType.Description,
-                Status = paymentType.Status
+                Status = paymentType.Status,
+                Rank = paymentType.Rank,
+                CreatedBy = paymentType.CreatedBy,  
+                CreationDate = paymentType.CreationDate,
+                Version = paymentType.Version,
+                BusinessId = paymentType.BusinessId,
                 // Map other properties as needed
             };
         }
@@ -88,7 +131,29 @@ namespace IMS.Services
                 Id = paymentTypeDto.Id,
                 Name = paymentTypeDto.Name,
                 Description = paymentTypeDto.Description,
-                Status = paymentTypeDto.Status
+                Status = paymentTypeDto.Status,
+                CreationDate = paymentTypeDto.CreationDate,
+                CreatedBy = paymentTypeDto.CreatedBy,
+                Version = paymentTypeDto.Version,
+                BusinessId = paymentTypeDto.BusinessId,
+                Rank = paymentTypeDto.Rank,
+                // Map other properties as needed
+            };
+        }
+
+        private PaymentType MapToEntity(PaymentTypeFormData paymentTypeFormData)
+        {
+            return new PaymentType
+            {
+                Id = paymentTypeFormData.Id,
+                Name = paymentTypeFormData.Name,
+                Description = paymentTypeFormData.Description,
+                Status = paymentTypeFormData.Status,
+                CreationDate = DateTime.Now,
+                CreatedBy = 1,
+                Version = 1,
+                BusinessId = "IMS-1",
+                Rank = paymentTypeFormData.Rank,
                 // Map other properties as needed
             };
         }

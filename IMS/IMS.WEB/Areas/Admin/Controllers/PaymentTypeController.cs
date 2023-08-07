@@ -78,7 +78,7 @@ namespace IMS.WEB.Areas.Admin.Controllers
 
         // POST: Admin/PaymentType/Create
         [HttpPost]
-        public ActionResult Create(PaymentTypeDto paymentTypeDto)
+        public ActionResult Create(PaymentTypeFormData paymentTypeFormData)
         {
             try
             {
@@ -87,13 +87,14 @@ namespace IMS.WEB.Areas.Admin.Controllers
                 {
                     using (var session = NHibernateConfig.OpenSession())
                     {
+                     
                         _paymentTypeService = new PaymentTypeService();
                         // Call the PaymentType service to add the new PaymentType to the database
-                        _paymentTypeService.CreatePaymentType(paymentTypeDto, session);
-
+                        _paymentTypeService.CreatePaymentType(paymentTypeFormData, session);
 
                         // Return a JSON response indicating success
                         return Json(new { success = true, message = "PaymentType added successfully." });
+   
                     }
                 }
                 var errors = ModelState.Values.SelectMany(v => v.Errors.Select(e => e.ErrorMessage)).ToList();
@@ -107,47 +108,58 @@ namespace IMS.WEB.Areas.Admin.Controllers
 
         }
 
-        // GET: Admin/PaymentType/Edit/5
-        public ActionResult Edit(int id)
-        {
-            return View();
-        }
 
         // POST: Admin/PaymentType/Edit/5
         [HttpPost]
-        public ActionResult Edit(int id, FormCollection collection)
+        public ActionResult Edit(PaymentTypeFormData paymentTypeFormData)
         {
             try
             {
-                // TODO: Add update logic here
+                // Perform validation if needed
+                if (ModelState.IsValid)
+                {
+                    using (var session = NHibernateConfig.OpenSession())
+                    {
 
-                return RedirectToAction("Index");
+                        _paymentTypeService = new PaymentTypeService();
+                        // Call the PaymentType service to add the new PaymentType to the database
+                        _paymentTypeService.UpdatePaymentType(paymentTypeFormData, session);
+
+                        // Return a JSON response indicating success
+                        return Json(new { success = true, message = "PaymentType updated successfully." });
+
+                    }
+                }
+                var errors = ModelState.Values.SelectMany(v => v.Errors.Select(e => e.ErrorMessage)).ToList();
+                return Json(new { success = false, message = "Validation failed.", errors });
             }
-            catch
+            catch (Exception ex)
             {
-                return View();
+                // Handle exceptions if necessary
+                return Json(new { success = false, message = "Error occurred while updating PaymentType.", ex.Message });
             }
         }
 
-        // GET: Admin/PaymentType/Delete/5
-        public ActionResult Delete(int id)
-        {
-            return View();
-        }
+     
 
         // POST: Admin/PaymentType/Delete/5
         [HttpPost]
-        public ActionResult Delete(int id, FormCollection collection)
+        public ActionResult Delete(long id)
         {
             try
             {
-                // TODO: Add delete logic here
-
-                return RedirectToAction("Index");
+                using (var session = NHibernateConfig.OpenSession())
+                {
+                    _paymentTypeService = new PaymentTypeService();
+                    _paymentTypeService.DeletePaymentType(id,session);
+                    // Return a success message as JSON
+                    return Json(new { success = true, message = "Payment Type deleted successfully." });
+                }
             }
-            catch
+            catch (Exception ex)
             {
-                return View();
+                // Return an error message as JSON
+                return Json(new { success = false, message = "An error occurred while deleting the Payment Type: " + ex.Message });
             }
         }
     }

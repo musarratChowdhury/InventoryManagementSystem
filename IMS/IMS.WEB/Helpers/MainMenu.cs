@@ -159,7 +159,7 @@
         {
             public const string PageName = "Payment Type";
             public const string RoleName = "Payment Type";
-            public const string Path = "/PaymentType/Index";
+            public const string Path = "Admin/PaymentType/Index";
             public const string ControllerName = "PaymentType";
             public const string ActionName = "Index";
         }
