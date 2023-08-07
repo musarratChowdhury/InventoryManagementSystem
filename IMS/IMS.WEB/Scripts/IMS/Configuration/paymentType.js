@@ -92,6 +92,7 @@ function saveButtonAction(args) {
 }
 
 function complete(args) {
+  console.log(this._sortSettings_sortedColumns);
   if (args.requestType == "beginedit" || args.requestType == "add") {
     if (args.requestType == "add") {
       // console.log("Add Action Triggered", this);
@@ -149,6 +150,9 @@ function renderEjGrid(api) {
           updateUrl: "", // Specify the update URL
           removeUrl: "", // Specify the remove URL
         }),
+        sortSettings: {
+          sortedColumns: [],
+        },
         loadingIndicator: { indicatorType: "Shimmer" },
         toolbarSettings: {
           showToolbar: true,
@@ -172,6 +176,7 @@ function renderEjGrid(api) {
         isResponsive: true,
         enableResponsiveRow: true,
         allowSorting: true,
+        allowMultiSorting: false,
         allowSearching: true,
         allowFiltering: true,
         filterSettings: {
