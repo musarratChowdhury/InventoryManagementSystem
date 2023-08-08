@@ -1,9 +1,17 @@
+//#region  GLOBAL VARIABLES
 var currentAction = "";
+var FETCH_URL = "/Admin/PaymentType/GetPaymentTypes";
+var EDIT_URL = "/Admin/PaymentType/Edit";
+var DELETE_URL = "/Admin/PaymentType/Delete/";
+var CREATE_URL = "/Admin/PaymentType/Create";
+
+//#endregion
+
 $(function () {
-  let url = "/PaymentType/GetPaymentTypes";
   // AJAX call to fetch PaymentType data
-  renderEjGrid(url);
+  renderEjGrid(FETCH_URL);
 });
+//#region  ROW BOUND
 function rowBound(args) {
   if (args.data["Status"] == 1) {
     args.row[0].cells[3].innerText = "Active";
@@ -17,23 +25,25 @@ function rowBound(args) {
     // console.log(dateObject);
   }
 }
+//#endregion
+//#region ADD BUTTON ACTION
 function addButtonAction(args) {
   console.log("hello", args.model);
 }
+//#endregion
 //#region DELETE BUTTON ACTION
 function deleteButtonAction(args) {
   args.cancel = true;
-  let fetchurl = "/PaymentType/GetPaymentTypes";
   // console.log(args);
   let id = args.data.Id;
   $.ajax({
-    url: "/Admin/PaymentType/Delete/" + id, // Replace with the actual URL for your delete action
+    url: DELETE_URL + id, // Replace with the actual URL for your delete action
     method: "POST",
     success: function (data) {
       // Handle the success response from the server
       console.log("Record deleted successfully:", data);
 
-      renderEjGrid(fetchurl);
+      renderEjGrid(FETCH_URL);
     },
     error: function (error) {
       // Handle the error response from the server
@@ -50,16 +60,11 @@ function saveButtonAction(args) {
     var formDataObject = parseQueryString(formData);
     // Make an AJAX POST request to the create action
     $.ajax({
-      url: "/Admin/PaymentType/Create", // Replace with the actual URL for your create action
+      url: CREATE_URL, // Replace with the actual URL for your create action
       method: "POST",
-      data: formDataObject, // The JavaScript object containing form data
+      data: formDataObject,
       success: function (data) {
-        // Handle the success response from the server
-        let fetchurl = "/PaymentType/GetPaymentTypes";
-
-        console.log("Create action successful:", data);
-
-        renderEjGrid(fetchurl);
+        renderEjGrid(FETCH_URL);
         currentAction = "";
       },
       error: function (error) {
@@ -74,16 +79,11 @@ function saveButtonAction(args) {
     formDataObject.Id = args.rowData.Id;
     // Make an AJAX POST request to the create action
     $.ajax({
-      url: "/Admin/PaymentType/Edit", // Replace with the actual URL for your create action
+      url: EDIT_URL, // Replace with the actual URL for your create action
       method: "POST",
-      data: formDataObject, // The JavaScript object containing form data
+      data: formDataObject,
       success: function (data) {
-        // Handle the success response from the server
-        let fetchurl = "/PaymentType/GetPaymentTypes";
-
-        console.log("Edit action successful:", data);
-
-        renderEjGrid(fetchurl);
+        renderEjGrid(FETCH_URL);
         currentAction = "";
       },
       error: function (error) {
@@ -92,6 +92,12 @@ function saveButtonAction(args) {
       },
     });
   }
+}
+//#endregion
+//#region CANCEL BUTTON ACTION
+function cancelButtonAction(args) {
+  args.cancel = true;
+  currentAction = "";
 }
 //#endregion
 //#region COMPLETE(args)
@@ -118,24 +124,7 @@ function complete(args) {
   }
 }
 //#endregion
-function parseQueryString(queryString) {
-  var params = {};
-  var pairs = queryString.split("&");
 
-  for (var i = 0; i < pairs.length; i++) {
-    var pair = pairs[i].split("=");
-    var key = decodeURIComponent(pair[0]);
-    var value = decodeURIComponent(pair[1]);
-    params[key] = value;
-  }
-
-  return params;
-}
-
-function cancelButtonAction(args) {
-  args.cancel = true;
-  currentAction = "";
-}
 //#region RENDER EJ GRID FUNCTION
 function renderEjGrid(api) {
   $.ajax({
@@ -274,45 +263,11 @@ function renderEjGrid(api) {
   });
 }
 //#endregion
-
+//#region HANDLE REFRESH
 function handleRefresh(args) {
   if (args.requestType === "refresh" && currentAction == "edit") {
     console.log("refresh Called");
     args.cancel = true;
   }
 }
-function parseJsonDate(jsonDate) {
-  // Extract the timestamp from the JSON date format
-  var timestamp = parseInt(jsonDate.substr(6));
-  var currentDate = new Date(timestamp);
-  // Create a new Date object using the timestamp
-  const formattedDate = formatDate(currentDate);
-
-  return formattedDate;
-}
-function formatDate(date) {
-  const months = [
-    "Jan",
-    "Feb",
-    "Mar",
-    "Apr",
-    "May",
-    "Jun",
-    "Jul",
-    "Aug",
-    "Sep",
-    "Oct",
-    "Nov",
-    "Dec",
-  ];
-
-  const day = date.getDate().toString().padStart(2, "0");
-  const month = months[date.getMonth()];
-  const year = date.getFullYear().toString().slice(-2);
-
-  return `${day}-${month}-${year}`;
-}
-
-function sortByRank(data) {
-  return data.sort((a, b) => a.Rank - b.Rank);
-}
+//#endregion

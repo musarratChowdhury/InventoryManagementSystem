@@ -5,7 +5,7 @@ using System.Linq;
 
 namespace IMS.Dao
 {
-    public interface IBaseDao<TEntity> where TEntity : BaseEntity
+    public interface IBaseDao<TEntity> 
     {
         TEntity GetById(long id, ISession session);
         IEnumerable<TEntity> GetAll(ISession Session);
@@ -14,7 +14,7 @@ namespace IMS.Dao
         void Delete(TEntity entity, ISession session);
     }
 
-    public class BaseDao<TEntity> : IBaseDao<TEntity> where TEntity : BaseEntity
+    public class BaseDao<TEntity> : IBaseDao<TEntity> 
     {
         //private readonly ISession _session;
 

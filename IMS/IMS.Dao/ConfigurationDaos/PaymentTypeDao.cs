@@ -10,8 +10,7 @@ namespace IMS.Dao
 {
     public interface IPaymentTypeDao : IBaseDao<PaymentType>
     {
-        // Add specific query methods for the PaymentType entity if needed
-        // For example, you can add methods to retrieve PaymentTypes by name, status, etc.
+       
     }
 
     public class PaymentTypeDao : BaseDao<PaymentType>, IPaymentTypeDao
@@ -19,10 +18,5 @@ namespace IMS.Dao
         public PaymentTypeDao() : base()
         {
         }
-
-        // Implement additional methods specific to the PaymentType entity if needed
-        // For example, you can add methods to retrieve PaymentTypes by name, status, etc.
     }
-
-
 }

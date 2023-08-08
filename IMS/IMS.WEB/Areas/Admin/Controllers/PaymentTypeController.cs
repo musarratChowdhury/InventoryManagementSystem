@@ -3,11 +3,8 @@ using IMS.Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Web;
 using System.Web.Mvc;
-using System.Data.Entity;
-using IMS.BusinessModel.Dto.Configuration;
-using System.Threading;
+using IMS.BusinessModel.Dto.Configuration; 
 
 namespace IMS.WEB.Areas.Admin.Controllers
 {
@@ -17,12 +14,7 @@ namespace IMS.WEB.Areas.Admin.Controllers
 
         public PaymentTypeController()
         {
-
-        }
-
-        public PaymentTypeController(IPaymentTypeService paymentTypeService)
-        {
-            _paymentTypeService = paymentTypeService;
+            _paymentTypeService = new PaymentTypeService();
         }
 
         public ActionResult Index()
@@ -31,9 +23,8 @@ namespace IMS.WEB.Areas.Admin.Controllers
             {
                 using (var session = NHibernateConfig.OpenSession())
                 {
-                    _paymentTypeService = new PaymentTypeService();
 
-                    var paymentTypes = _paymentTypeService.GetAllPaymentTypes(session);
+                    var paymentTypes = _paymentTypeService.GetAll(session);
                     return View(paymentTypes);
                 }
             }
@@ -53,15 +44,15 @@ namespace IMS.WEB.Areas.Admin.Controllers
             {
                 using (var session = NHibernateConfig.OpenSession())
                 {
-                    _paymentTypeService = new PaymentTypeService();
 
-                    var paymentTypes = _paymentTypeService.GetAllPaymentTypes(session);
+                    var paymentTypes = _paymentTypeService.GetAll(session);
+                    paymentTypes.OrderBy(x => x.Rank);
 
                     // Check if paymentTypes is null or empty
                     if (paymentTypes == null || !paymentTypes.Any())
                     {
                         // Return an empty JSON array to indicate no data found
-                        return Json(new List<PaymentTypeDto>(), JsonRequestBehavior.AllowGet);
+                        return Json(new List<ConfigurationDto>(), JsonRequestBehavior.AllowGet);
                     }
 
                     return Json(paymentTypes, JsonRequestBehavior.AllowGet);
@@ -78,7 +69,7 @@ namespace IMS.WEB.Areas.Admin.Controllers
 
         // POST: Admin/PaymentType/Create
         [HttpPost]
-        public ActionResult Create(PaymentTypeFormData paymentTypeFormData)
+        public ActionResult Create(ConfigurationFormData paymentTypeFormData)
         {
             try
             {
@@ -87,10 +78,7 @@ namespace IMS.WEB.Areas.Admin.Controllers
                 {
                     using (var session = NHibernateConfig.OpenSession())
                     {
-                     
-                        _paymentTypeService = new PaymentTypeService();
-                        // Call the PaymentType service to add the new PaymentType to the database
-                        _paymentTypeService.CreatePaymentType(paymentTypeFormData, session);
+                        _paymentTypeService.Create(paymentTypeFormData, session);
 
                         // Return a JSON response indicating success
                         return Json(new { success = true, message = "PaymentType added successfully." });
@@ -109,9 +97,9 @@ namespace IMS.WEB.Areas.Admin.Controllers
         }
 
 
-        // POST: Admin/PaymentType/Edit/5
+        // POST: Admin/PaymentType/Edit/
         [HttpPost]
-        public ActionResult Edit(PaymentTypeFormData paymentTypeFormData)
+        public ActionResult Edit(ConfigurationFormData paymentTypeFormData)
         {
             try
             {
@@ -120,10 +108,7 @@ namespace IMS.WEB.Areas.Admin.Controllers
                 {
                     using (var session = NHibernateConfig.OpenSession())
                     {
-
-                        _paymentTypeService = new PaymentTypeService();
-                        // Call the PaymentType service to add the new PaymentType to the database
-                        _paymentTypeService.UpdatePaymentType(paymentTypeFormData, session);
+                        _paymentTypeService.Update(paymentTypeFormData, session);
 
                         // Return a JSON response indicating success
                         return Json(new { success = true, message = "PaymentType updated successfully." });
@@ -150,8 +135,7 @@ namespace IMS.WEB.Areas.Admin.Controllers
             {
                 using (var session = NHibernateConfig.OpenSession())
                 {
-                    _paymentTypeService = new PaymentTypeService();
-                    _paymentTypeService.DeletePaymentType(id,session);
+                    _paymentTypeService.Delete(id,session);
                     // Return a success message as JSON
                     return Json(new { success = true, message = "Payment Type deleted successfully." });
                 }

@@ -64,6 +64,7 @@
   <ItemGroup>
     <Compile Include="BaseDao.cs" />
     <Compile Include="Class1.cs" />
+    <Compile Include="ConfigurationDaos\CustomerTypeDao.cs" />
     <Compile Include="Mappings\BillMap.cs" />
     <Compile Include="Mappings\Configuration\BillTypeMap.cs" />
     <Compile Include="Mappings\Configuration\CashBankMap.cs" />
