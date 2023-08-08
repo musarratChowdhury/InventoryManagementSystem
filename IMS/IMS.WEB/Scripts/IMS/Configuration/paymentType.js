@@ -20,6 +20,7 @@ function rowBound(args) {
 function addButtonAction(args) {
   console.log("hello", args.model);
 }
+//#region DELETE BUTTON ACTION
 function deleteButtonAction(args) {
   args.cancel = true;
   let fetchurl = "/PaymentType/GetPaymentTypes";
@@ -40,8 +41,10 @@ function deleteButtonAction(args) {
     },
   });
 }
-
+//#endregion
+//#region SAVE BUTTON ACTION
 function saveButtonAction(args) {
+  // args.cancel = true;
   if (args.requestType === "save" && currentAction == "create") {
     var formData = $("#GridEditForm").serialize();
     var formDataObject = parseQueryString(formData);
@@ -90,9 +93,10 @@ function saveButtonAction(args) {
     });
   }
 }
-
+//#endregion
+//#region COMPLETE(args)
 function complete(args) {
-  console.log(this._sortSettings_sortedColumns);
+  console.log(this);
   if (args.requestType == "beginedit" || args.requestType == "add") {
     if (args.requestType == "add") {
       // console.log("Add Action Triggered", this);
@@ -113,7 +117,7 @@ function complete(args) {
     }
   }
 }
-
+//#endregion
 function parseQueryString(queryString) {
   var params = {};
   var pairs = queryString.split("&");
@@ -132,7 +136,7 @@ function cancelButtonAction(args) {
   args.cancel = true;
   currentAction = "";
 }
-
+//#region RENDER EJ GRID FUNCTION
 function renderEjGrid(api) {
   $.ajax({
     url: api,
@@ -140,18 +144,19 @@ function renderEjGrid(api) {
     dataType: "json",
     success: function (data) {
       // Initialize EJ2 Grid with the fetched PaymentType data
-      // console.log("received data from the server, payment types : ", data);
+      console.log("received data from the server, payment types : ", data);
+      //sort the data accroding to their rank
 
       $("#Grid").ejGrid({
         dataSource: ej.DataManager({
-          json: data, // Use the fetched PaymentType data
+          json: sortByRank(data), // Use the fetched PaymentType data
           adaptor: new ej.remoteSaveAdaptor(),
           insertUrl: "", // Specify the insert URL
           updateUrl: "", // Specify the update URL
           removeUrl: "", // Specify the remove URL
         }),
         sortSettings: {
-          sortedColumns: [],
+          sortedColumns: [{ field: "Rank", direction: "Ascending" }],
         },
         loadingIndicator: { indicatorType: "Shimmer" },
         toolbarSettings: {
@@ -173,6 +178,10 @@ function renderEjGrid(api) {
           showAddNewDialog: true,
           editMode: "dialog",
         },
+        beginEdit: function (args) {
+          console.log("beginEdit", args);
+        },
+
         isResponsive: true,
         enableResponsiveRow: true,
         allowSorting: true,
@@ -224,7 +233,12 @@ function renderEjGrid(api) {
             editType: "numericedit",
             defaultValue: 1,
           },
-          { field: "Rank", headerText: "Rank", editType: "numericedit" },
+          {
+            field: "Rank",
+            headerText: "Rank",
+            editType: "numericedit",
+            defaultValue: 1,
+          },
           { field: "CreatedBy", headerText: "CreatedBy", allowSorting: false },
           { field: "CreationDate", headerText: "Creation Date" },
         ],
@@ -246,6 +260,9 @@ function renderEjGrid(api) {
             case "cancel":
               cancelButtonAction(args);
               break;
+            case "refresh":
+              handleRefresh(args);
+              break;
           }
         },
         rowDataBound: rowBound,
@@ -256,7 +273,14 @@ function renderEjGrid(api) {
     },
   });
 }
+//#endregion
 
+function handleRefresh(args) {
+  if (args.requestType === "refresh" && currentAction == "edit") {
+    console.log("refresh Called");
+    args.cancel = true;
+  }
+}
 function parseJsonDate(jsonDate) {
   // Extract the timestamp from the JSON date format
   var timestamp = parseInt(jsonDate.substr(6));
@@ -287,4 +311,8 @@ function formatDate(date) {
   const year = date.getFullYear().toString().slice(-2);
 
   return `${day}-${month}-${year}`;
+}
+
+function sortByRank(data) {
+  return data.sort((a, b) => a.Rank - b.Rank);
 }
