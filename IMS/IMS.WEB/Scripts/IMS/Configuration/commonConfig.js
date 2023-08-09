@@ -58,6 +58,7 @@ function saveButtonAction(args) {
       success: function (data) {
         renderEjGrid(FETCH_URL);
         currentAction = "";
+        console.log("create Succesful", data);
       },
       error: function (error) {
         // Handle the error response from the server

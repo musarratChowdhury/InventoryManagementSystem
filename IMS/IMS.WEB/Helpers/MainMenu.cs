@@ -69,8 +69,8 @@
         {
             public const string PageName = "Unit Of Measurement";
             public const string RoleName = "Unit Of Measurement";
-            public const string Path = "/Admin/UnitOfMeasurement/Index";
-            public const string ControllerName = "UnitOfMeasurement";
+            public const string Path = "/Admin/UOM/Index";
+            public const string ControllerName = "UOM";
             public const string ActionName = "Index";
         }
 

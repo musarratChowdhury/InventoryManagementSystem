@@ -54,9 +54,16 @@ namespace IMS.Dao
 
         public int GetHighestRank(ISession session)
         {
-            return session.Query<TEntity>()
-                          .Select(b => b.Rank)
-                          .Max();
+            if(session.Query<TEntity>().ToList().Count!=0)
+            {
+                return session.Query<TEntity>()
+                              .Select(b => b.Rank)
+                              .Max();
+            }
+            else
+            {
+                return 0;
+            }
         }
 
     }

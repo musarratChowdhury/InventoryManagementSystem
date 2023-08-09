@@ -189,8 +189,14 @@
     <Compile Include="App_Start\Startup.Auth.cs" />
     <Compile Include="Areas\Admin\AdminAreaRegistration.cs" />
     <Compile Include="Areas\Admin\Controllers\BaseControllers\BaseConfigurationController.cs" />
+    <Compile Include="Areas\Admin\Controllers\BillTypeController.cs" />
+    <Compile Include="Areas\Admin\Controllers\CashBankController.cs" />
     <Compile Include="Areas\Admin\Controllers\CustomerTypeController.cs" />
+    <Compile Include="Areas\Admin\Controllers\InvoiceTypeController.cs" />
     <Compile Include="Areas\Admin\Controllers\PaymentTypeController.cs" />
+    <Compile Include="Areas\Admin\Controllers\ProductCategoryController.cs" />
+    <Compile Include="Areas\Admin\Controllers\ShipmentTypeController.cs" />
+    <Compile Include="Areas\Admin\Controllers\UOMController.cs" />
     <Compile Include="Areas\Admin\Controllers\VendorTypeController.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
@@ -255,6 +261,12 @@
     <Content Include="Areas\Admin\Views\Shared\_AdminlteMainSidebar.cshtml" />
     <Content Include="Areas\Admin\Views\Shared\_ValidationScriptsPartial.cshtml" />
     <Content Include="Areas\Admin\Views\VendorType\Index.cshtml" />
+    <Content Include="Areas\Admin\Views\UOM\Index.cshtml" />
+    <Content Include="Areas\Admin\Views\ProductCategory\Index.cshtml" />
+    <Content Include="Areas\Admin\Views\CashBank\Index.cshtml" />
+    <Content Include="Areas\Admin\Views\InvoiceType\Index.cshtml" />
+    <Content Include="Areas\Admin\Views\BillType\Index.cshtml" />
+    <Content Include="Areas\Admin\Views\ShipmentType\Index.cshtml" />
     <None Include="Scripts\jquery-3.4.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.4.1.js" />
     <Content Include="Scripts\jquery-3.4.1.min.js" />
