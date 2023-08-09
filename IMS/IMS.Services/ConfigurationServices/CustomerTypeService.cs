@@ -1,9 +1,6 @@
-﻿using IMS.BusinessModel.Dto.Configuration;
-using IMS.BusinessModel.Entity.Configuration;
-using IMS.Dao;
-using NHibernate;
-using System;
+﻿using IMS.BusinessModel.Entity.Configuration;
 using IMS.Services.BaseServices;
+using IMS.BusinessModel.Dto.CommonDtos;
 
 namespace IMS.Services
 {

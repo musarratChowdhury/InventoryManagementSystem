@@ -1,7 +1,6 @@
-﻿using IMS.BusinessModel.Dto.CommonDtos;
-using System;
+﻿using System;
 
-namespace IMS.BusinessModel.Dto.Configuration
+namespace IMS.BusinessModel.Dto.CommonDtos
 {
     public class ConfigurationDto : IConfigurationDto
     {
