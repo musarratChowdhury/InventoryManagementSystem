@@ -1,11 +1,5 @@
-﻿using FluentNHibernate.Cfg;
-using FluentNHibernate.Mapping;
+﻿using FluentNHibernate.Mapping;
 using IMS.BusinessModel.Entity.Configuration;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace IMS.Dao.Mappings
 {
@@ -26,6 +20,16 @@ namespace IMS.Dao.Mappings
             Map(x => x.Rank).Column("Rank").Not.Nullable();
             Map(x => x.BusinessId).Column("BusinessId").Length(256);
             Map(x => x.Version).Column("Version").Not.Nullable();
+
+            HasMany(x => x.PaymentReceivedList)
+                .KeyColumn("PaymentTypeId")
+                .Inverse()
+                .LazyLoad();
+
+            HasMany(x => x.PaymentVoucherList)
+                .KeyColumn("PaymentTypeId")
+                .Inverse()
+                .LazyLoad();
         }
     }
 }

@@ -14,7 +14,7 @@ namespace IMS.Dao.Mappings
         {
             Table("Product");
 
-            Id(x => x.ProductId).Column("ProductId").GeneratedBy.Identity();
+            Id(x =>  x.Id).Column("Id").GeneratedBy.Identity();
             Map(x => x.ProductName).Column("ProductName").Not.Nullable().Length(55);
             Map(x => x.ProductImageUrl).Column("ProductImageUrl");
             Map(x => x.UnitOfMeasurementId).Column("UnitOfMeasurementId").Not.Nullable();
@@ -28,13 +28,11 @@ namespace IMS.Dao.Mappings
 
             References(x => x.UnitOfMeasurement) // Many-to-one relationship with UnitOfMeasurement
                 .Column("UnitOfMeasurementId")
-                .LazyLoad()
                 .Not.Insert()
                 .Not.Update();
 
             References(x => x.ProductCategory) // Many-to-one relationship with ProductCategory
                 .Column("ProductCategoryId")
-                .LazyLoad()
                 .Not.Insert()
                 .Not.Update();
 

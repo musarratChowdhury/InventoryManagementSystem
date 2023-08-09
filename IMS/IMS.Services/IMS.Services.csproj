@@ -66,7 +66,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="BaseServices\BaseService.cs" />
+    <Compile Include="BaseServices\BaseConfigurationService.cs" />
     <Compile Include="Class1.cs" />
     <Compile Include="ConfigurationServices\CustomerTypeService.cs" />
     <Compile Include="Helpers\FluentNhibernateConfiguration.cs" />

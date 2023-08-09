@@ -8,7 +8,7 @@ namespace IMS.Dao
     public interface IBaseDao<TEntity> 
     {
         TEntity GetById(long id, ISession session);
-        IEnumerable<TEntity> GetAll(ISession Session);
+        IList<TEntity> GetAll(ISession Session);
         void Create(TEntity entity, ISession session);
         void Update(TEntity entity, ISession session);
         void Delete(TEntity entity, ISession session);
@@ -28,7 +28,7 @@ namespace IMS.Dao
             return session.Get<TEntity>(id);
         }
 
-        public IEnumerable<TEntity> GetAll(ISession session)
+        public IList<TEntity> GetAll(ISession session)
         {
             return session.Query<TEntity>().ToList();
         }

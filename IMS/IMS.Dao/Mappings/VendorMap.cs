@@ -24,12 +24,17 @@ namespace IMS.Dao.Mappings
             Map(x => x.Rank).Column("Rank").Not.Nullable();
             Map(x => x.BusinessId).Column("BusinessId").Length(256);
             Map(x => x.Version).Column("Version").Not.Nullable();
+            Map(x => x.VendorTypeId).Column("VendorTypeId").Not.Nullable();
 
             References(x => x.VendorType)
                 .Column("VendorTypeId")
-                .LazyLoad()
                 .Not.Insert()
-                .Not.Update(); ; // Many to one
+                .Not.Update();
+
+            HasMany(x => x.PurchaseOrders)
+                .KeyColumn("VendorId")
+                .LazyLoad()
+                .Inverse();
         }
     }
 }

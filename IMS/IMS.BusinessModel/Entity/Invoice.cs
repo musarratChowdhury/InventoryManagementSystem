@@ -10,6 +10,8 @@ namespace IMS.BusinessModel.Entity
     {
         public virtual DateTime InvoiceDate { get; set; }
         public virtual DateTime InvoiceDueDate { get; set; }
+
+        // Navigation properties for foreign keys
         public virtual long InvoiceTypeId { get; set; }
         public virtual InvoiceType InvoiceType { get; set; }
         public virtual long SalesOrderId { get; set; }

@@ -30,19 +30,16 @@ namespace IMS.Dao.Mappings
 
             References(x => x.Bill) // Many-to-one relationship with Bill
                 .Column("BillId")
-                .LazyLoad()
                 .Not.Insert()
                 .Not.Update();
 
             References(x => x.PaymentType) // Many-to-one relationship with PaymentType
                 .Column("PaymentTypeId")
-                .LazyLoad()
                 .Not.Insert()
                 .Not.Update();
 
             References(x => x.CashBank) // Many-to-one relationship with CashBank
                 .Column("CashBankId")
-                .LazyLoad()
                 .Not.Insert()
                 .Not.Update();
 

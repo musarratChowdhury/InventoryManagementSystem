@@ -22,13 +22,11 @@ namespace IMS.Dao.Mappings
 
             References(x => x.SalesOrder) // Many-to-one relationship with SalesOrder
                 .Column("SalesOrderId")
-                .LazyLoad()
                 .Not.Insert()
                 .Not.Update();
 
             References(x => x.ShipmentType) // Many-to-one relationship with ShipmentType
                 .Column("ShipmentTypeId")
-                .LazyLoad()
                 .Not.Insert()
                 .Not.Update();
 

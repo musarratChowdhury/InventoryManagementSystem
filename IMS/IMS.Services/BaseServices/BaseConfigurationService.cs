@@ -11,7 +11,7 @@ using System.Linq;
 
 namespace IMS.Services.BaseServices
 {
-    public interface IBaseService<IConfigurationDto, IConfigurationFormData, TEntity> where TEntity : IBaseEntity 
+    public interface IBaseConfigurationService<IConfigurationDto, IConfigurationFormData, TEntity> where TEntity : IConfigurationEntity 
                                                            
     {
         IEnumerable<ConfigurationDto> GetAll(ISession session);
@@ -19,21 +19,28 @@ namespace IMS.Services.BaseServices
         ConfigurationDto MapToDto(TEntity entity, ConfigurationDto dto);
         TEntity MapToEntity(ConfigurationFormData DtoForm, TEntity entity);
     }
-    public class BaseService<TDto, TDtoForm, TEntity> : IBaseService<IConfigurationDto, IConfigurationFormData, TEntity> where TEntity : IBaseEntity 
+    public class BaseConfigurationService<TDto, TDtoForm, TEntity> : IBaseConfigurationService<IConfigurationDto, IConfigurationFormData, TEntity> where TEntity : IConfigurationEntity 
     {
         private IBaseDao<TEntity> _BaseDao;
 
-        public BaseService()
+        public BaseConfigurationService()
         {
             _BaseDao = new BaseDao<TEntity>();
         }
 
         public IEnumerable<ConfigurationDto> GetAll(ISession session)
         {
-            var entities = _BaseDao.GetAll(session);
-            var dto = new ConfigurationDto();
-            var result =  entities.Select(entity => MapToDto(entity ,dto));
-            return result;
+            try
+            {
+                var entities = _BaseDao.GetAll(session);
+                var dto = new ConfigurationDto();
+                var result =  entities.Select(entity => MapToDto(entity ,dto));
+                return result;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
         }
 
         public void Delete(long entityId, ISession session)

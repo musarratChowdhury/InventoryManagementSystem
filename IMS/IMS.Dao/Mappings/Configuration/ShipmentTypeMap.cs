@@ -20,6 +20,11 @@ namespace IMS.Dao.Mappings
             Map(x => x.Rank).Column("Rank").Not.Nullable();
             Map(x => x.BusinessId).Column("BusinessId").Length(256);
             Map(x => x.Version).Column("Version").Not.Nullable();
+
+            HasMany(x => x.Shipments)
+               .KeyColumn("ShipmentTypeId")
+               .Inverse()
+               .LazyLoad();
         }
     }
 }

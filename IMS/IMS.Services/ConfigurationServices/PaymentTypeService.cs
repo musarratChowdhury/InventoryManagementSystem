@@ -11,7 +11,7 @@ using FluentNHibernate.Data;
 
 namespace IMS.Services
 {
-    public interface IPaymentTypeService : IBaseService<ConfigurationDto, ConfigurationFormData, PaymentType>
+    public interface IPaymentTypeService : IBaseConfigurationService<ConfigurationDto, ConfigurationFormData, PaymentType>
     {
         void Create(ConfigurationFormData dtoFormData, ISession session);
         void Update(ConfigurationFormData dtoFormData, ISession session);
@@ -19,7 +19,7 @@ namespace IMS.Services
 
 
 
-    public class PaymentTypeService : BaseService<ConfigurationDto, ConfigurationFormData, PaymentType>, IPaymentTypeService
+    public class PaymentTypeService : BaseConfigurationService<ConfigurationDto, ConfigurationFormData, PaymentType>, IPaymentTypeService
     {
         private IBaseDao<PaymentType> _BaseDao;
 

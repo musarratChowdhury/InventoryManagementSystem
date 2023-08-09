@@ -5,12 +5,8 @@ using IMS.BusinessModel.Entity.Common;
 
 namespace IMS.BusinessModel.Entity.Configuration
 {
-    public class VendorType : BaseEntity
+    public class VendorType : ConfigurationEntity
     {
-        public virtual string Name { get; set; }
-        public virtual string Description { get; set; }
-        public virtual int Status { get; set; }
-
-        public virtual List<Vendor> Vendors { get; set; }
+        public virtual IList<Vendor> Vendors { get; set; }
     }
 }

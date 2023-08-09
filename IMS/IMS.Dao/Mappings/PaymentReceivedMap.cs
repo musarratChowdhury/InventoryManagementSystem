@@ -23,13 +23,11 @@ namespace IMS.Dao.Mappings
 
             References(x => x.Invoice) // Many-to-one relationship with Invoice
                 .Column("InvoiceId")
-                .LazyLoad()
                 .Not.Insert()
                 .Not.Update();
 
             References(x => x.PaymentType) // Many-to-one relationship with PaymentType
                 .Column("PaymentTypeId")
-                .LazyLoad()
                 .Not.Insert()
                 .Not.Update();
 

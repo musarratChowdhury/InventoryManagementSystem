@@ -41,67 +41,7 @@
 }
 
 @section Scripts{
-
-    <script type="text/javascript">
-        $(function () {
-
-            var dataManager = ej.DataManager({
-                url: "/api/CustomerType",
-                adaptor: new ej.WebApiAdaptor(),
-                offline: true
-            });
-
-            dataManager.ready.done(function (e) {
-                $("#Grid").ejGrid({
-                    dataSource: ej.DataManager({
-                        json: e.result,
-                        adaptor: new ej.remoteSaveAdaptor(),
-                        insertUrl: "/api/CustomerType/Insert",
-                        updateUrl: "/api/CustomerType/Update",
-                        removeUrl: "/api/CustomerType/Remove",
-                    }),
-                    toolbarSettings: {
-                        showToolbar: true,
-                        toolbarItems: ["add", "edit", "delete", "update", "cancel", "search", "printGrid"]
-                    },
-                    editSettings: {
-                        allowEditing: true,
-                        allowAdding: true,
-                        allowDeleting: true,
-                        showDeleteConfirmDialog: true,
-                        editMode: "dialog"
-                    },
-                    isResponsive: true,
-                    enableResponsiveRow: true,
-                    allowSorting: true,
-                    allowSearching: true,
-                    allowFiltering: true,
-                    filterSettings: {
-                        filterType: "excel",
-                        maxFilterChoices: 100,
-                        enableCaseSensitivity: false
-                    },
-                    allowPaging: true,
-                    pageSettings: { pageSize: 10, printMode: ej.Grid.PrintMode.CurrentPage },
-                    columns: [
-                        { field: "CustomerTypeId", headerText: 'Customer Type Id', isPrimaryKey: true, isIdentity: true, visible: false },
-                        { field: "CustomerTypeName", headerText: 'Customer Type Name', validationRules: { required: true } },
-                        { field: "Description", headerText: 'Description', },
-                    ],
-                    actionComplete: "complete",
-                });
-             });
-
-
-        });
-
-        function complete(args) {
-            if (args.requestType == 'beginedit') {
-                $("#" + this._id + "_dialogEdit").ejDialog({ title: "Edit Record" });
-            }
-        }
-
-
-    </script>
+    <script src="~/Scripts/IMS/Configuration/customerType.js"></script>
+    <script src="~/Scripts/IMS/Utility/utility.js"></script>
 }
 

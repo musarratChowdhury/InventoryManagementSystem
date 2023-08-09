@@ -5,12 +5,8 @@ using IMS.BusinessModel.Entity.Common;
 
 namespace IMS.BusinessModel.Entity.Configuration
 {
-    public class InvoiceType : BaseEntity
+    public class InvoiceType : ConfigurationEntity
     {
-        public virtual string Name { get; set; }
-        public virtual string Description { get; set; }
-        public virtual int Status { get; set; }
-
-        public virtual List<Invoice> Invoices { get; set;}
+        public virtual IList<Invoice> Invoices { get; set;}
     }
 }

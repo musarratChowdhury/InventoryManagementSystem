@@ -1,10 +1,5 @@
 ﻿using FluentNHibernate.Mapping;
 using IMS.BusinessModel.Entity.Configuration;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace IMS.Dao.Mappings
 {
@@ -28,7 +23,8 @@ namespace IMS.Dao.Mappings
 
             HasMany(x => x.Customers)
               .KeyColumn("CustomerTypeId")
-              .Inverse();
+              .Inverse()
+              .LazyLoad();
         }
     }
 }

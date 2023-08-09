@@ -12,27 +12,24 @@ namespace IMS.Dao.Mappings
     {
         public InvoiceMap()
         {
-            Table("Invoice"); // Specify the table name
+            Table("Invoice"); 
 
-            Id(x => x.Id).Column("Id").GeneratedBy.Identity(); // Primary key
+            Id(x => x.Id).Column("Id").GeneratedBy.Identity();
             Map(x => x.InvoiceDate).Column("InvoiceDate").Not.Nullable();
             Map(x => x.InvoiceDueDate).Column("InvoiceDueDate").Not.Nullable();
             Map(x => x.InvoiceTypeId).Column("InvoiceTypeId").Not.Nullable();
+            Map(x => x.SalesOrderId).Column("SalesOrderId").Not.Nullable();
 
-            References(x => x.InvoiceType) // Many-to-one relationship with InvoiceType
+            References(x => x.InvoiceType) 
                 .Column("InvoiceTypeId")
-                .LazyLoad()
                 .Not.Insert()
                 .Not.Update();
 
             References(x => x.SalesOrder)
-                .Column("SalesOrderId");
+                .Column("SalesOrderId")
+                .Not.Insert()
+                .Not.Update();
 
-            HasMany(x => x.PaymentReceivedList) // One-to-many relationship with PaymentReceived
-                .KeyColumn("InvoiceId")
-                .Cascade.All()
-                .Inverse()
-                .LazyLoad();
 
             // BaseEntity properties
             Map(x => x.CreatedBy).Column("CreatedBy").Not.Nullable();
@@ -40,8 +37,14 @@ namespace IMS.Dao.Mappings
             Map(x => x.ModifiedBy).Column("ModifiedBy");
             Map(x => x.ModificationDate).Column("ModificationDate");
             Map(x => x.Rank).Column("Rank").Not.Nullable();
-            Map(x => x.BusinessId).Column("BusinessId").Length(256); // Specify the length for BusinessId column
+            Map(x => x.BusinessId).Column("BusinessId").Length(256); 
             Map(x => x.Version).Column("Version").Not.Nullable();
+
+            HasMany(x => x.PaymentReceivedList)
+                .KeyColumn("InvoiceId")
+                .Cascade.All()
+                .LazyLoad()
+                .Inverse();
         }
     }
 }

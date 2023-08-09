@@ -5,11 +5,10 @@ using IMS.BusinessModel.Entity.Common;
 
 namespace IMS.BusinessModel.Entity.Configuration
 {
-    public class PaymentType : BaseEntity, IConfigurationEntity
+    public class PaymentType : ConfigurationEntity
     {
-
-        public virtual List<PaymentReceived> PaymentReceivedList { get; set; }
-        public virtual List<PaymentVoucher> PaymentVoucherList { get; set; }
+        public virtual IList<PaymentReceived> PaymentReceivedList { get; set; }
+        public virtual IList<PaymentVoucher> PaymentVoucherList { get; set; }
 
     }
 }

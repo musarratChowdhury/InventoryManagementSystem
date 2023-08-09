@@ -15,30 +15,23 @@ namespace IMS.Dao.Mappings
     {
         public BillMap()
         {
-            Table("Bill"); // Specify the table name
+            Table("Bill");
 
-            Id(x => x.Id).Column("Id").GeneratedBy.Identity(); // Primary key
+            Id(x => x.Id).Column("Id").GeneratedBy.Identity();
             Map(x => x.BillDate).Column("BillDate").Not.Nullable();
             Map(x => x.BillDueDate).Column("BillDueDate").Not.Nullable();
             Map(x => x.BillTypeId).Column("BillTypeId").Not.Nullable();
+            Map(x => x.PurchaseOrderId).Column("PurchaseOrderId").Not.Nullable();
 
-            References(x => x.BillType) // Many-to-one relationship with BillType
+            References(x => x.BillType)
                 .Column("BillTypeId")
-                .LazyLoad()
                 .Not.Insert()
                 .Not.Update();
 
-            // One-to-one relationship with PurchaseOrder
-            //HasOne(x => x.PurchaseOrder)
-            //    .PropertyRef(nameof(PurchaseOrder.Bill)) // Specify the property in PurchaseOrder that maps back to Bill
-            //    .Cascade.All() // You can specify cascade options if necessary
-            //    .Constrained(); // Optional - adds a foreign key constraint
-
-            HasMany(x => x.PaymentVoucherList) // One-to-many relationship with PaymentVoucher
-                .KeyColumn("BillId")
-                .Cascade.All()
-                .Inverse()
-                .LazyLoad();
+            References(x => x.PurchaseOrder)
+                .Column("PurchaseOrderId")
+                .Not.Insert()
+                .Not.Update();
 
             Map(x => x.CreatedBy).Column("CreatedBy").Not.Nullable();
             Map(x => x.CreationDate).Column("CreationDate").Not.Nullable();
@@ -47,6 +40,12 @@ namespace IMS.Dao.Mappings
             Map(x => x.Rank).Column("Rank").Not.Nullable();
             Map(x => x.BusinessId).Column("BusinessId").Length(256);
             Map(x => x.Version).Column("Version").Not.Nullable();
+
+            HasMany(x => x.PaymentVoucherList)
+                .KeyColumn("BillId")
+                .Cascade.All()
+                .Inverse()
+                .LazyLoad();
         }
     }
 

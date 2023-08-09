@@ -17,13 +17,11 @@ namespace IMS.Dao.Mappings.OrderDetails
             Map(x => x.Amount).Column("Amount").Not.Nullable();
             Map(x => x.Total).Column("Total").Not.Nullable();
 
-            References(x => x.PurchaseOrder) // Many-to-one relationship with PurchaseOrder
+            References(x => x.PurchaseOrder)
                 .Not.Nullable()
-                .LazyLoad()
                 .Cascade.None();
 
-            References(x => x.Product) // Many-to-one relationship with Product
-                .LazyLoad()
+            References(x => x.Product)
                 .Cascade.None();
         }
     }

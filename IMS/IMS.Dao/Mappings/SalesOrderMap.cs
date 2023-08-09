@@ -11,6 +11,7 @@ namespace IMS.Dao.Mappings
 
             Id(x => x.Id).Column("Id").GeneratedBy.Identity();
             Map(x => x.CustomerId).Column("CustomerId").Not.Nullable();
+            Map(x => x.InvoiceId).Column("InvoiceId");
             Map(x => x.TotalAmount).Column("TotalAmount").Not.Nullable();
             Map(x => x.IsArchived).Column("IsArchived").Not.Nullable();
             Map(x => x.ShipmentStatus).Column("ShipmentStatus").Not.Nullable();
@@ -18,12 +19,13 @@ namespace IMS.Dao.Mappings
 
             References(x => x.Customer) // Many-to-one relationship with Customer
                 .Column("CustomerId")
-                .LazyLoad()
                 .Not.Insert()
                 .Not.Update();
 
             References(x => x.Invoice)
-                .Column("InvoiceId");
+                .Column("InvoiceId")
+                .Not.Insert()
+                .Not.Update();
 
             // BaseEntity properties
             Map(x => x.CreatedBy).Column("CreatedBy").Not.Nullable();
@@ -33,6 +35,18 @@ namespace IMS.Dao.Mappings
             Map(x => x.Rank).Column("Rank").Not.Nullable();
             Map(x => x.BusinessId).Column("BusinessId").Length(256);
             Map(x => x.Version).Column("Version").Not.Nullable();
+
+            HasMany(x => x.SalesOrderLines)
+                .KeyColumn("SalesOrderId")
+                .Cascade.All()
+                .LazyLoad()
+                .Inverse();
+
+            HasMany(x => x.Shipments)
+                .KeyColumn("SalesOrderId")
+                .Cascade.All()
+                .LazyLoad()
+                .Inverse();
         }
     }
 }
