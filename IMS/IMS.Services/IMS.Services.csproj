@@ -68,10 +68,7 @@
   <ItemGroup>
     <Compile Include="BaseServices\BaseConfigurationService.cs" />
     <Compile Include="Class1.cs" />
-    <Compile Include="ConfigurationServices\CustomerTypeService.cs" />
-    <Compile Include="ConfigurationServices\VendorTypeService.cs" />
     <Compile Include="Helpers\FluentNhibernateConfiguration.cs" />
-    <Compile Include="ConfigurationServices\PaymentTypeService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
