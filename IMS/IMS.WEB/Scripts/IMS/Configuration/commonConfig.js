@@ -94,15 +94,16 @@ function cancelButtonAction(args) {
 //#endregion
 //#region COMPLETE(args)
 function complete(args) {
-  console.log(this);
+  //   console.log(this);
   if (args.requestType == "beginedit" || args.requestType == "add") {
     if (args.requestType == "add") {
-      // console.log("Add Action Triggered", this);
+      console.log("Add Action Triggered", this);
       $("#" + this._id + "_dialogEdit").ejDialog({
         title: "Add New  Type",
       });
       $("#GridCreatedBy").parent().parent().hide();
       $("#GridCreationDate").parent().parent().hide();
+      $("#GridRank").parent().parent().parent().parent().hide();
       currentAction = "create";
     } else {
       $("#" + this._id + "_dialogEdit").ejDialog({
@@ -126,6 +127,7 @@ function renderEjGrid(api) {
     success: function (data) {
       // Initialize EJ2 Grid with the fetched CustomerType data
       console.log("received data from the server,  types : ", data);
+
       //sort the data accroding to their rank
 
       $("#Grid").ejGrid({
