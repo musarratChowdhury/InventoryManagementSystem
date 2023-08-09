@@ -1,14 +1,6 @@
-//#region  GLOBAL VARIABLES
 var currentAction = "";
-var FETCH_URL = "/Admin/CustomerType/GetCustomerTypes";
-var EDIT_URL = "/Admin/CustomerType/Edit";
-var DELETE_URL = "/Admin/CustomerType/Delete/";
-var CREATE_URL = "/Admin/CustomerType/Create";
-
-//#endregion
-
 $(function () {
-  // AJAX call to fetch CustomerType data
+  // AJAX call to fetch VendorType data
   renderEjGrid(FETCH_URL);
 });
 //#region  ROW BOUND
