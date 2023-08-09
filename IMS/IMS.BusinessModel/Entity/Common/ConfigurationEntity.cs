@@ -8,5 +8,10 @@ namespace IMS.BusinessModel.Entity.Common
     {
         public virtual string Name { get; set; }
         public virtual string Description { get; set; }
+
+        public static T CreateInstance<T>()
+        {
+            return Activator.CreateInstance<T>();
+        }
     }
 }

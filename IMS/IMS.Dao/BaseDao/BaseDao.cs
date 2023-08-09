@@ -5,16 +5,18 @@ using System.Linq;
 
 namespace IMS.Dao
 {
-    public interface IBaseDao<TEntity> 
+    public interface IBaseDao<TEntity> where TEntity : IBaseEntity
     {
         TEntity GetById(long id, ISession session);
         IList<TEntity> GetAll(ISession Session);
         void Create(TEntity entity, ISession session);
         void Update(TEntity entity, ISession session);
         void Delete(TEntity entity, ISession session);
+
+        int GetHighestRank(ISession session);
     }
 
-    public class BaseDao<TEntity> : IBaseDao<TEntity> 
+    public class BaseDao<TEntity> : IBaseDao<TEntity> where TEntity : IBaseEntity
     {
         //private readonly ISession _session;
 
@@ -48,6 +50,13 @@ namespace IMS.Dao
         public void Delete(TEntity entity, ISession session)
         {
             session.Delete(entity);
+        }
+
+        public int GetHighestRank(ISession session)
+        {
+            return session.Query<TEntity>()
+                          .Select(b => b.Rank)
+                          .Max();
         }
 
     }

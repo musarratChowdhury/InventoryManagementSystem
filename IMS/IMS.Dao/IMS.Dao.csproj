@@ -62,8 +62,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="BaseDao.cs" />
-    <Compile Include="Class1.cs" />
+    <Compile Include="BaseDao\BaseDao.cs" />
     <Compile Include="ConfigurationDaos\CustomerTypeDao.cs" />
     <Compile Include="Mappings\BillMap.cs" />
     <Compile Include="Mappings\Configuration\BillTypeMap.cs" />

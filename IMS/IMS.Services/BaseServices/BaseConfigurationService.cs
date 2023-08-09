@@ -4,22 +4,23 @@ using IMS.BusinessModel.Entity.Common;
 using IMS.BusinessModel.Entity.Configuration;
 using IMS.Dao;
 using NHibernate;
-using NHibernate.SqlCommand;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 
 namespace IMS.Services.BaseServices
 {
-    public interface IBaseConfigurationService<IConfigurationDto, IConfigurationFormData, TEntity> where TEntity : IConfigurationEntity 
+    public interface IBaseConfigurationService<IConfigurationDto, IConfigurationFormData, TEntity> where TEntity : IConfigurationEntity
                                                            
     {
         IEnumerable<ConfigurationDto> GetAll(ISession session);
+        void Create(ConfigurationFormData dtoFormData, ISession session);
+        void Update(ConfigurationFormData dtoFormData, ISession session);
         void Delete(long entityId, ISession session);
         ConfigurationDto MapToDto(TEntity entity, ConfigurationDto dto);
         TEntity MapToEntity(ConfigurationFormData DtoForm, TEntity entity);
     }
-    public class BaseConfigurationService<TDto, TDtoForm, TEntity> : IBaseConfigurationService<IConfigurationDto, IConfigurationFormData, TEntity> where TEntity : IConfigurationEntity 
+    public class BaseConfigurationService<TDto, TDtoForm, TEntity> : IBaseConfigurationService<IConfigurationDto, IConfigurationFormData, TEntity> where TEntity : IConfigurationEntity
     {
         private IBaseDao<TEntity> _BaseDao;
 
@@ -42,6 +43,43 @@ namespace IMS.Services.BaseServices
                 throw ex;
             }
         }
+        public void Create(ConfigurationFormData dtoFormData, ISession session)
+        {
+            using (var transaction = session.BeginTransaction())
+            {
+                try
+                {
+                    var entityType = ConfigurationEntity.CreateInstance<TEntity>();
+                    var entity = MapToEntity(dtoFormData, entityType);
+                    entity.Rank = GetNextRank(session);
+                    _BaseDao.Create(entity, session);
+                    transaction.Commit();
+                }
+                catch (Exception ex)
+                {
+                    transaction.Rollback();
+                    throw ex;
+                }
+            }
+        }
+        public void Update(ConfigurationFormData dtoFormData, ISession session)
+        {
+            using (var transaction = session.BeginTransaction())
+            {
+                try
+                {
+                    var entityType = ConfigurationEntity.CreateInstance<TEntity>();
+                    var entity = MapToEntity(dtoFormData, entityType);
+                    _BaseDao.Update(entityType, session);
+                    transaction.Commit();
+                }
+                catch (Exception ex)
+                {
+                    transaction.Rollback();
+                    throw ex;
+                }
+            }
+        }
 
         public void Delete(long entityId, ISession session)
         {
@@ -61,6 +99,17 @@ namespace IMS.Services.BaseServices
                     transaction.Rollback();
                     throw ex;
                 }
+            }
+        }
+
+        protected int GetNextRank(ISession session)
+        {
+            try {
+                var highestRank = _BaseDao.GetHighestRank(session);
+                return highestRank + 1;
+            } catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
             }
         }
 
