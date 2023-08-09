@@ -33,7 +33,7 @@ namespace IMS.WEB.Areas.Admin.Controllers
                 ViewBag.Message = "Error: " + ex.Message;
             }
            
-            //_logger.Info("hello from home");
+     
 
 
             return View();
@@ -48,10 +48,10 @@ namespace IMS.WEB.Areas.Admin.Controllers
                     var paymentTypes = _paymentTypeService.GetAll(session);
                     paymentTypes.OrderBy(x => x.Rank);
 
-                    // Check if paymentTypes is null or empty
+                   
                     if (paymentTypes == null || !paymentTypes.Any())
                     {
-                        // Return an empty JSON array to indicate no data found
+                     
                         return Json(new List<ConfigurationDto>(), JsonRequestBehavior.AllowGet);
                     }
 
@@ -62,7 +62,6 @@ namespace IMS.WEB.Areas.Admin.Controllers
             {
                 ViewBag.Message = "Error: " + ex.Message;
             }
-            // Handle any other error scenarios and return appropriate responses
             return Json(new { error = "An error occurred while fetching data." });
 
         }
@@ -73,14 +72,14 @@ namespace IMS.WEB.Areas.Admin.Controllers
         {
             try
             {
-                // Perform validation if needed
+                
                 if (ModelState.IsValid)
                 {
                     using (var session = NHibernateConfig.OpenSession())
                     {
                         _paymentTypeService.Create(paymentTypeFormData, session);
 
-                        // Return a JSON response indicating success
+                       
                         return Json(new { success = true, message = "PaymentType added successfully." });
    
                     }
@@ -90,7 +89,6 @@ namespace IMS.WEB.Areas.Admin.Controllers
             }
             catch (Exception ex)
             {
-                // Handle exceptions if necessary
                 return Json(new { success = false, message = "Error occurred while adding PaymentType.",ex.Message });
             }
 
@@ -103,14 +101,12 @@ namespace IMS.WEB.Areas.Admin.Controllers
         {
             try
             {
-                // Perform validation if needed
                 if (ModelState.IsValid)
                 {
                     using (var session = NHibernateConfig.OpenSession())
                     {
                         _paymentTypeService.Update(paymentTypeFormData, session);
 
-                        // Return a JSON response indicating success
                         return Json(new { success = true, message = "PaymentType updated successfully." });
 
                     }
@@ -120,7 +116,6 @@ namespace IMS.WEB.Areas.Admin.Controllers
             }
             catch (Exception ex)
             {
-                // Handle exceptions if necessary
                 return Json(new { success = false, message = "Error occurred while updating PaymentType.", ex.Message });
             }
         }
@@ -136,13 +131,11 @@ namespace IMS.WEB.Areas.Admin.Controllers
                 using (var session = NHibernateConfig.OpenSession())
                 {
                     _paymentTypeService.Delete(id,session);
-                    // Return a success message as JSON
                     return Json(new { success = true, message = "Payment Type deleted successfully." });
                 }
             }
             catch (Exception ex)
             {
-                // Return an error message as JSON
                 return Json(new { success = false, message = "An error occurred while deleting the Payment Type: " + ex.Message });
             }
         }

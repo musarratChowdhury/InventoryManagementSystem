@@ -33,10 +33,8 @@ namespace IMS.WEB.Areas.Admin.Controllers
                     var CustomerTypes = _CustomerTypeService.GetAll(session);
                     CustomerTypes.OrderBy(x => x.Rank);
 
-                    // Check if CustomerTypes is null or empty
                     if (CustomerTypes == null || !CustomerTypes.Any())
                     {
-                        // Return an empty JSON array to indicate no data found
                         return Json(new List<ConfigurationDto>(), JsonRequestBehavior.AllowGet);
                     }
 
@@ -47,7 +45,7 @@ namespace IMS.WEB.Areas.Admin.Controllers
             {
                 ViewBag.Message = "Error: " + ex.Message;
             }
-            // Handle any other error scenarios and return appropriate responses
+            
             return Json(new { error = "An error occurred while fetching data." });
 
         }
@@ -58,14 +56,14 @@ namespace IMS.WEB.Areas.Admin.Controllers
         {
             try
             {
-                // Perform validation if needed
+                
                 if (ModelState.IsValid)
                 {
                     using (var session = NHibernateConfig.OpenSession())
                     {
                         _CustomerTypeService.Create(CustomerTypeFormData, session);
 
-                        // Return a JSON response indicating success
+                        
                         return Json(new { success = true, message = "CustomerType added successfully." });
 
                     }
@@ -75,7 +73,6 @@ namespace IMS.WEB.Areas.Admin.Controllers
             }
             catch (Exception ex)
             {
-                // Handle exceptions if necessary
                 return Json(new { success = false, message = "Error occurred while adding CustomerType.", ex.Message });
             }
 
@@ -88,14 +85,13 @@ namespace IMS.WEB.Areas.Admin.Controllers
         {
             try
             {
-                // Perform validation if needed
+                
                 if (ModelState.IsValid)
                 {
                     using (var session = NHibernateConfig.OpenSession())
                     {
                         _CustomerTypeService.Update(CustomerTypeFormData, session);
 
-                        // Return a JSON response indicating success
                         return Json(new { success = true, message = "CustomerType updated successfully." });
 
                     }
@@ -105,7 +101,6 @@ namespace IMS.WEB.Areas.Admin.Controllers
             }
             catch (Exception ex)
             {
-                // Handle exceptions if necessary
                 return Json(new { success = false, message = "Error occurred while updating CustomerType.", ex.Message });
             }
         }
@@ -121,13 +116,12 @@ namespace IMS.WEB.Areas.Admin.Controllers
                 using (var session = NHibernateConfig.OpenSession())
                 {
                     _CustomerTypeService.Delete(id, session);
-                    // Return a success message as JSON
+                    
                     return Json(new { success = true, message = "Customer Type deleted successfully." });
                 }
             }
             catch (Exception ex)
             {
-                // Return an error message as JSON
                 return Json(new { success = false, message = "An error occurred while deleting the Customer Type: " + ex.Message });
             }
         }

@@ -1,6 +1,5 @@
 ﻿using IMS.BusinessModel.Dto.CommonDtos;
 using IMS.BusinessModel.Entity.Common;
-using IMS.BusinessModel.Entity.Configuration;
 using IMS.Dao;
 using NHibernate;
 using System;

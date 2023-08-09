@@ -63,7 +63,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BaseDao\BaseDao.cs" />
-    <Compile Include="ConfigurationDaos\CustomerTypeDao.cs" />
     <Compile Include="Mappings\BillMap.cs" />
     <Compile Include="Mappings\Configuration\BillTypeMap.cs" />
     <Compile Include="Mappings\Configuration\CashBankMap.cs" />
@@ -85,7 +84,6 @@
     <Compile Include="Mappings\ShipmentMap.cs" />
     <Compile Include="Mappings\VendorMap.cs" />
     <Compile Include="Mappings\Configuration\VendorTypeMap.cs" />
-    <Compile Include="ConfigurationDaos\PaymentTypeDao.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -96,6 +94,9 @@
       <Project>{077AD203-18E3-4803-8BFD-2C83E5561D1F}</Project>
       <Name>IMS.BusinessModel</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="ConfigurationDaos\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

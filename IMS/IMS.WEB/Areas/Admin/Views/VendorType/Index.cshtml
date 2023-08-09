@@ -1,6 +1,6 @@
 ﻿
 @{
-    ViewData["Title"] = "Payment Type";
+    ViewData["Title"] = "Vendor Type";
 }
 <!-- Content Wrapper. Contains page content -->
 <div class="content-wrapper">
@@ -41,15 +41,17 @@
 }
 
 @section Scripts{
-    <script>
-        var FETCH_URL = "/Admin/PaymentType/GetPaymentTypes";
-        var EDIT_URL = "/Admin/PaymentType/Edit";
-        var DELETE_URL = "/Admin/PaymentType/Delete/";
-        var CREATE_URL = "/Admin/PaymentType/Create";
-    </script>
+   <script>
+       var FETCH_URL = "/Admin/VendorType/GetVendorTypes";
+       var EDIT_URL = "/Admin/VendorType/Edit";
+       var DELETE_URL = "/Admin/VendorType/Delete/";
+       var CREATE_URL = "/Admin/VendorType/Create";
+    </script>     
 
-    <script src="~/Scripts/IMS/Configuration/commonConfig.js"></script>
+
+
     <script src="~/Scripts/IMS/Utility/utility.js"></script>
+    <script src="~/Scripts/IMS/Configuration/commonConfig.js" defer></script>
 }
 
 

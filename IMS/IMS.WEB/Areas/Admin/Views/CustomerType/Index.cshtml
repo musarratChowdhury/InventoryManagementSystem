@@ -41,7 +41,14 @@
 }
 
 @section Scripts{
-    <script src="~/Scripts/IMS/Configuration/customerType.js"></script>
+    <script>
+        var FETCH_URL = "/Admin/CustomerType/GetCustomerTypes";
+        var EDIT_URL = "/Admin/CustomerType/Edit";
+        var DELETE_URL = "/Admin/CustomerType/Delete/";
+        var CREATE_URL = "/Admin/CustomerType/Create";
+    </script>
+
+    <script src="~/Scripts/IMS/Configuration/commonConfig.js"></script>
     <script src="~/Scripts/IMS/Utility/utility.js"></script>
 }
 

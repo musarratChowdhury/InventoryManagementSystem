@@ -1,88 +1,142 @@
-﻿using System;
+﻿using IMS.Services.Helpers;
+using IMS.Services;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Web;
 using System.Web.Mvc;
+using IMS.BusinessModel.Dto.CommonDtos;
 
 namespace IMS.WEB.Areas.Admin.Controllers
 {
     public class VendorTypeController : Controller
     {
-        // GET: Admin/VendorType
+        private IVendorTypeService _vendorTypeService;
+
+        public VendorTypeController()
+        {
+            _vendorTypeService = new VendorTypeService();
+        }
+
         public ActionResult Index()
         {
+            try
+            {
+                using (var session = NHibernateConfig.OpenSession())
+                {
+
+                    var vendorTypes = _vendorTypeService.GetAll(session);
+                    return View(vendorTypes);
+                }
+            }
+            catch (Exception ex)
+            {
+                ViewBag.Message = "Error: " + ex.Message;
+            }
+
+
+
+
             return View();
         }
-
-        // GET: Admin/VendorType/Details/5
-        public ActionResult Details(int id)
+        public ActionResult GetVendorTypes()
         {
-            return View();
-        }
+            try
+            {
+                using (var session = NHibernateConfig.OpenSession())
+                {
 
-        // GET: Admin/VendorType/Create
-        public ActionResult Create()
-        {
-            return View();
+                    var vendorTypes = _vendorTypeService.GetAll(session);
+                    vendorTypes.OrderBy(x => x.Rank);
+
+
+                    if (vendorTypes == null || !vendorTypes.Any())
+                    {
+
+                        return Json(new List<ConfigurationDto>(), JsonRequestBehavior.AllowGet);
+                    }
+
+                    return Json(vendorTypes, JsonRequestBehavior.AllowGet);
+                }
+            }
+            catch (Exception ex)
+            {
+                ViewBag.Message = "Error: " + ex.Message;
+            }
+            return Json(new { error = "An error occurred while fetching data." });
+
         }
 
         // POST: Admin/VendorType/Create
         [HttpPost]
-        public ActionResult Create(FormCollection collection)
+        public ActionResult Create(ConfigurationFormData vendorTypeFormData)
         {
             try
             {
-                // TODO: Add insert logic here
 
-                return RedirectToAction("Index");
+                if (ModelState.IsValid)
+                {
+                    using (var session = NHibernateConfig.OpenSession())
+                    {
+                        _vendorTypeService.Create(vendorTypeFormData, session);
+
+
+                        return Json(new { success = true, message = "VendorType added successfully." });
+
+                    }
+                }
+                var errors = ModelState.Values.SelectMany(v => v.Errors.Select(e => e.ErrorMessage)).ToList();
+                return Json(new { success = false, message = "Validation failed.", errors });
             }
-            catch
+            catch (Exception ex)
             {
-                return View();
+                return Json(new { success = false, message = "Error occurred while adding VendorType.", ex.Message });
             }
+
         }
 
-        // GET: Admin/VendorType/Edit/5
-        public ActionResult Edit(int id)
-        {
-            return View();
-        }
 
-        // POST: Admin/VendorType/Edit/5
+        // POST: Admin/VendorType/Edit/
         [HttpPost]
-        public ActionResult Edit(int id, FormCollection collection)
+        public ActionResult Edit(ConfigurationFormData vendorTypeFormData)
         {
             try
             {
-                // TODO: Add update logic here
+                if (ModelState.IsValid)
+                {
+                    using (var session = NHibernateConfig.OpenSession())
+                    {
+                        _vendorTypeService.Update(vendorTypeFormData, session);
 
-                return RedirectToAction("Index");
+                        return Json(new { success = true, message = "VendorType updated successfully." });
+
+                    }
+                }
+                var errors = ModelState.Values.SelectMany(v => v.Errors.Select(e => e.ErrorMessage)).ToList();
+                return Json(new { success = false, message = "Validation failed.", errors });
             }
-            catch
+            catch (Exception ex)
             {
-                return View();
+                return Json(new { success = false, message = "Error occurred while updating VendorType.", ex.Message });
             }
         }
 
-        // GET: Admin/VendorType/Delete/5
-        public ActionResult Delete(int id)
-        {
-            return View();
-        }
+
 
         // POST: Admin/VendorType/Delete/5
         [HttpPost]
-        public ActionResult Delete(int id, FormCollection collection)
+        public ActionResult Delete(long id)
         {
             try
             {
-                // TODO: Add delete logic here
-
-                return RedirectToAction("Index");
+                using (var session = NHibernateConfig.OpenSession())
+                {
+                    _vendorTypeService.Delete(id, session);
+                    return Json(new { success = true, message = "Vendor Type deleted successfully." });
+                }
             }
-            catch
+            catch (Exception ex)
             {
-                return View();
+                return Json(new { success = false, message = "An error occurred while deleting the Vendor Type: " + ex.Message });
             }
         }
     }

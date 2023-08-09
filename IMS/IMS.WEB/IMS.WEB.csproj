@@ -253,6 +253,7 @@
     <Content Include="Areas\Admin\Views\Shared\_AdminlteMainHeader.cshtml" />
     <Content Include="Areas\Admin\Views\Shared\_AdminlteMainSidebar.cshtml" />
     <Content Include="Areas\Admin\Views\Shared\_ValidationScriptsPartial.cshtml" />
+    <Content Include="Areas\Admin\Views\VendorType\Index.cshtml" />
     <None Include="Scripts\jquery-3.4.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.4.1.js" />
     <Content Include="Scripts\jquery-3.4.1.min.js" />
@@ -312,7 +313,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Areas\Admin\Views\VendorType\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\bootstrap.rtl.min.css.map" />
