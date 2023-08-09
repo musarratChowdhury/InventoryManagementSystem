@@ -2,6 +2,97 @@
 {
     public static class MainMenu
     {
+        #region Configuration
+        public static class BillType
+        {
+            public const string PageName = "Bill Type";
+            public const string RoleName = "Bill Type";
+            public const string Path = "/Admin/BillType/Index";
+            public const string ControllerName = "BillType";
+            public const string ActionName = "Index";
+        }
+        public static class CashBank
+        {
+            public const string PageName = "Cash Bank";
+            public const string RoleName = "Cash Bank";
+            public const string Path = "/Admin/CashBank/Index";
+            public const string ControllerName = "CashBank";
+            public const string ActionName = "Index";
+        }
+
+        public static class CustomerType
+        {
+            public const string PageName = "Customer Type";
+            public const string RoleName = "Customer Type";
+            public const string Path = "/Admin/CustomerType/Index";
+            public const string ControllerName = "CustomerType";
+            public const string ActionName = "Index";
+        }
+
+        public static class InvoiceType
+        {
+            public const string PageName = "Invoice Type";
+            public const string RoleName = "Invoice Type";
+            public const string Path = "/Admin/InvoiceType/Index";
+            public const string ControllerName = "InvoiceType";
+            public const string ActionName = "Index";
+        }
+
+        public static class PaymentType
+        {
+            public const string PageName = "Payment Type";
+            public const string RoleName = "Payment Type";
+            public const string Path = "/Admin/PaymentType/Index";
+            public const string ControllerName = "PaymentType";
+            public const string ActionName = "Index";
+        }
+
+        public static class ProductCategory
+        {
+            public const string PageName = "Product Category";
+            public const string RoleName = "Product Category";
+            public const string Path = "/Admin/ProductCategory/Index";
+            public const string ControllerName = "ProductCategory";
+            public const string ActionName = "Index";
+        }
+
+        public static class ShipmentType
+        {
+            public const string PageName = "Shipment Type";
+            public const string RoleName = "Shipment Type";
+            public const string Path = "/Admin/ShipmentType/Index";
+            public const string ControllerName = "ShipmentType";
+            public const string ActionName = "Index";
+        }
+
+        public static class UnitOfMeasurement
+        {
+            public const string PageName = "Unit Of Measurement";
+            public const string RoleName = "Unit Of Measurement";
+            public const string Path = "/Admin/UnitOfMeasurement/Index";
+            public const string ControllerName = "UnitOfMeasurement";
+            public const string ActionName = "Index";
+        }
+
+        public static class VendorType
+        {
+            public const string PageName = "Vendor Type";
+            public const string RoleName = "Vendor Type";
+            public const string Path = "/Admin/VendorType/Index";
+            public const string ControllerName = "VendorType";
+            public const string ActionName = "Index";
+        }
+
+
+        public static class PurchaseType
+        {
+            public const string PageName = "Purchase Type";
+            public const string RoleName = "Purchase Type";
+            public const string Path = "/Admin/PurchaseType/Index";
+            public const string ControllerName = "PurchaseType";
+            public const string ActionName = "Index";
+        }
+        #endregion
         public static class Customer
         {
             public const string PageName = "Customer";
@@ -27,6 +118,7 @@
             public const string Path = "/Product/Index";
             public const string ControllerName = "Product";
             public const string ActionName = "Index";
+      
         }
 
         public static class PurchaseOrder
@@ -38,14 +130,6 @@
             public const string ActionName = "Index";
         }
 
-        public static class GoodsReceivedNote
-        {
-            public const string PageName = "Goods Received Note";
-            public const string RoleName = "Goods Received Note";
-            public const string Path = "/GoodsReceivedNote/Index";
-            public const string ControllerName = "GoodsReceivedNote";
-            public const string ActionName = "Index";
-        }
 
         public static class Bill
         {
@@ -101,132 +185,7 @@
             public const string ActionName = "Index";
         }
 
-        public static class BillType
-        {
-            public const string PageName = "Bill Type";
-            public const string RoleName = "Bill Type";
-            public const string Path = "/BillType/Index";
-            public const string ControllerName = "BillType";
-            public const string ActionName = "Index";
-        }
-
-        public static class Branch
-        {
-            public const string PageName = "Branch";
-            public const string RoleName = "Branch";
-            public const string Path = "/Branch/Index";
-            public const string ControllerName = "Branch";
-            public const string ActionName = "Index";
-        }
-
-        public static class CashBank
-        {
-            public const string PageName = "Cash Bank";
-            public const string RoleName = "Cash Bank";
-            public const string Path = "/CashBank/Index";
-            public const string ControllerName = "CashBank";
-            public const string ActionName = "Index";
-        }
-
-        public static class Currency
-        {
-            public const string PageName = "Currency";
-            public const string RoleName = "Currency";
-            public const string Path = "/Currency/Index";
-            public const string ControllerName = "Currency";
-            public const string ActionName = "Index";
-        }
-
-        public static class CustomerType
-        {
-            public const string PageName = "Customer Type";
-            public const string RoleName = "Customer Type";
-            public const string Path = "Admin/CustomerType/Index";
-            public const string ControllerName = "CustomerType";
-            public const string ActionName = "Index";
-        }
-
-        public static class InvoiceType
-        {
-            public const string PageName = "Invoice Type";
-            public const string RoleName = "Invoice Type";
-            public const string Path = "/InvoiceType/Index";
-            public const string ControllerName = "InvoiceType";
-            public const string ActionName = "Index";
-        }
-
-        public static class PaymentType
-        {
-            public const string PageName = "Payment Type";
-            public const string RoleName = "Payment Type";
-            public const string Path = "Admin/PaymentType/Index";
-            public const string ControllerName = "PaymentType";
-            public const string ActionName = "Index";
-        }
-
-        public static class ProductType
-        {
-            public const string PageName = "Product Type";
-            public const string RoleName = "Product Type";
-            public const string Path = "/ProductType/Index";
-            public const string ControllerName = "ProductType";
-            public const string ActionName = "Index";
-        }
-
-        public static class SalesType
-        {
-            public const string PageName = "Sales Type";
-            public const string RoleName = "Sales Type";
-            public const string Path = "/SalesType/Index";
-            public const string ControllerName = "SalesType";
-            public const string ActionName = "Index";
-        }
-
-        public static class ShipmentType
-        {
-            public const string PageName = "Shipment Type";
-            public const string RoleName = "Shipment Type";
-            public const string Path = "/ShipmentType/Index";
-            public const string ControllerName = "ShipmentType";
-            public const string ActionName = "Index";
-        }
-
-        public static class UnitOfMeasure
-        {
-            public const string PageName = "Unit Of Measure";
-            public const string RoleName = "Unit Of Measure";
-            public const string Path = "/UnitOfMeasure/Index";
-            public const string ControllerName = "UnitOfMeasure";
-            public const string ActionName = "Index";
-        }
-
-        public static class VendorType
-        {
-            public const string PageName = "Vendor Type";
-            public const string RoleName = "Vendor Type";
-            public const string Path = "/VendorType/Index";
-            public const string ControllerName = "VendorType";
-            public const string ActionName = "Index";
-        }
-
-        public static class Warehouse
-        {
-            public const string PageName = "Warehouse";
-            public const string RoleName = "Warehouse";
-            public const string Path = "/Warehouse/Index";
-            public const string ControllerName = "Warehouse";
-            public const string ActionName = "Index";
-        }
-
-        public static class PurchaseType
-        {
-            public const string PageName = "Purchase Type";
-            public const string RoleName = "Purchase Type";
-            public const string Path = "/PurchaseType/Index";
-            public const string ControllerName = "PurchaseType";
-            public const string ActionName = "Index";
-        }
-
+        #region USER MANAGEMENT
         public static class User
         {
             public const string PageName = "User";
@@ -262,6 +221,9 @@
             public const string ControllerName = "UserRole";
             public const string ActionName = "ChangeRole";
         }
+
+        #endregion
+
 
         public static class Dashboard
         {
