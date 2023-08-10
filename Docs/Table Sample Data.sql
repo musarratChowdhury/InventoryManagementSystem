@@ -69,3 +69,6 @@ VALUES
     ('Home & Garden', 'Home and Garden Products', 101, '2023-07-31 11:45:00', NULL, NULL, 3, 'Business789', 1),
     ('Beauty & Personal Care', 'Beauty and Personal Care Products', 101, '2023-07-31 12:30:00', NULL, NULL, 4, 'BusinessXYZ', 1);
 select * from ProductCategory;
+
+select * from AspNetUsers;
+delete  from AspNetUsers;
