@@ -334,37 +334,37 @@ use MyInventoryDb;
 CREATE TABLE SalesOrderLine (
     SalesOrderId BIGINT NOT NULL,
     ProductId BIGINT NOT NULL,
-    Quantity INT,
-    UnitPrice DECIMAL(10, 2),
-    DiscountedAmount DECIMAL(10, 2),
-    Amount DECIMAL(10, 2),
-    Total DECIMAL(10, 2),
+    Quantity INT NOT NULL,
+    UnitPrice DECIMAL(10, 2) NOT NULL,
+    Discount DECIMAL(10, 2),
+    Amount DECIMAL(10, 2) NOT NULL,
+    Total DECIMAL(10, 2) NOT NULL,
     PRIMARY KEY (SalesOrderId, ProductId),
     FOREIGN KEY (SalesOrderId) REFERENCES SalesOrder(Id),
-    FOREIGN KEY (ProductId) REFERENCES Product(ProductId)
+    FOREIGN KEY (ProductId) REFERENCES Product(Id)
 );
 CREATE TABLE PurchaseOrderLine (
     PurchaseOrderId BIGINT NOT NULL,
     ProductId BIGINT NOT NULL,
-    Quantity INT,
-    UnitPrice DECIMAL(10, 2),
-    DiscountedAmount DECIMAL(10, 2),
-    Amount DECIMAL(10, 2),
-    Total DECIMAL(10, 2),
+    Quantity INT NOT NULL,
+    UnitPrice DECIMAL(10, 2) NOT NULL,
+    Discount DECIMAL(10, 2),
+    Amount DECIMAL(10, 2) NOT NULL,
+    Total DECIMAL(10, 2) NOT NULL,
     PRIMARY KEY (PurchaseOrderId, ProductId),
     FOREIGN KEY (PurchaseOrderId) REFERENCES PurchaseOrder(Id),
-    FOREIGN KEY (ProductId) REFERENCES Product(ProductId)
+    FOREIGN KEY (ProductId) REFERENCES Product(Id)
 );
 
 
 
----- Create UserProfile table with foreign key constraint
---CREATE TABLE UserProfile (
---    UserProfileId BIGINT PRIMARY KEY,
---    AspNetUserId BIGINT,
---    FirstName NVARCHAR(100),
---    LastName NVARCHAR(100),
---    ProfilePicture NVARCHAR(MAX),
---    CONSTRAINT FK_UserProfile_AspNetUser FOREIGN KEY (AspNetUserId) REFERENCES AspNetUsers(Id)
---);
+-- Create UserProfile table with foreign key constraint
+CREATE TABLE UserProfile (
+    UserProfileId BIGINT PRIMARY KEY NOT NULL,
+    AspNetUserId BIGINT NOT NULL,
+    FirstName NVARCHAR(100),
+    LastName NVARCHAR(100),
+    ProfilePicture NVARCHAR(MAX),
+    CONSTRAINT FK_UserProfile_AspNetUser FOREIGN KEY (AspNetUserId) REFERENCES AspNetUsers(Id)
+);
 
