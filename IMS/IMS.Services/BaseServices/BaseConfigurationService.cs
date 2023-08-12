@@ -5,6 +5,8 @@ using NHibernate;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
+using System.Web;
 
 namespace IMS.Services.BaseServices
 {
@@ -21,10 +23,12 @@ namespace IMS.Services.BaseServices
     public class BaseConfigurationService<TDto, TDtoForm, TEntity> : IBaseConfigurationService<IConfigurationDto, IConfigurationFormData, TEntity> where TEntity : IConfigurationEntity
     {
         private IBaseDao<TEntity> _BaseDao;
+        private long _currentUserId;
 
         public BaseConfigurationService()
         {
             _BaseDao = new BaseDao<TEntity>();
+            _currentUserId = Int64.Parse(ClaimsPrincipal.Current.FindFirst(ClaimTypes.NameIdentifier).Value);
         }
 
         public IEnumerable<ConfigurationDto> GetAll(ISession session)
@@ -138,7 +142,7 @@ namespace IMS.Services.BaseServices
             entity.Status = dtoForm.Status;
             entity.Rank = dtoForm.Rank;
             entity.CreationDate = DateTime.Now;
-            entity.CreatedBy = 1;
+            entity.CreatedBy = _currentUserId;
             entity.ModificationDate = DateTime.Now;
             entity.ModifiedBy = 1;
             entity.Version = 1;

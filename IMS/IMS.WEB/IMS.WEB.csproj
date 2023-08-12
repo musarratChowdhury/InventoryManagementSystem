@@ -206,17 +206,9 @@
     </Compile>
     <Compile Include="Helpers\HtmlHelpers.cs" />
     <Compile Include="Helpers\MainMenu.cs" />
-    <Compile Include="Migrations\202308010510432_Initial.cs" />
-    <Compile Include="Migrations\202308010510432_Initial.designer.cs">
-      <DependentUpon>202308010510432_Initial.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\202308010513253_SeedAdmin.cs" />
-    <Compile Include="Migrations\202308010513253_SeedAdmin.designer.cs">
-      <DependentUpon>202308010513253_SeedAdmin.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\202308100445151_longtypePk.cs" />
-    <Compile Include="Migrations\202308100445151_longtypePk.designer.cs">
-      <DependentUpon>202308100445151_longtypePk.cs</DependentUpon>
+    <Compile Include="Migrations\202308120510180_AddIdentityTable.cs" />
+    <Compile Include="Migrations\202308120510180_AddIdentityTable.designer.cs">
+      <DependentUpon>202308120510180_AddIdentityTable.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
@@ -359,17 +351,6 @@
     <Content Include="Scripts\jquery-3.4.1.min.map" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Migrations\202308010510432_Initial.resx">
-      <DependentUpon>202308010510432_Initial.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\202308010513253_SeedAdmin.resx">
-      <DependentUpon>202308010513253_SeedAdmin.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\202308100445151_longtypePk.resx">
-      <DependentUpon>202308100445151_longtypePk.cs</DependentUpon>
-    </EmbeddedResource>
-  </ItemGroup>
-  <ItemGroup>
     <ProjectReference Include="..\IMS.BusinessModel\IMS.BusinessModel.csproj">
       <Project>{077AD203-18E3-4803-8BFD-2C83E5561D1F}</Project>
       <Name>IMS.BusinessModel</Name>
@@ -378,6 +359,11 @@
       <Project>{8B0F2CED-1206-4438-A5F9-E9B5F57AAEAF}</Project>
       <Name>IMS.Services</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Migrations\202308120510180_AddIdentityTable.resx">
+      <DependentUpon>202308120510180_AddIdentityTable.cs</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

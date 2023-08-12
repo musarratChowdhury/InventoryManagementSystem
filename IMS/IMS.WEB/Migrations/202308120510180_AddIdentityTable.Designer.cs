@@ -7,13 +7,13 @@ namespace IMS.WEB.Migrations
     using System.Resources;
     
     [GeneratedCode("EntityFramework.Migrations", "6.4.4")]
-    public sealed partial class SeedAdmin : IMigrationMetadata
+    public sealed partial class AddIdentityTable : IMigrationMetadata
     {
-        private readonly ResourceManager Resources = new ResourceManager(typeof(SeedAdmin));
+        private readonly ResourceManager Resources = new ResourceManager(typeof(AddIdentityTable));
         
         string IMigrationMetadata.Id
         {
-            get { return "202308010513253_SeedAdmin"; }
+            get { return "202308120510180_AddIdentityTable"; }
         }
         
         string IMigrationMetadata.Source

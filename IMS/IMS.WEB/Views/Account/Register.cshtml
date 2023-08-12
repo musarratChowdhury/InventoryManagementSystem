@@ -13,19 +13,19 @@
         <form id="registrationForm" asp-route-returnUrl="@ViewData["ReturnUrl"]" method="post">
             <div class="form-group has-feedback">
                 <label asp-for="Email"></label>
-                <input asp-for="Email" id="email" type="email" class="form-control" placeholder="Email" />
+                <input asp-for="Email" id="email" type="email" class="form-control" placeholder="Email" data-val="true" data-val-required="Email is required." data-val-email="Invalid email format." />
                 <span class="glyphicon glyphicon-envelope form-control-feedback"></span>
                 <span asp-validation-for="Email" class="text-danger"></span>
             </div>
             <div class="form-group has-feedback">
                 <label asp-for="Password"></label>
-                <input asp-for="Password" id="password" type="password" class="form-control" placeholder="Password" />
+                <input asp-for="Password" id="password" type="password" class="form-control" placeholder="Password" data-val="true" data-val-required="Password is required." data-val-minlength="Password must be at least 6 characters." />
                 <span class="glyphicon glyphicon-lock form-control-feedback"></span>
                 <span asp-validation-for="Password" class="text-danger"></span>
             </div>
             <div class="form-group has-feedback">
                 <label asp-for="ConfirmPassword"></label>
-                <input asp-for="ConfirmPassword" type="password" class="form-control" placeholder="Retype password" />
+                <input id="confirmPassword" asp-for="ConfirmPassword" type="password" class="form-control" placeholder="Retype password" data-val="true" data-val-required="Confirmation password is required." data-val-equalto="Passwords do not match." />
                 <span class="glyphicon glyphicon-log-in form-control-feedback"></span>
                 <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
             </div>
@@ -36,8 +36,8 @@
                 </div>
                 <!-- /.col -->
             </div>
-
         </form>
+
     </div>
     <!-- /.form-box -->
 </div>
@@ -45,4 +45,7 @@
 @section Scripts
 {
      @Html.Partial("_ValidationScriptsPartial") 
+     <script src="~/Scripts/IMS/Register/register.js"></script>
 }
+
+ 
