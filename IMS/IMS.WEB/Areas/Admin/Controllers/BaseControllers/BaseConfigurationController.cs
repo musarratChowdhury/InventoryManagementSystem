@@ -95,7 +95,6 @@ namespace IMS.WEB.Areas.Admin.Controllers.BaseControllers
         {
             try
             {
-
                 if (ModelState.IsValid)
                 {
                     using (var session = NHibernateConfig.OpenSession())

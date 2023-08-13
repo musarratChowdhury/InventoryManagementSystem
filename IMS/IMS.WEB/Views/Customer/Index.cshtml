@@ -22,7 +22,9 @@
                 </div>
             </div>
             <div class="box-body">
-                <div id="grid"></div>
+                <div id="container">
+                    <div id="grid"></div>
+                </div>
             </div>
             <!-- /.box-body -->
             <div class="box-footer">
@@ -38,25 +40,28 @@
 
 @section Styles{
     <style>
-        .e-grid .e-row.e-altrow {
-            background-color: rgb(150, 212, 212);
+        .e-row[aria-selected="true"] .e-customizedExpandcell {
+            background-color: #e0e0e0;
         }
-        .e-grid .e-row {
-            background-color: rgb(180, 180, 180);
+
+        .e-grid.e-gridhover tr[role='row']:hover {
+            background-color: #eee;
         }
-        .e-grid td.e-active {
-            background-color: #f9920b;
+
+        .e-expand::before {
+            content: '\e5b8';
         }
     </style>
 }
 
 @section Scripts{
     <script>
-            //var FETCH_URL = "/Customer/GetAll";
-            //var EDIT_URL = "/Customer/Edit";
-            //var DELETE_URL = "/Customer/Delete/";
-            //var CREATE_URL = "/Customer/Create";
+                //var FETCH_URL = "/Customer/GetAll";
+                //var EDIT_URL = "/Customer/Edit";
+                //var DELETE_URL = "/Customer/Delete/";
+                //var CREATE_URL = "/Customer/Create";
     </script>
+    
 
     <script src="~/Scripts/IMS/Customer/Customer.js"></script>
 }

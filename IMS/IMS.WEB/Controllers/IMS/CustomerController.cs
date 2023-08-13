@@ -32,19 +32,35 @@ namespace IMS.WEB.Controllers.IMS
             {
                 using (var session = NHibernateConfig.OpenSession())
                 {
-
                     var result = new DataResult<CustomerDto>();
-                    result.result = _customerService.GetAll(session).Skip(request.skip).Take(request.take).ToList();
-                    result.count = result.result.Count;
+                    var getAllEntities = _customerService.GetAll(session);
+                    result.count = getAllEntities.Count();
+                    result.result = getAllEntities.Skip(request.skip).Take(request.take).ToList();
 
                     return Json(result, JsonRequestBehavior.AllowGet);
                 }
-
             }
             catch (Exception ex)
             {
-
                 throw ex;
+            }
+        }
+
+        [HttpPost]
+        public ActionResult Insert(CRUDRequest<CustomerFormDto> customerCreateReq)
+        {
+            try
+            {
+                using (var session = NHibernateConfig.OpenSession())
+                {
+                    _customerService.Create(customerCreateReq.value, session);
+
+                    return Json(new { success = true, message = "Added successfully." });
+                }
+            }
+            catch (Exception ex)
+            {
+                return Json(new { success = false, message = "Error occurred while Adding.", ex.Message });
             }
         }
     }
