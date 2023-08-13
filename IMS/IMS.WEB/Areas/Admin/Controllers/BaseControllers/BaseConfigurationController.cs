@@ -7,6 +7,7 @@ using System.Web.Mvc;
 using IMS.BusinessModel.Dto.CommonDtos;
 using IMS.Services.BaseServices;
 using IMS.BusinessModel.Entity.Common;
+using IMS.BusinessModel.Dto.GridData;
 
 namespace IMS.WEB.Areas.Admin.Controllers.BaseControllers
 {
@@ -19,7 +20,40 @@ namespace IMS.WEB.Areas.Admin.Controllers.BaseControllers
             _baseConfigurationService = new BaseConfigurationService<ConfigurationDto, ConfigurationFormData, TEntity>();
         }
 
-    
+        [HttpPost]
+        public ActionResult DataSource()
+        {
+            using (var session = NHibernateConfig.OpenSession())
+            {
+
+                var result = new DataResult<ConfigurationDto>();
+                result.result = _baseConfigurationService.GetAll(session).ToList();
+                result.count = result.result.Count;
+
+                return Json(result, JsonRequestBehavior.AllowGet);  
+            }
+        }
+
+        [HttpPost]
+        public ActionResult DropDownList() 
+        {
+            try
+            {
+                using (var session = NHibernateConfig.OpenSession())
+                {
+                    var result = _baseConfigurationService.GetDropDownList(session);
+
+                    return Json(result, JsonRequestBehavior.AllowGet);
+                }
+
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+
         [HttpGet]
         public ActionResult GetAll()
         {

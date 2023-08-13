@@ -1,7 +1,9 @@
-﻿using IMS.BusinessModel.Dto.CommonDtos;
+﻿using FluentNHibernate.Data;
+using IMS.BusinessModel.Dto.CommonDtos;
 using IMS.BusinessModel.Entity.Common;
 using IMS.Dao;
 using NHibernate;
+using NHibernate.Util;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -36,8 +38,12 @@ namespace IMS.Services.BaseServices
             try
             {
                 var entities = _BaseDao.GetAll(session);
-                var dto = new ConfigurationDto();
-                var result =  entities.Select(entity => MapToDto(entity ,dto));
+                var result  =  new List<ConfigurationDto>();
+                for(int i =0; i < entities.Count; i++)
+                {
+                    var dto = new ConfigurationDto();
+                    result.Add(MapToDto(entities[i], dto));
+                }
                 return result;
             }
             catch (Exception ex)
@@ -45,6 +51,26 @@ namespace IMS.Services.BaseServices
                 throw ex;
             }
         }
+
+        public List<DropDownDto> GetDropDownList(ISession session)
+        {
+            try
+            {
+                var entities = _BaseDao.GetAll(session);
+                var result = new List<DropDownDto>();
+                for (int i = 0; i < entities.Count; i++)
+                {
+                    var dto = new DropDownDto();
+                    result.Add(MapToDropDownDto(entities[i], dto));
+                }
+                return result;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
         public void Create(ConfigurationFormData dtoFormData, ISession session)
         {
             using (var transaction = session.BeginTransaction())
@@ -149,6 +175,15 @@ namespace IMS.Services.BaseServices
             entity.BusinessId = "IMS-1";
 
             return entity;
+        }
+
+        public DropDownDto MapToDropDownDto(TEntity entity, DropDownDto dto)
+        {
+            dto.Id = entity.Id;
+            dto.Name = entity.Name;
+            dto.Description = entity.Description;
+
+            return dto;
         }
     }
 }

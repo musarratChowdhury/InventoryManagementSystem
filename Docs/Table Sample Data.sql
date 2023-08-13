@@ -70,5 +70,14 @@ VALUES
     ('Beauty & Personal Care', 'Beauty and Personal Care Products', 101, '2023-07-31 12:30:00', NULL, NULL, 4, 'BusinessXYZ', 1);
 select * from ProductCategory;
 
+
+INSERT INTO Customer ( CustomerTypeId, FirstName, LastName, Address, Email, Phone, Status, CreatedBy, CreationDate, ModifiedBy, ModificationDate, Rank, BusinessId, Version)
+VALUES
+    ( 1, 'John', 'Doe', '123 Main St', 'john@example.com', '123-456-7890', 1, 0, '2023-08-10', 0, '2023-08-10', 1, 'Business123', 1),
+    ( 2, 'Jane', 'Smith', '456 Elm St', 'jane@example.com', '987-654-3210', 1, 0, '2023-08-10', 0, '2023-08-10', 2, 'Business456', 1),
+    ( 3, 'Michael', 'Johnson', '789 Oak St', 'michael@example.com', '555-123-4567', 1, 0, '2023-08-10', 0, '2023-08-10', 3, 'Business789', 1);
+
+
+select * from Customer;
 select * from AspNetUsers;
 delete  from AspNetUsers;
