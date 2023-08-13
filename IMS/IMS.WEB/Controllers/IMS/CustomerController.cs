@@ -26,7 +26,7 @@ namespace IMS.WEB.Controllers.IMS
         }
 
         [HttpPost]
-        public ActionResult DataSource()
+        public ActionResult DataSource(DataRequest request)
         {
             try
             {
@@ -34,7 +34,7 @@ namespace IMS.WEB.Controllers.IMS
                 {
 
                     var result = new DataResult<CustomerDto>();
-                    result.result = _customerService.GetAll(session).ToList();
+                    result.result = _customerService.GetAll(session).Skip(request.skip).Take(request.take).ToList();
                     result.count = result.result.Count;
 
                     return Json(result, JsonRequestBehavior.AllowGet);

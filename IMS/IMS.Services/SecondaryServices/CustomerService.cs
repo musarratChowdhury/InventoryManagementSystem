@@ -42,6 +42,7 @@ namespace IMS.Services.SecondaryServices
         {
 
             dto.Id = entity.Id;
+            dto.CustomerTypeId = entity.CustomerTypeId;
             dto.FirstName = entity.FirstName;
             dto.LastName = entity.LastName;
             dto.Email = entity.Email;
