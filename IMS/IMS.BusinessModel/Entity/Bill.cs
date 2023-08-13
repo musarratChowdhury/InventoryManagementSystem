@@ -15,6 +15,6 @@ namespace IMS.BusinessModel.Entity
         public virtual BillType BillType { get; set; }
         public virtual PurchaseOrder PurchaseOrder {get;set;}
         public virtual long PurchaseOrderId {get; set;}
-        public virtual List<PaymentVoucher> PaymentVoucherList { get; set; }
+        public virtual IList<PaymentVoucher> PaymentVoucherList { get; set; } = null;
     }
 }

@@ -5,11 +5,20 @@ using System.Linq;
 using IMS.BusinessModel.Dto.Customer;
 using System.Web.Mvc;
 using IMS.BusinessModel.Entity;
+using IMS.Services.SecondaryServices;
+using IMS.BusinessModel.Dto.CommonDtos;
+using IMS.Services.Helpers;
 
 namespace IMS.WEB.Controllers.IMS
 {
     public class CustomerController : Controller
     {
+        private CustomerService _customerService;
+
+        public CustomerController()
+        {
+            _customerService = new CustomerService();
+        }
         // GET: Customer
         public ActionResult Index()
         {
@@ -19,26 +28,24 @@ namespace IMS.WEB.Controllers.IMS
         [HttpPost]
         public ActionResult DataSource()
         {
-            var result = new DataResult<CustomerDto>();
-            result.result.Add(new CustomerDto()
+            try
             {
-                FirstName = "muhit",
-                LastName = "chow",
-                Address = "dhaka",
-                Phone = "019",
-                Email = "lorp@gmail.com",
-                CustomerTypeId = 1,
-                Id = 1,
-                Rank = 1,
-                CreatedBy = 1,
-                CreationDate = DateTime.Now,
-                ModificationDate = DateTime.Now,
-                ModifiedBy = 1,
-                BusinessId = "ims",
-                Status = 1,
-                Version = 1,
-            });
-            return Json(result, JsonRequestBehavior.AllowGet);
+                using (var session = NHibernateConfig.OpenSession())
+                {
+
+                    var result = new DataResult<CustomerDto>();
+                    result.result = _customerService.GetAll(session).ToList();
+                    result.count = result.result.Count;
+
+                    return Json(result, JsonRequestBehavior.AllowGet);
+                }
+
+            }
+            catch (Exception ex)
+            {
+
+                throw ex;
+            }
         }
     }
 }

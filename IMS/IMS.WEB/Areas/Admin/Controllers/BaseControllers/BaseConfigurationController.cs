@@ -23,14 +23,21 @@ namespace IMS.WEB.Areas.Admin.Controllers.BaseControllers
         [HttpPost]
         public ActionResult DataSource()
         {
-            using (var session = NHibernateConfig.OpenSession())
+            try
             {
+                using (var session = NHibernateConfig.OpenSession())
+                {
 
-                var result = new DataResult<ConfigurationDto>();
-                result.result = _baseConfigurationService.GetAll(session).ToList();
-                result.count = result.result.Count;
+                    var result = new DataResult<ConfigurationDto>();
+                    result.result = _baseConfigurationService.GetAll(session).ToList();
+                    result.count = result.result.Count;
 
-                return Json(result, JsonRequestBehavior.AllowGet);  
+                    return Json(result, JsonRequestBehavior.AllowGet);  
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
             }
         }
 

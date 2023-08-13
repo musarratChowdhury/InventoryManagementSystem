@@ -20,7 +20,8 @@ namespace IMS.Dao.Mappings
             References(x => x.Customer) // Many-to-one relationship with Customer
                 .Column("CustomerId")
                 .Not.Insert()
-                .Not.Update();
+                .Not.Update()
+                .LazyLoad();
 
             References(x => x.Invoice)
                 .Column("InvoiceId")

@@ -23,8 +23,12 @@ namespace IMS.Services.SecondaryServices
             try
             {
                 var entities = _BaseDao.GetAll(session);
-                var dto = new CustomerDto();
-                var result = entities.Select(entity => MapToDto(entity, dto));
+                var result = new List<CustomerDto>();
+                for (int i = 0; i < entities.Count; i++)
+                {
+                    var dto = new CustomerDto();
+                    result.Add(MapToDto(entities[i], dto));
+                }
                 return result;
             }
             catch (Exception ex)

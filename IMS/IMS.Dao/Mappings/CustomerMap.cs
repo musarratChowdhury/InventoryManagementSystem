@@ -33,6 +33,7 @@ namespace IMS.Dao.Mappings
 
             References(x => x.CustomerType)
                 .Column("CustomerTypeId")
+                .Not.Nullable()
                 .Not.Insert()
                 .Not.Update();
 

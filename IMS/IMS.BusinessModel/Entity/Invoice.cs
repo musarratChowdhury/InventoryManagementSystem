@@ -17,6 +17,6 @@ namespace IMS.BusinessModel.Entity
         public virtual long SalesOrderId { get; set; }
         public virtual SalesOrder SalesOrder { get; set; }
 
-        public virtual List<PaymentReceived> PaymentReceivedList { get; set; }
+        public virtual IList<PaymentReceived> PaymentReceivedList { get; set; }
     }
 }

@@ -17,6 +17,6 @@ namespace IMS.BusinessModel.Entity
         // Navigation properties for foreign keys
         public virtual long VendorTypeId { get; set; }
         public virtual VendorType VendorType { get; set; }
-        public virtual List<PurchaseOrder> PurchaseOrders { get; set;}
+        public virtual IList<PurchaseOrder> PurchaseOrders { get; set;}
     }
 }
