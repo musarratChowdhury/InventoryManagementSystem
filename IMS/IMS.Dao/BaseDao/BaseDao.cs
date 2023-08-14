@@ -11,13 +11,12 @@ namespace IMS.Dao
     public interface IBaseDao<TEntity> where TEntity : IBaseEntity
     {
         TEntity GetById(long id, ISession session);
-        IList<TEntity> GetAll(ISession Session);
+        IList<TEntity> GetAll(ISession session);
         void Create(TEntity entity, ISession session);
         void Update(TEntity entity, ISession session);
         void Delete(TEntity entity, ISession session);
         int GetTotalCount(ISession session);
-        IList<TEntity> GetDataBySkipTake(int skip, int take, ISession session);
-        IList<TEntity> GetAllSorted(DataRequest sortRequest, ISession session);
+        IList<TEntity> GetAll( ISession session, DataRequest dataRequest);
         int GetHighestRank(ISession session);
     }
 
@@ -67,11 +66,11 @@ namespace IMS.Dao
             return session.Query<TEntity>().Skip(skip).Take(take).ToList();
         }
 
-        public IList<TEntity> GetAllSorted(DataRequest sortRequest, ISession session)
+        public IList<TEntity> GetAll(ISession session, DataRequest dataRequest)
         {
-            ICriteria criteria = session.CreateCriteria<TEntity>();
+            var criteria = session.CreateCriteria<TEntity>();
 
-            foreach (var sortInfo in sortRequest.Sorted)
+            foreach (var sortInfo in dataRequest.Sorted)
             {
                 if (sortInfo.Direction.Equals("ascending", StringComparison.OrdinalIgnoreCase))
                 {
@@ -83,8 +82,8 @@ namespace IMS.Dao
                 }
             }
 
-            criteria.SetFirstResult(sortRequest.skip)
-                    .SetMaxResults(sortRequest.take);
+            criteria.SetFirstResult(dataRequest.Skip)
+                    .SetMaxResults(dataRequest.Take);
 
             return criteria.List<TEntity>();
         }

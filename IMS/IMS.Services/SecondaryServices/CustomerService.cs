@@ -15,81 +15,30 @@ namespace IMS.Services.SecondaryServices
 {
     public class CustomerService : ICustomerService
     {
-        private IBaseDao<Customer> _BaseDao;
+        private readonly IBaseDao<Customer> _baseDao;
         public CustomerService()
         {
-            _BaseDao = new BaseDao<Customer>();
-        }
-
-        public IEnumerable<CustomerDto> GetAll(ISession session)
-        {
-            try
-            {
-                var entities = _BaseDao.GetAll(session);
-                var result = new List<CustomerDto>();
-                for (int i = 0; i < entities.Count; i++)
-                {
-                    var dto = new CustomerDto();
-                    result.Add(MapToDto(entities[i], dto));
-                }
-                return result;
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
-        }
-
-        //For pagination with certain amount of data
-        public List<CustomerDto> GetAll(ISession session, int skip, int take)
-        {
-            try
-            {
-                var entities = _BaseDao.GetDataBySkipTake(skip, take, session);
-                var result = new List<CustomerDto>();
-                for (int i = 0; i < entities.Count; i++)
-                {
-                    var dto = new CustomerDto();
-                    result.Add(MapToDto(entities[i], dto));
-                }
-                return result;
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
+            _baseDao = new BaseDao<Customer>();
         }
 
         public List<CustomerDto> GetAll(ISession session, DataRequest dataRequest)
         {
             try
             {
-                var entities = _BaseDao.GetAllSorted(dataRequest, session);
-                var result = new List<CustomerDto>();
-                for (int i = 0; i < entities.Count; i++)
-                {
-                    var dto = new CustomerDto();
-                    result.Add(MapToDto(entities[i], dto));
-                }
-                return result;
+                var entities = _baseDao.GetAll(session, dataRequest);
+                return (from t in entities let dto = new CustomerDto() select MapToDto(t, dto)).ToList();
             }
-            catch (Exception ex)
+            catch (Exception e)
             {
-                throw ex;
+                Console.WriteLine(e);
+                throw;
             }
         }
 
         public int GetTotalCount(ISession session)
         {
-            try
-            {
-                var result = _BaseDao.GetTotalCount(session);
-                return result;
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
+            var result = _baseDao.GetTotalCount(session);
+            return result;
         }
 
         public void Create(CustomerFormDto customerFormDto, long userId, ISession session)
@@ -103,7 +52,7 @@ namespace IMS.Services.SecondaryServices
                     mappedCustomer.Rank = GetNextRank(session);
                     mappedCustomer.CreatedBy = userId;
                     mappedCustomer.CreationDate = DateTime.Now;
-                    _BaseDao.Create(mappedCustomer, session);
+                    _baseDao.Create(mappedCustomer, session);
                     transaction.Commit();
                 }
                 catch (Exception ex)
@@ -124,7 +73,7 @@ namespace IMS.Services.SecondaryServices
                     var mappedCustomer = MapToEntity(customerDto, customer);
                     mappedCustomer.ModificationDate = DateTime.Now;
                     mappedCustomer.ModifiedBy = userId;
-                    _BaseDao.Update(mappedCustomer, sess);
+                    _baseDao.Update(mappedCustomer, sess);
                     transaction.Commit();
                 }
                 catch (Exception ex)
@@ -141,10 +90,10 @@ namespace IMS.Services.SecondaryServices
             {
                 try
                 {
-                    var entity = _BaseDao.GetById(entityId, sess);
+                    var entity = _baseDao.GetById(entityId, sess);
                     if (entity != null)
                     {
-                        _BaseDao.Delete(entity, sess);
+                        _baseDao.Delete(entity, sess);
                     }
                     transaction.Commit();
                 }
@@ -180,7 +129,7 @@ namespace IMS.Services.SecondaryServices
             return dto;
         }
 
-        protected Customer MapToEntity(CustomerFormDto dto, Customer customer)
+        private Customer MapToEntity(CustomerFormDto dto, Customer customer)
         {
             customer.CustomerTypeId = dto.CustomerTypeId;
             customer.FirstName = dto.FirstName;
@@ -196,7 +145,7 @@ namespace IMS.Services.SecondaryServices
         }
 
         //for update action
-        protected Customer MapToEntity(CustomerDto dto, Customer customer)
+        private Customer MapToEntity(CustomerDto dto, Customer customer)
         {
             customer.Id = dto.Id;
             customer.CreatedBy = dto.CreatedBy;
@@ -210,16 +159,16 @@ namespace IMS.Services.SecondaryServices
             customer.Address = dto.Address;
             customer.Version = 1;
             customer.BusinessId = "IMS-1";
-            customer.Status = 1;
+            customer.Status = dto.Status;
 
             return customer;
         }
 
-        protected int GetNextRank(ISession session)
+        private int GetNextRank(ISession session)
         {
             try
             {
-                var highestRank = _BaseDao.GetHighestRank(session);
+                var highestRank = _baseDao.GetHighestRank(session);
                 return highestRank + 1;
             }
             catch (Exception ex)

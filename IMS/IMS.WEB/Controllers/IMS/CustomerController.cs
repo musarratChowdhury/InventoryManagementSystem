@@ -28,28 +28,15 @@ namespace IMS.WEB.Controllers.IMS
         [HttpPost]
         public ActionResult DataSource(DataRequest request)
         {
-            try
+            using (var session = NHibernateConfig.OpenSession())
             {
-                using (var session = NHibernateConfig.OpenSession())
-                {
-                    var result = new DataResult<CustomerDto>();
-                    if(request.Sorted==null)
-                    {
-                        result.count = _customerService.GetTotalCount(session);
-                        result.result = _customerService.GetAll(session, request.skip, request.take);
-                    }
-                    else
-                    {
-                        result.count = _customerService.GetTotalCount(session);
-                        result.result = _customerService.GetAll(session, request);
-                    }
+                var result = new DataResult<CustomerDto>();
+               
+                    result.count = _customerService.GetTotalCount(session);
+                    result.result = _customerService.GetAll(session, request);
+                
 
-                    return Json(result, JsonRequestBehavior.AllowGet);
-                }
-            }
-            catch (Exception ex)
-            {
-                throw ex;
+                return Json(result, JsonRequestBehavior.AllowGet);
             }
         }
 

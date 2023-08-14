@@ -10,8 +10,6 @@ namespace IMS.Services.SecondaryServices
     {
         void Create(CustomerFormDto customerFormDto, long userId, ISession session);
         void Delete(long entityId, ISession sess);
-        IEnumerable<CustomerDto> GetAll(ISession session);
-        List<CustomerDto> GetAll(ISession session, int skip, int take);
         List<CustomerDto> GetAll(ISession session, DataRequest dataRequest);
         int GetTotalCount(ISession session);
         CustomerDto MapToDto(Customer entity, CustomerDto dto);

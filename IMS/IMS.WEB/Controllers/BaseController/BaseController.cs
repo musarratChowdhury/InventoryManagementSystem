@@ -10,12 +10,6 @@ namespace IMS.WEB.Controllers.BaseController
 {
     public class BaseController : Controller
     {
-        // GET: Base
-        public ActionResult Index()
-        {
-            return View();
-        }
-
         [HttpPost]
         public ActionResult DataSource()
         {

@@ -91,7 +91,7 @@ namespace IMS.WEB.Controllers
                         return Json(new { success = false, error = "Invalid login attempt." });
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 // Log the exception or perform other error handling actions
                 return Json(new { success = false, error = "An error occurred during login." });
@@ -180,7 +180,7 @@ namespace IMS.WEB.Controllers
 
                 return Json(new { success = false, errors = errorMessages });
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 // Log the exception or perform other error handling actions
                 return Json(new { success = false, message = "An error occurred during registration." });
@@ -194,7 +194,7 @@ namespace IMS.WEB.Controllers
         [AllowAnonymous]
         public async Task<ActionResult> ConfirmEmail(long userId, string code)
         {
-            if (userId == null || code == null)
+            if (code == null)
             {
                 return View("Error");
             }
