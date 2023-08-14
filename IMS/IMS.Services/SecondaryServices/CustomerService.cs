@@ -1,6 +1,7 @@
 ﻿using FluentNHibernate.Data;
 using IMS.BusinessModel.Dto.CommonDtos;
 using IMS.BusinessModel.Dto.Customer;
+using IMS.BusinessModel.Dto.GridData;
 using IMS.BusinessModel.Entity;
 using IMS.Dao;
 using NHibernate;
@@ -12,14 +13,12 @@ using System.Transactions;
 
 namespace IMS.Services.SecondaryServices
 {
-    public class CustomerService
+    public class CustomerService : ICustomerService
     {
         private IBaseDao<Customer> _BaseDao;
-        private long _currentUserId;
         public CustomerService()
         {
             _BaseDao = new BaseDao<Customer>();
-            _currentUserId = Int64.Parse(ClaimsPrincipal.Current.FindFirst(ClaimTypes.NameIdentifier).Value);
         }
 
         public IEnumerable<CustomerDto> GetAll(ISession session)
@@ -41,7 +40,59 @@ namespace IMS.Services.SecondaryServices
             }
         }
 
-        public void Create(CustomerFormDto customerFormDto, ISession session)
+        //For pagination with certain amount of data
+        public List<CustomerDto> GetAll(ISession session, int skip, int take)
+        {
+            try
+            {
+                var entities = _BaseDao.GetDataBySkipTake(skip, take, session);
+                var result = new List<CustomerDto>();
+                for (int i = 0; i < entities.Count; i++)
+                {
+                    var dto = new CustomerDto();
+                    result.Add(MapToDto(entities[i], dto));
+                }
+                return result;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        public List<CustomerDto> GetAll(ISession session, DataRequest dataRequest)
+        {
+            try
+            {
+                var entities = _BaseDao.GetAllSorted(dataRequest, session);
+                var result = new List<CustomerDto>();
+                for (int i = 0; i < entities.Count; i++)
+                {
+                    var dto = new CustomerDto();
+                    result.Add(MapToDto(entities[i], dto));
+                }
+                return result;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        public int GetTotalCount(ISession session)
+        {
+            try
+            {
+                var result = _BaseDao.GetTotalCount(session);
+                return result;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        public void Create(CustomerFormDto customerFormDto, long userId, ISession session)
         {
             using (var transaction = session.BeginTransaction())
             {
@@ -50,12 +101,56 @@ namespace IMS.Services.SecondaryServices
                     var customer = new Customer();
                     var mappedCustomer = MapToEntity(customerFormDto, customer);
                     mappedCustomer.Rank = GetNextRank(session);
+                    mappedCustomer.CreatedBy = userId;
+                    mappedCustomer.CreationDate = DateTime.Now;
                     _BaseDao.Create(mappedCustomer, session);
                     transaction.Commit();
                 }
                 catch (Exception ex)
                 {
+                    transaction.Rollback();
+                    throw ex;
+                }
+            }
+        }
 
+        public void Update(CustomerDto customerDto, long userId, ISession sess)
+        {
+            using (var transaction = sess.BeginTransaction())
+            {
+                try
+                {
+                    var customer = new Customer();
+                    var mappedCustomer = MapToEntity(customerDto, customer);
+                    mappedCustomer.ModificationDate = DateTime.Now;
+                    mappedCustomer.ModifiedBy = userId;
+                    _BaseDao.Update(mappedCustomer, sess);
+                    transaction.Commit();
+                }
+                catch (Exception ex)
+                {
+                    transaction.Rollback();
+                    throw ex;
+                }
+            }
+        }
+
+        public void Delete(long entityId, ISession sess)
+        {
+            using (var transaction = sess.BeginTransaction())
+            {
+                try
+                {
+                    var entity = _BaseDao.GetById(entityId, sess);
+                    if (entity != null)
+                    {
+                        _BaseDao.Delete(entity, sess);
+                    }
+                    transaction.Commit();
+                }
+                catch (Exception ex)
+                {
+                    transaction.Rollback();
                     throw ex;
                 }
             }
@@ -85,22 +180,37 @@ namespace IMS.Services.SecondaryServices
             return dto;
         }
 
-        public Customer MapToEntity(CustomerFormDto dto, Customer customer)
+        protected Customer MapToEntity(CustomerFormDto dto, Customer customer)
         {
-            customer.Id = dto.Id;
             customer.CustomerTypeId = dto.CustomerTypeId;
             customer.FirstName = dto.FirstName;
             customer.LastName = dto.LastName;
             customer.Email = dto.Email;
             customer.Phone = dto.Phone;
-            customer.Rank = dto.Rank;
             customer.Address = dto.Address;
-            customer.CreatedBy = _currentUserId;
-            customer.CreationDate = DateTime.Now;
-            customer.ModificationDate = DateTime.Now;
-            customer.ModifiedBy = 1;
             customer.Version = 1;
             customer.BusinessId = "IMS-1";
+            customer.Status = 1;
+
+            return customer;
+        }
+
+        //for update action
+        protected Customer MapToEntity(CustomerDto dto, Customer customer)
+        {
+            customer.Id = dto.Id;
+            customer.CreatedBy = dto.CreatedBy;
+            customer.CreationDate = dto.CreationDate;
+            customer.Rank = dto.Rank;
+            customer.CustomerTypeId = dto.CustomerTypeId;
+            customer.FirstName = dto.FirstName;
+            customer.LastName = dto.LastName;
+            customer.Email = dto.Email;
+            customer.Phone = dto.Phone;
+            customer.Address = dto.Address;
+            customer.Version = 1;
+            customer.BusinessId = "IMS-1";
+            customer.Status = 1;
 
             return customer;
         }

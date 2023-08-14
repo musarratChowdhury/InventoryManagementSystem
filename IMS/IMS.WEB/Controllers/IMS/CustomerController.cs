@@ -4,16 +4,16 @@ using System.Collections.Generic;
 using System.Linq;
 using IMS.BusinessModel.Dto.Customer;
 using System.Web.Mvc;
-using IMS.BusinessModel.Entity;
 using IMS.Services.SecondaryServices;
-using IMS.BusinessModel.Dto.CommonDtos;
 using IMS.Services.Helpers;
+using Microsoft.AspNet.Identity;
 
 namespace IMS.WEB.Controllers.IMS
 {
+    [Authorize]
     public class CustomerController : Controller
     {
-        private CustomerService _customerService;
+        private ICustomerService _customerService;
 
         public CustomerController()
         {
@@ -33,9 +33,16 @@ namespace IMS.WEB.Controllers.IMS
                 using (var session = NHibernateConfig.OpenSession())
                 {
                     var result = new DataResult<CustomerDto>();
-                    var getAllEntities = _customerService.GetAll(session);
-                    result.count = getAllEntities.Count();
-                    result.result = getAllEntities.Skip(request.skip).Take(request.take).ToList();
+                    if(request.Sorted==null)
+                    {
+                        result.count = _customerService.GetTotalCount(session);
+                        result.result = _customerService.GetAll(session, request.skip, request.take);
+                    }
+                    else
+                    {
+                        result.count = _customerService.GetTotalCount(session);
+                        result.result = _customerService.GetAll(session, request);
+                    }
 
                     return Json(result, JsonRequestBehavior.AllowGet);
                 }
@@ -53,7 +60,7 @@ namespace IMS.WEB.Controllers.IMS
             {
                 using (var session = NHibernateConfig.OpenSession())
                 {
-                    _customerService.Create(customerCreateReq.value, session);
+                    _customerService.Create(customerCreateReq.value, User.Identity.GetUserId<long>(), session);
 
                     return Json(new { success = true, message = "Added successfully." });
                 }
@@ -61,6 +68,42 @@ namespace IMS.WEB.Controllers.IMS
             catch (Exception ex)
             {
                 return Json(new { success = false, message = "Error occurred while Adding.", ex.Message });
+            }
+        } 
+        
+        [HttpPost]
+        public ActionResult Update(CRUDRequest<CustomerDto> customerCreateReq)
+        {
+            try
+            {
+                using (var session = NHibernateConfig.OpenSession())
+                {
+                    _customerService.Update(customerCreateReq.value, User.Identity.GetUserId<long>(), session);
+
+                    return Json(new { success = true, message = "Updated successfully." });
+                }
+            }
+            catch (Exception ex)
+            {
+                return Json(new { success = false, message = "Error occurred while Updating.", ex.Message });
+            }
+        } 
+        
+        [HttpPost]
+        public ActionResult Delete(DeleteRequest customerCreateReq)
+        {
+            try
+            {
+                using (var session = NHibernateConfig.OpenSession())
+                {
+                    _customerService.Delete(customerCreateReq.Key, session);
+
+                    return Json(new { success = true, message = "Deleted successfully." });
+                }
+            }
+            catch (Exception ex)
+            {
+                return Json(new { success = false, message = "Error occurred while deleting.", ex.Message });
             }
         }
     }

@@ -22,7 +22,7 @@ namespace IMS.Services.BaseServices
         ConfigurationDto MapToDto(TEntity entity, ConfigurationDto dto);
         TEntity MapToEntity(ConfigurationFormData DtoForm, TEntity entity);
     }
-    public class BaseConfigurationService<TDto, TDtoForm, TEntity> : IBaseConfigurationService<IConfigurationDto, IConfigurationFormData, TEntity> where TEntity : IConfigurationEntity
+    public class BaseConfigurationService<TDto, TDtoForm, TEntity> : IBaseConfigurationService<IConfigurationDto, IConfigurationFormData, TEntity> where TEntity :class, IConfigurationEntity
     {
         private IBaseDao<TEntity> _BaseDao;
         private long _currentUserId;

@@ -11,7 +11,7 @@ using IMS.BusinessModel.Dto.GridData;
 
 namespace IMS.WEB.Areas.Admin.Controllers.BaseControllers
 {
-    public class BaseConfigurationController<TEntity> : Controller where TEntity : IConfigurationEntity
+    public class BaseConfigurationController<TEntity> : Controller where TEntity : class, IConfigurationEntity
     {
         private BaseConfigurationService<ConfigurationDto, ConfigurationFormData, TEntity> _baseConfigurationService;
 

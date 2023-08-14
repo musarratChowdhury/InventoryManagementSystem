@@ -71,6 +71,7 @@
     <Compile Include="SecondaryServices\CustomerService.cs" />
     <Compile Include="Helpers\FluentNhibernateConfiguration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SecondaryServices\ICustomerService.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
