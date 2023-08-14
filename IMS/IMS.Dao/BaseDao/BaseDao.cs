@@ -17,6 +17,8 @@ namespace IMS.Dao
         void Delete(TEntity entity, ISession session);
         int GetTotalCount(ISession session);
         IList<TEntity> GetAll( ISession session, DataRequest dataRequest);
+        IList<TEntity> ExecuteRawSqlQuery(ISession session, string sqlQuery);
+        void UpdateRankForIdsGreaterThanOrEqualTo(ISession session, string tableName, long rank);
         int GetHighestRank(ISession session);
     }
 
@@ -86,6 +88,22 @@ namespace IMS.Dao
                     .SetMaxResults(dataRequest.Take);
 
             return criteria.List<TEntity>();
+        }
+        
+        public IList<TEntity> ExecuteRawSqlQuery(ISession session, string sqlQuery)
+        {
+            IQuery query = session.CreateSQLQuery(sqlQuery).AddEntity(typeof(TEntity));
+
+            return query.List<TEntity>();
+        }
+
+        public void UpdateRankForIdsGreaterThanOrEqualTo(ISession session, string tableName, long rank)
+        {
+            string sql = $"UPDATE {tableName} SET Rank = Rank + 1 WHERE Rank >= :rank";
+            IQuery query = session.CreateSQLQuery(sql)
+                .SetParameter("rank", rank);
+
+            query.ExecuteUpdate();
         }
 
 

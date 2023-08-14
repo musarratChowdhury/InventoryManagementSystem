@@ -69,17 +69,23 @@ namespace IMS.Services.SecondaryServices
             {
                 try
                 {
+                    var oldEntity = _baseDao.GetById(userId, sess);
                     var customer = new Customer();
                     var mappedCustomer = MapToEntity(customerDto, customer);
                     mappedCustomer.ModificationDate = DateTime.Now;
                     mappedCustomer.ModifiedBy = userId;
+                    if (oldEntity.Rank != mappedCustomer.Rank)
+                    {
+                        _baseDao.UpdateRankForIdsGreaterThanOrEqualTo(sess, mappedCustomer.GetType().Name, 
+                            mappedCustomer.Rank);
+                    }
                     _baseDao.Update(mappedCustomer, sess);
                     transaction.Commit();
                 }
                 catch (Exception ex)
                 {
                     transaction.Rollback();
-                    throw ex;
+                    throw;
                 }
             }
         }
@@ -100,7 +106,7 @@ namespace IMS.Services.SecondaryServices
                 catch (Exception ex)
                 {
                     transaction.Rollback();
-                    throw ex;
+                    throw;
                 }
             }
         }
@@ -129,6 +135,7 @@ namespace IMS.Services.SecondaryServices
             return dto;
         }
 
+        //for create operation
         private Customer MapToEntity(CustomerFormDto dto, Customer customer)
         {
             customer.CustomerTypeId = dto.CustomerTypeId;
