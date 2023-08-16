@@ -51,8 +51,7 @@ namespace IMS.Dao
         {
             session.Update(entity);
         }
-
-
+        
         public void Delete(TEntity entity, ISession session)
         {
             session.Delete(entity);
