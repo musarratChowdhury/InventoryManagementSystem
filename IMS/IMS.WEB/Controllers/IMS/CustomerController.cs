@@ -64,6 +64,7 @@ namespace IMS.WEB.Controllers.IMS
             {
                 using (var session = NHibernateConfig.OpenSession())
                 {
+                    
                     _customerService.Update(customerCreateReq.value, User.Identity.GetUserId<long>(), session);
 
                     return Json(new { success = true, message = "Updated successfully." });

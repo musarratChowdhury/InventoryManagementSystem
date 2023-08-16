@@ -66,14 +66,37 @@ namespace IMS.Services.SecondaryServices
             {
                 try
                 {
+                    var oldEntity = _baseDao.GetById(customerDto.Id, sess);
                     var customer = new Customer();
                     var mappedCustomer = MapToEntity(customerDto, customer);
                     mappedCustomer.ModificationDate = DateTime.Now;
                     mappedCustomer.ModifiedBy = modifiedById;
-                    _baseDao.Update(mappedCustomer, sess);
-                    transaction.Commit();
+                    
+                    if (oldEntity.Rank != mappedCustomer.Rank)
+                    {
+                        var changeRankDto = new ChangeRankDto();
+                        changeRankDto.NewRank = mappedCustomer.Rank;
+                        changeRankDto.OldRank = oldEntity.Rank;
+                        changeRankDto.Id = mappedCustomer.Id;
+                        if (changeRankDto.OldRank > changeRankDto.NewRank)
+                        {
+                            _baseDao.UpdateRank(sess,true, 
+                                changeRankDto.OldRank, changeRankDto.NewRank, changeRankDto.Id);
+                        }
+                        else if(changeRankDto.OldRank < changeRankDto.NewRank)
+                        {
+                            _baseDao.UpdateRank(sess,false, 
+                                changeRankDto.OldRank, changeRankDto.NewRank, changeRankDto.Id);
+                        }
+                        transaction.Commit();
+                    }
+                    else
+                    {
+                        _baseDao.Update(mappedCustomer, sess);
+                        transaction.Commit();
+                    }
                 }
-                catch (Exception ex)
+                catch (Exception)
                 {
                     transaction.Rollback();
                     throw;
