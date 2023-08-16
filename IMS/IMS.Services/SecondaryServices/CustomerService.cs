@@ -88,13 +88,13 @@ namespace IMS.Services.SecondaryServices
                             _baseDao.UpdateRank(sess,false, 
                                 changeRankDto.OldRank, changeRankDto.NewRank, changeRankDto.Id);
                         }
-                        transaction.Commit();
                     }
                     else
                     {
+                        sess.Clear();
                         _baseDao.Update(mappedCustomer, sess);
-                        transaction.Commit();
                     }
+                    transaction.Commit();
                 }
                 catch (Exception)
                 {
