@@ -1,9 +1,8 @@
 ﻿using IMS.BusinessModel.Dto.GridData;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using IMS.BusinessModel.Dto.Customer;
 using System.Web.Mvc;
+using IMS.BusinessModel.Dto.CommonDtos;
 using IMS.Services.SecondaryServices;
 using IMS.Services.Helpers;
 using Microsoft.AspNet.Identity;
@@ -75,6 +74,26 @@ namespace IMS.WEB.Controllers.IMS
                 return Json(new { success = false, message = "Error occurred while Updating.", ex.Message });
             }
         } 
+        
+        [HttpPost]
+        public ActionResult UpdateRank(ChangeRankDto changeRankDto)
+        {
+            try
+            {
+                using (var session = NHibernateConfig.OpenSession())
+                {
+                    _customerService.UpdateRank(changeRankDto, session);
+                    var response = new { message = "Rank updated successfully." };
+                    return Json(response);
+                }
+            }
+            catch (Exception ex)
+            {
+                return Json(new { success = false, message = "Error occurred while Updating.", ex.Message });
+                throw;
+            }
+            
+        }
         
         [HttpPost]
         public ActionResult Delete(DeleteRequest customerCreateReq)

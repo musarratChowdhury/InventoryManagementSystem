@@ -1,6 +1,4 @@
-﻿using FluentNHibernate.Data;
-using IMS.BusinessModel.Dto.CommonDtos;
-using IMS.BusinessModel.Dto.Customer;
+﻿using IMS.BusinessModel.Dto.Customer;
 using IMS.BusinessModel.Dto.GridData;
 using IMS.BusinessModel.Entity;
 using IMS.Dao;
@@ -8,8 +6,7 @@ using NHibernate;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Security.Claims;
-using System.Transactions;
+using IMS.BusinessModel.Dto.CommonDtos;
 
 namespace IMS.Services.SecondaryServices
 {
@@ -58,28 +55,48 @@ namespace IMS.Services.SecondaryServices
                 catch (Exception ex)
                 {
                     transaction.Rollback();
-                    throw ex;
+                    throw;
                 }
             }
         }
 
-        public void Update(CustomerDto customerDto, long userId, ISession sess)
+        public void Update(CustomerDto customerDto, long modifiedById, ISession sess)
         {
             using (var transaction = sess.BeginTransaction())
             {
                 try
                 {
-                    var oldEntity = _baseDao.GetById(userId, sess);
                     var customer = new Customer();
                     var mappedCustomer = MapToEntity(customerDto, customer);
                     mappedCustomer.ModificationDate = DateTime.Now;
-                    mappedCustomer.ModifiedBy = userId;
-                    if (oldEntity.Rank != mappedCustomer.Rank)
-                    {
-                        _baseDao.UpdateRankForIdsGreaterThanOrEqualTo(sess, mappedCustomer.GetType().Name, 
-                            mappedCustomer.Rank);
-                    }
+                    mappedCustomer.ModifiedBy = modifiedById;
                     _baseDao.Update(mappedCustomer, sess);
+                    transaction.Commit();
+                }
+                catch (Exception ex)
+                {
+                    transaction.Rollback();
+                    throw;
+                }
+            }
+        }
+
+        public void UpdateRank(ChangeRankDto changeRankDto, ISession sess)
+        {
+            using (var transaction = sess.BeginTransaction())
+            {
+                try
+                {
+                    if (changeRankDto.OldRank > changeRankDto.NewRank)
+                    {
+                        _baseDao.UpdateRank(sess,true, 
+                            changeRankDto.OldRank, changeRankDto.NewRank, changeRankDto.Id);
+                    }
+                    else if(changeRankDto.OldRank < changeRankDto.NewRank)
+                    {
+                        _baseDao.UpdateRank(sess,false, 
+                            changeRankDto.OldRank, changeRankDto.NewRank, changeRankDto.Id);
+                    }
                     transaction.Commit();
                 }
                 catch (Exception ex)

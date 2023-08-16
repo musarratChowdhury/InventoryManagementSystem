@@ -18,7 +18,7 @@ namespace IMS.Dao
         int GetTotalCount(ISession session);
         IList<TEntity> GetAll( ISession session, DataRequest dataRequest);
         IList<TEntity> ExecuteRawSqlQuery(ISession session, string sqlQuery);
-        void UpdateRankForIdsGreaterThanOrEqualTo(ISession session, string tableName, long rank);
+        void UpdateRank(ISession session, bool isPromoted, int oldRank, int newRank, long id);
         int GetHighestRank(ISession session);
     }
 
@@ -71,18 +71,21 @@ namespace IMS.Dao
         public IList<TEntity> GetAll(ISession session, DataRequest dataRequest)
         {
             var criteria = session.CreateCriteria<TEntity>();
-
-            foreach (var sortInfo in dataRequest.Sorted)
+            if (dataRequest.Sorted!=null)
             {
-                if (sortInfo.Direction.Equals("ascending", StringComparison.OrdinalIgnoreCase))
+                foreach (var sortInfo in dataRequest.Sorted)
                 {
-                    criteria.AddOrder(Order.Asc(sortInfo.Name));
-                }
-                else if (sortInfo.Direction.Equals("descending", StringComparison.OrdinalIgnoreCase))
-                {
-                    criteria.AddOrder(Order.Desc(sortInfo.Name));
+                    if (sortInfo.Direction.Equals("ascending", StringComparison.OrdinalIgnoreCase))
+                    {
+                        criteria.AddOrder(Order.Asc(sortInfo.Name));
+                    }
+                    else if (sortInfo.Direction.Equals("descending", StringComparison.OrdinalIgnoreCase))
+                    {
+                        criteria.AddOrder(Order.Desc(sortInfo.Name));
+                    }
                 }
             }
+            
 
             criteria.SetFirstResult(dataRequest.Skip)
                     .SetMaxResults(dataRequest.Take);
@@ -97,12 +100,25 @@ namespace IMS.Dao
             return query.List<TEntity>();
         }
 
-        public void UpdateRankForIdsGreaterThanOrEqualTo(ISession session, string tableName, long rank)
+        public void UpdateRank(ISession session,bool isPromoted, int oldRank, int newRank, long id)
         {
-            string sql = $"UPDATE {tableName} SET Rank = Rank + 1 WHERE Rank >= :rank";
-            IQuery query = session.CreateSQLQuery(sql)
-                .SetParameter("rank", rank);
-
+            var  sql = isPromoted ? $@"
+                UPDATE {typeof(TEntity).Name}
+                SET Rank = Rank + 1
+                WHERE Rank >= {newRank} AND Rank < {oldRank};
+                UPDATE {typeof(TEntity).Name}
+                SET Rank = {newRank}
+                WHERE Id = {id}
+            " : $@"
+                UPDATE {typeof(TEntity).Name}
+                SET Rank = Rank - 1
+                WHERE Rank <= {newRank} AND Rank > {oldRank};
+                UPDATE {typeof(TEntity).Name}
+                SET Rank = {newRank}
+                WHERE Id = {id}
+            ";
+            IQuery query = session.CreateSQLQuery(sql);
+            
             query.ExecuteUpdate();
         }
 
