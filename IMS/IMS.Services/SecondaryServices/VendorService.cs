@@ -45,7 +45,7 @@ namespace IMS.Services.SecondaryServices
                     _baseDao.Create(mappedVendor, session);
                     transaction.Commit();
                 }
-                catch (Exception ex)
+                catch (Exception)
                 {
                     transaction.Rollback();
                     throw;

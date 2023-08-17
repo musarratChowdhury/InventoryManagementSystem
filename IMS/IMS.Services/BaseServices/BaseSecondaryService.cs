@@ -1,11 +1,7 @@
-﻿using IMS.BusinessModel.Dto.Customer;
-using IMS.BusinessModel.Dto.GridData;
-using IMS.BusinessModel.Entity;
+﻿
 using IMS.Dao;
 using NHibernate;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using IMS.BusinessModel.Dto.CommonDtos;
 using IMS.BusinessModel.Entity.Common;
 
@@ -20,70 +16,11 @@ namespace IMS.Services.SecondaryServices
             _baseDao = new BaseDao<TEntity>();
         }
 
-        // public List<CustomerDto> GetAll(ISession session, DataRequest dataRequest)
-        // {
-        //     try
-        //     {
-        //         var entities = _baseDao.GetAll(session, dataRequest);
-        //         return (from t in entities let dto = new CustomerDto() select MapToDto(t, dto)).ToList();
-        //     }
-        //     catch (Exception e)
-        //     {
-        //         Console.WriteLine(e);
-        //         throw;
-        //     }
-        // }
-
         public int GetTotalCount(ISession session)
         {
             var result = _baseDao.GetTotalCount(session);
             return result;
         }
-
-        // public void Create(CustomerFormDto customerFormDto, long userId, ISession session)
-        // {
-        //     using (var transaction = session.BeginTransaction())
-        //     {
-        //         try
-        //         {
-        //             var customer = new Customer();
-        //             var mappedCustomer = MapToEntity(customerFormDto, customer);
-        //             mappedCustomer.Rank = GetNextRank(session);
-        //             mappedCustomer.CreatedBy = userId;
-        //             mappedCustomer.CreationDate = DateTime.Now;
-        //             _baseDao.Create(mappedCustomer, session);
-        //             transaction.Commit();
-        //         }
-        //         catch (Exception ex)
-        //         {
-        //             transaction.Rollback();
-        //             throw;
-        //         }
-        //     }
-        // }
-        //
-        // public void Update(CustomerDto customerDto, long modifiedById, ISession sess)
-        // {
-        //     using (var transaction = sess.BeginTransaction())
-        //     {
-        //         try
-        //         {
-        //             var customer = new Customer();
-        //             var mappedCustomer = MapToEntity(customerDto, customer);
-        //             mappedCustomer.ModificationDate = DateTime.Now;
-        //             mappedCustomer.ModifiedBy = modifiedById;
-        //             
-        //             _baseDao.Update(mappedCustomer, sess);
-        //             
-        //             transaction.Commit();
-        //         }
-        //         catch (Exception)
-        //         {
-        //             transaction.Rollback();
-        //             throw;
-        //         }
-        //     }
-        // }
 
         public void UpdateRank(ChangeRankDto changeRankDto, ISession sess)
         {
@@ -103,7 +40,7 @@ namespace IMS.Services.SecondaryServices
                     }
                     transaction.Commit();
                 }
-                catch (Exception ex)
+                catch (Exception)
                 {
                     transaction.Rollback();
                     throw;
@@ -124,7 +61,7 @@ namespace IMS.Services.SecondaryServices
                     }
                     transaction.Commit();
                 }
-                catch (Exception ex)
+                catch (Exception)
                 {
                     transaction.Rollback();
                     throw;
@@ -139,9 +76,9 @@ namespace IMS.Services.SecondaryServices
                 var highestRank = _baseDao.GetHighestRank(session);
                 return highestRank + 1;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                throw new Exception(ex.Message);
+                throw;
             }
         }
     }

@@ -75,6 +75,32 @@
           rel="stylesheet" />
     <link href="https://cdn.syncfusion.com/ej2/22.2.5/ej2-splitbuttons/styles/material.css"
           rel="stylesheet" />
+    
+     <style>
+            .e-row[aria-selected="true"] .e-customizedExpandcell {
+                background-color: #e0e0e0;
+            }
+    
+            .e-grid.e-gridhover tr[role='row']:hover {
+                background-color: #eee;
+            }
+            
+            .e-grid td.e-selectionbackground {
+                background-color: #b7d7f5;
+            }
+    
+            .e-expand::before {
+                content: '\e5b8';
+            }
+            .Active{
+                background-color: #58d258;
+                padding: 0.5rem;
+            }
+            .Inactive{
+                background-color: #ff5e5e;
+                padding: 0.5rem;
+            }
+        </style>
 
     @RenderSection("Styles", required: false)
 
