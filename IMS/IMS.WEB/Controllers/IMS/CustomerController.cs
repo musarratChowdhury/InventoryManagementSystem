@@ -12,7 +12,7 @@ namespace IMS.WEB.Controllers.IMS
     [Authorize]
     public class CustomerController : Controller
     {
-        private ICustomerService _customerService;
+        private readonly CustomerService _customerService;
 
         public CustomerController()
         {
@@ -29,11 +29,12 @@ namespace IMS.WEB.Controllers.IMS
         {
             using (var session = NHibernateConfig.OpenSession())
             {
-                var result = new DataResult<CustomerDto>();
-               
-                    result.count = _customerService.GetTotalCount(session);
-                    result.result = _customerService.GetAll(session, request);
-                
+                var result = new DataResult<CustomerDto>
+                {
+                    count = _customerService.GetTotalCount(session),
+                    result = _customerService.GetAll(session, request)
+                };
+
 
                 return Json(result, JsonRequestBehavior.AllowGet);
             }

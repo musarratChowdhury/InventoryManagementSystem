@@ -6,11 +6,10 @@ using NHibernate;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using IMS.BusinessModel.Dto.CommonDtos;
 
 namespace IMS.Services.SecondaryServices
 {
-    public class CustomerService : ICustomerService
+    public class CustomerService : BaseSecondaryService<Customer>
     {
         private readonly IBaseDao<Customer> _baseDao;
         public CustomerService()
@@ -30,12 +29,6 @@ namespace IMS.Services.SecondaryServices
                 Console.WriteLine(e);
                 throw;
             }
-        }
-
-        public int GetTotalCount(ISession session)
-        {
-            var result = _baseDao.GetTotalCount(session);
-            return result;
         }
 
         public void Create(CustomerFormDto customerFormDto, long userId, ISession session)
@@ -82,55 +75,7 @@ namespace IMS.Services.SecondaryServices
                 }
             }
         }
-
-        public void UpdateRank(ChangeRankDto changeRankDto, ISession sess)
-        {
-            using (var transaction = sess.BeginTransaction())
-            {
-                try
-                {
-                    if (changeRankDto.OldRank > changeRankDto.NewRank)
-                    {
-                        _baseDao.UpdateRank(sess,true, 
-                            changeRankDto.OldRank, changeRankDto.NewRank, changeRankDto.Id);
-                    }
-                    else if(changeRankDto.OldRank < changeRankDto.NewRank)
-                    {
-                        _baseDao.UpdateRank(sess,false, 
-                            changeRankDto.OldRank, changeRankDto.NewRank, changeRankDto.Id);
-                    }
-                    transaction.Commit();
-                }
-                catch (Exception ex)
-                {
-                    transaction.Rollback();
-                    throw;
-                }
-            }
-        }
-
-        public void Delete(long entityId, ISession sess)
-        {
-            using (var transaction = sess.BeginTransaction())
-            {
-                try
-                {
-                    var entity = _baseDao.GetById(entityId, sess);
-                    if (entity != null)
-                    {
-                        _baseDao.Delete(entity, sess);
-                    }
-                    transaction.Commit();
-                }
-                catch (Exception ex)
-                {
-                    transaction.Rollback();
-                    throw;
-                }
-            }
-        }
-
-
+        
         public CustomerDto MapToDto(Customer entity, CustomerDto dto)
         {
 
@@ -188,19 +133,6 @@ namespace IMS.Services.SecondaryServices
             customer.Status = dto.Status;
 
             return customer;
-        }
-
-        private int GetNextRank(ISession session)
-        {
-            try
-            {
-                var highestRank = _baseDao.GetHighestRank(session);
-                return highestRank + 1;
-            }
-            catch (Exception ex)
-            {
-                throw new Exception(ex.Message);
-            }
         }
     }
 }

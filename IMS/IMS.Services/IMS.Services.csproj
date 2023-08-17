@@ -67,11 +67,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BaseServices\BaseConfigurationService.cs" />
+    <Compile Include="BaseServices\BaseSecondaryService.cs" />
     <Compile Include="Class1.cs" />
     <Compile Include="SecondaryServices\CustomerService.cs" />
     <Compile Include="Helpers\FluentNhibernateConfiguration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="SecondaryServices\ICustomerService.cs" />
+    <Compile Include="SecondaryServices\VendorService.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
