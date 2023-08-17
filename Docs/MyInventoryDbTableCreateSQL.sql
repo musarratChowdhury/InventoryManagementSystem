@@ -368,3 +368,5 @@ CREATE TABLE UserProfile (
     CONSTRAINT FK_UserProfile_AspNetUser FOREIGN KEY (AspNetUserId) REFERENCES AspNetUsers(Id)
 );
 
+
+
