@@ -41,6 +41,25 @@ namespace IMS.WEB.Controllers.IMS
         }
 
         [HttpPost]
+        public ActionResult DropDownList()
+        {
+            try
+            {
+                using (var session = NHibernateConfig.OpenSession())
+                {
+                    var result = _customerService.GetDropDownList(session);
+
+                    return Json(result, JsonRequestBehavior.AllowGet);
+                }
+
+            }
+            catch(Exception)
+            {
+                throw;
+            }
+        }
+
+        [HttpPost]
         public ActionResult Insert(CRUDRequest<CustomerFormDto> customerCreateReq)
         {
             try

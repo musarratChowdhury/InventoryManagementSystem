@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using IMS.BusinessModel.Dto.CommonDtos;
 using IMS.BusinessModel.Dto.SalesOrder;
 using IMS.BusinessModel.Dto.GridData;
 using IMS.BusinessModel.Entity;
@@ -76,9 +77,30 @@ namespace IMS.Services.SecondaryServices
             }
         }
         
-        public SalesOrderDto MapToDto(SalesOrder entity, SalesOrderDto dto)
+        public List<DropDownDto> GetDropDownList(ISession session)
         {
+            try
+            {
+                var entities = _baseDao.GetAll(session);
+                return (from t in entities let dto = new DropDownDto() select MapToDropDownDto(t, dto)).ToList();
+            }
+            catch (Exception)
+            {
+                throw ;
+            }
+        }
+        
+        private DropDownDto MapToDropDownDto(SalesOrder entity, DropDownDto dto)
+        {
+            dto.Id = entity.Id;
+            dto.SerialNumber = $"#SO{entity.Id}C{entity.CustomerId}";
 
+            return dto;
+        }
+        
+        private SalesOrderDto MapToDto(SalesOrder entity, SalesOrderDto dto)
+        {
+            dto.SerialNumber =  $"#SO{entity.Id}C{entity.CustomerId}";
             dto.Id = entity.Id;
             dto.ShipmentStatus = entity.ShipmentStatus;
             dto.PaymentStatus = entity.PaymentStatus;
@@ -87,7 +109,7 @@ namespace IMS.Services.SecondaryServices
             dto.CustomerId = entity.CustomerId;
             dto.CustomerName = entity.Customer.FirstName + " " + entity.Customer.LastName;
             dto.InvoiceId = entity.InvoiceId;
-            dto.InvoiceName = entity.Invoice.Id.ToString();
+            dto.InvoiceName =entity.Invoice!=null? entity.Invoice.Id.ToString():"NOT INVOICED";
             dto.Status = entity.Status;
             dto.Rank = entity.Rank;
             dto.CreatedBy = entity.CreatedBy;

@@ -82,5 +82,6 @@ VALUES
 
 use MyInventoryDb;
 select * from Customer;
+select * from Product;
 select * from AspNetUsers;
 delete  from AspNetUsers;

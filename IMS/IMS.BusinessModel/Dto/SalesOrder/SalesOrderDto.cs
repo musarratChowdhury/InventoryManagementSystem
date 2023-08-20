@@ -8,6 +8,7 @@ namespace IMS.BusinessModel.Dto.SalesOrder
 {
     public sealed class SalesOrderDto : BaseDto
     {
+        public string SerialNumber { get; set; }
         public decimal TotalAmount { get; set; }
         public bool IsArchived { get; set; } = false;
         public int ShipmentStatus { get; set; } = 0;
