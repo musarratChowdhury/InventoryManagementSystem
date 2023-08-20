@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using IMS.BusinessModel.Dto.CommonDtos;
 using IMS.BusinessModel.Dto.GridData;
 using IMS.BusinessModel.Dto.Product;
 using IMS.BusinessModel.Entity;
@@ -31,6 +32,14 @@ namespace IMS.Services.SecondaryServices
             }
         }
 
+        public ProductDto GetProductById(ISession session, long Id)
+        {
+            var product =  _baseDao.GetById(Id, session);
+            var productDto = new ProductDto();
+            var result = MapToDto(product, productDto);
+            return result;
+        }
+
         public void Create(ProductFormDto productFormDto, long userId, ISession session)
         {
             using (var transaction = session.BeginTransaction())
@@ -51,6 +60,27 @@ namespace IMS.Services.SecondaryServices
                     throw;
                 }
             }
+        }
+        
+        public List<DropDownDto> GetDropDownList(ISession session)
+        {
+            try
+            {
+                var entities = _baseDao.GetAll(session);
+                return (from t in entities let dto = new DropDownDto() select MapToDropDownDto(t, dto)).ToList();
+            }
+            catch (Exception)
+            {
+                throw ;
+            }
+        }
+        
+        private DropDownDto MapToDropDownDto(Product entity, DropDownDto dto)
+        {
+            dto.Id = entity.Id;
+            dto.Name = entity.ProductName;
+
+            return dto;
         }
 
         public void Update(ProductDto productDto, long modifiedById, ISession sess)

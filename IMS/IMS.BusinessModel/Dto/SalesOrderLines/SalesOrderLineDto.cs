@@ -7,8 +7,6 @@
         public decimal DiscountedAmount { get; set; }
         public decimal Amount { get; set; }
         public decimal Total { get; set; }
-        
-        public long SalesOrderId { get; set; }
         public long? ProductId { get; set; }
     }
 }

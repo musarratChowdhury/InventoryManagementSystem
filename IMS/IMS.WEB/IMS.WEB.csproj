@@ -204,6 +204,7 @@
     <Compile Include="Controllers\IMS\CustomerController.cs" />
     <Compile Include="Controllers\IMS\ProductController.cs" />
     <Compile Include="Controllers\IMS\SalesOrderController.cs" />
+    <Compile Include="Controllers\IMS\ShipmentController.cs" />
     <Compile Include="Controllers\IMS\VendorController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
     <Compile Include="Global.asax.cs">
@@ -281,6 +282,7 @@
     <Content Include="Scripts\modernizr-2.8.3.js" />
     <Content Include="Views\Product\Index.cshtml" />
     <Content Include="Views\SalesOrder\Index.cshtml" />
+    <Content Include="Views\Shipment\Index.cshtml" />
     <Content Include="Views\Vendor\Index.cshtml" />
     <Content Include="Web.config" />
     <Content Include="Web.Debug.config">
