@@ -1,7 +1,5 @@
 ﻿using System.Collections.Generic;
 using IMS.BusinessModel.Dto.CommonDtos;
-using IMS.BusinessModel.Dto.SalesOrderLines;
-using IMS.BusinessModel.Entity;
 using IMS.BusinessModel.Entity.OrderDetails;
 
 namespace IMS.BusinessModel.Dto.SalesOrder
@@ -20,7 +18,7 @@ namespace IMS.BusinessModel.Dto.SalesOrder
         public string InvoiceName { get; set; } = string.Empty;
         
         public List<SalesOrderLine> SalesOrderLines { get; set; }
-        public List<Shipment> Shipments { get; set; }
+        public List<Entity.Shipment> Shipments { get; set; }
     }
 
     public sealed class SalesOrderFormDto

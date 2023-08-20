@@ -68,11 +68,17 @@
   <ItemGroup>
     <Compile Include="BaseServices\BaseConfigurationService.cs" />
     <Compile Include="BaseServices\BaseSecondaryService.cs" />
+    <Compile Include="SecondaryServices\BillService.cs" />
     <Compile Include="SecondaryServices\CustomerService.cs" />
     <Compile Include="Helpers\FluentNhibernateConfiguration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SecondaryServices\InvoiceService.cs" />
+    <Compile Include="SecondaryServices\PaymentReceiveService.cs" />
+    <Compile Include="SecondaryServices\PaymentVoucherService.cs" />
     <Compile Include="SecondaryServices\ProductService.cs" />
+    <Compile Include="SecondaryServices\PurchaseOrderService.cs" />
     <Compile Include="SecondaryServices\SalesOrderService.cs" />
+    <Compile Include="SecondaryServices\ShipmentService.cs" />
     <Compile Include="SecondaryServices\VendorService.cs" />
   </ItemGroup>
   <ItemGroup>
