@@ -1,8 +1,9 @@
 ﻿using System;
+using IMS.BusinessModel.Dto.CommonDtos;
 
 namespace IMS.BusinessModel.Dto.Bill
 {
-    public sealed class BillDto
+    public sealed class BillDto : BaseDto
     {
         public string SerialNumber { get; set; }
         public DateTime BillDate { get; set; }
