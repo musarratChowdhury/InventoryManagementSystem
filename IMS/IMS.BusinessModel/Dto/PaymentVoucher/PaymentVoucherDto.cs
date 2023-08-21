@@ -3,7 +3,7 @@ using IMS.BusinessModel.Dto.CommonDtos;
 
 namespace IMS.BusinessModel.Dto.PaymentVoucher
 {
-    public class PaymentVoucherDto : BaseDto
+    public sealed class PaymentVoucherDto : BaseDto
     {
         public string SerialNumber { get; set; }
         public DateTime PaymentDate { get; set; }
@@ -16,7 +16,7 @@ namespace IMS.BusinessModel.Dto.PaymentVoucher
         public string CashBankName { get; set; }
     }
 
-    public class PaymentVoucherFormDto
+    public sealed class PaymentVoucherFormDto
     {
         public DateTime PaymentDate { get; set; }
         public decimal PaymentAmount { get; set; }

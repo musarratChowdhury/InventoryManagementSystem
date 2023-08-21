@@ -2,22 +2,22 @@
 
 namespace IMS.BusinessModel.Dto.Bill
 {
-    public class BillDto
+    public sealed class BillDto
     {
         public string SerialNumber { get; set; }
-        public virtual DateTime BillDate { get; set; }
-        public virtual DateTime BillDueDate { get; set; }
-        public virtual long BillTypeId { get; set; }
-        public virtual string BillTypeName { get; set; }
-        public virtual long PurchaseOrderId {get; set;}
-        public virtual string PurchaseOrderSerialNumber {get;set;}
+        public DateTime BillDate { get; set; }
+        public DateTime BillDueDate { get; set; }
+        public long BillTypeId { get; set; }
+        public string BillTypeName { get; set; }
+        public long PurchaseOrderId {get; set;}
+        public string PurchaseOrderSerialNumber {get;set;}
     }
 
-    public class BillFormDto
+    public sealed class BillFormDto
     {
-        public virtual DateTime BillDate { get; set; }
-        public virtual DateTime BillDueDate { get; set; }
-        public virtual long BillTypeId { get; set; }
-        public virtual long PurchaseOrderId {get; set;}
+        public DateTime BillDate { get; set; }
+        public DateTime BillDueDate { get; set; }
+        public long BillTypeId { get; set; }
+        public long PurchaseOrderId {get; set;}
     }
 }

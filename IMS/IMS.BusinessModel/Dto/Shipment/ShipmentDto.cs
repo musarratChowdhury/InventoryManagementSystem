@@ -3,7 +3,7 @@ using IMS.BusinessModel.Dto.CommonDtos;
 
 namespace IMS.BusinessModel.Dto.Shipment
 {
-    public class ShipmentDto : BaseDto
+    public sealed class ShipmentDto : BaseDto
     {
         public string SerialNumber { get; set; }
         public DateTime ShipmentDate { get; set; }
@@ -13,7 +13,7 @@ namespace IMS.BusinessModel.Dto.Shipment
         public string ShipmentTypeName { get; set; }
     }
 
-    public class ShipmentFormDto
+    public sealed class ShipmentFormDto
     {
         public DateTime ShipmentDate { get; set; }
         public long SalesOrderId { get; set; }

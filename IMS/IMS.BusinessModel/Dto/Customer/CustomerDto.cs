@@ -5,7 +5,7 @@ using System.Text;
 
 namespace IMS.BusinessModel.Dto.Customer
 {
-    public class CustomerDto : BaseDto
+    public sealed class CustomerDto : BaseDto
     {
         public string FirstName { get; set; }
         public string LastName { get; set; }
@@ -16,7 +16,7 @@ namespace IMS.BusinessModel.Dto.Customer
         public string CustomerTypeName { get; set; }
     }
 
-    public class  CustomerFormDto
+    public sealed class  CustomerFormDto
     {
         public string FirstName { get; set; }
         public string LastName { get; set; }

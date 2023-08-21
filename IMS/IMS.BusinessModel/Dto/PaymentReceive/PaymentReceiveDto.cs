@@ -3,7 +3,7 @@ using IMS.BusinessModel.Dto.CommonDtos;
 
 namespace IMS.BusinessModel.Dto.PaymentReceive
 {
-    public class PaymentReceiveDto : BaseDto
+    public sealed class PaymentReceiveDto : BaseDto
     {
         public string SerialNumber { get; set; }
         public DateTime PaymentDate { get; set; }
@@ -14,7 +14,7 @@ namespace IMS.BusinessModel.Dto.PaymentReceive
         public string PaymentTypeName { get; set; }
     }
 
-    public class PaymentReceiveFormDto
+    public sealed class PaymentReceiveFormDto
     {
         public DateTime PaymentDate { get; set; }
         public decimal PaymentAmount { get; set; }

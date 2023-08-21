@@ -3,7 +3,7 @@ using IMS.BusinessModel.Dto.CommonDtos;
 
 namespace IMS.BusinessModel.Dto.Invoice
 {
-    public class InvoiceDto : BaseDto
+    public sealed class InvoiceDto : BaseDto
     {
         public string SerialNumber { get; set; }
         public DateTime InvoiceDate { get; set; }
@@ -14,7 +14,7 @@ namespace IMS.BusinessModel.Dto.Invoice
         public string SalesOrderSerialNumber { get; set; }
     }
 
-    public class InvoiceFormDto
+    public sealed class InvoiceFormDto
     {
         public DateTime InvoiceDate { get; set; }
         public DateTime InvoiceDueDate { get; set; }

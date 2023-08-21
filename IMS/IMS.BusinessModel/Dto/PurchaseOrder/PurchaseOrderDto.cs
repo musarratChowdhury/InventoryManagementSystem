@@ -3,7 +3,7 @@ using IMS.BusinessModel.Entity.OrderDetails;
 
 namespace IMS.BusinessModel.Dto.PurchaseOrder
 {
-    public class PurchaseOrderDto
+    public sealed class PurchaseOrderDto
     {
         public string SerialNumber { get; set; }
         public int PaymentStatus { get; set; }
@@ -19,7 +19,7 @@ namespace IMS.BusinessModel.Dto.PurchaseOrder
         public List<PurchaseOrderLine> PurchaseOrderLines { get; set;}
     }
 
-    public class PurchaseOrderFormDto
+    public sealed class PurchaseOrderFormDto
     {
         public long VendorId { get; set; }
         public decimal TotalAmount { get; set; }

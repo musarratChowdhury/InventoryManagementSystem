@@ -3,7 +3,7 @@ using IMS.BusinessModel.Dto.CommonDtos;
 
 namespace IMS.BusinessModel.Dto.Product
 {
-    public class ProductDto:BaseDto
+    public sealed class ProductDto:BaseDto
     {
         public string ProductName { get; set; }
         public string ProductImageUrl { get; set; }
@@ -19,7 +19,7 @@ namespace IMS.BusinessModel.Dto.Product
         public string ProductCategoryName { get; set; }
     }
 
-    public class ProductFormDto
+    public sealed class ProductFormDto
     {
         public string ProductName { get; set; }
         public string ProductImageUrl { get; set; }
