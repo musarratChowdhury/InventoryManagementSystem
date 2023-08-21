@@ -5,6 +5,7 @@ namespace IMS.BusinessModel.Dto.PaymentReceive
 {
     public class PaymentReceiveDto : BaseDto
     {
+        public string SerialNumber { get; set; }
         public DateTime PaymentDate { get; set; }
         public decimal PaymentAmount { get; set; }
         public long InvoiceId { get; set; }

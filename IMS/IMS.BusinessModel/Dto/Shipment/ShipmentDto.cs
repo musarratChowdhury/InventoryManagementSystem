@@ -5,6 +5,7 @@ namespace IMS.BusinessModel.Dto.Shipment
 {
     public class ShipmentDto : BaseDto
     {
+        public string SerialNumber { get; set; }
         public DateTime ShipmentDate { get; set; }
         public long SalesOrderId { get; set; }
         public string SalesOrderSerialNumber { get; set; }

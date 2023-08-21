@@ -118,7 +118,7 @@ namespace IMS.Services.SecondaryServices
             dto.CustomerId = entity.CustomerId;
             dto.CustomerName = entity.Customer.FirstName + " " + entity.Customer.LastName;
             dto.InvoiceId = entity.InvoiceId;
-            dto.InvoiceName =entity.Invoice!=null? entity.Invoice.Id.ToString():"NOT INVOICED";
+            dto.InvoiceSerialNumber =entity.Invoice!=null? $"#IN{entity.InvoiceId}SO{entity.Id}":"NOT INVOICED";
             dto.Status = entity.Status;
             dto.Rank = entity.Rank;
             dto.CreatedBy = entity.CreatedBy;

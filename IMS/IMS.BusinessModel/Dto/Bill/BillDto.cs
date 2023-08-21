@@ -4,6 +4,7 @@ namespace IMS.BusinessModel.Dto.Bill
 {
     public class BillDto
     {
+        public string SerialNumber { get; set; }
         public virtual DateTime BillDate { get; set; }
         public virtual DateTime BillDueDate { get; set; }
         public virtual long BillTypeId { get; set; }

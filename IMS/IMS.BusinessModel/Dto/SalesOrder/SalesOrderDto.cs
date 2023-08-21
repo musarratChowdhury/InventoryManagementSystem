@@ -15,7 +15,7 @@ namespace IMS.BusinessModel.Dto.SalesOrder
         public long CustomerId { get; set; }
         public string CustomerName { get; set; }
         public long? InvoiceId { get; set; }
-        public string InvoiceName { get; set; } = string.Empty;
+        public string InvoiceSerialNumber { get; set; } = string.Empty;
         
         public List<SalesOrderLine> SalesOrderLines { get; set; }
     }

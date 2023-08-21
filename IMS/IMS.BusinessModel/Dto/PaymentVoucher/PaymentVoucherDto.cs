@@ -5,6 +5,7 @@ namespace IMS.BusinessModel.Dto.PaymentVoucher
 {
     public class PaymentVoucherDto : BaseDto
     {
+        public string SerialNumber { get; set; }
         public DateTime PaymentDate { get; set; }
         public decimal PaymentAmount { get; set; }
         public long BillId { get; set; }

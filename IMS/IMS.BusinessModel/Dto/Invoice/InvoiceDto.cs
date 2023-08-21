@@ -5,6 +5,7 @@ namespace IMS.BusinessModel.Dto.Invoice
 {
     public class InvoiceDto : BaseDto
     {
+        public string SerialNumber { get; set; }
         public DateTime InvoiceDate { get; set; }
         public DateTime InvoiceDueDate { get; set; }
         public long InvoiceTypeId { get; set; }
