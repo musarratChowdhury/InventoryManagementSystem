@@ -17,7 +17,7 @@ namespace IMS.BusinessModel.Entity.OrderDetails
         // Navigation properties for foreign keys
         public virtual long PurchaseOrderId { get; set; }
         public virtual PurchaseOrder PurchaseOrder { get; set; }
-        public virtual long? ProductId { get; set; }
+        public virtual long ProductId { get; set; }
         public virtual Product Product { get; set; }
 
         #region Overriden Methods
