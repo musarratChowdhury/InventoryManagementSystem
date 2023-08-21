@@ -74,6 +74,24 @@ namespace IMS.WEB.Controllers.IMS
             {
                 return Json(new { success = false, message = "Error occurred while Adding.", ex.Message });
             }
+        }  
+        
+        [HttpPost]
+        public ActionResult Create(SalesOrderFormDto salesOrderCreateDto)
+        {
+            try
+            {
+                using (var session = NHibernateConfig.OpenSession())
+                {
+                    _salesOrderService.Create(salesOrderCreateDto, User.Identity.GetUserId<long>(), session);
+
+                    return Json(new { success = true, message = "Added successfully." });
+                }
+            }
+            catch (Exception ex)
+            {
+                return Json(new { success = false, message = "Error occurred while Adding.", ex.Message });
+            }
         } 
         
         [HttpPost]

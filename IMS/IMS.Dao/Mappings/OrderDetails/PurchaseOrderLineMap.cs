@@ -8,7 +8,7 @@ namespace IMS.Dao.Mappings.OrderDetails
         public PurchaseOrderLineMap()
         {
             CompositeId()
-            .KeyProperty(x => x.PurchaseOrderId, "PurchaseOrderId")
+            .KeyReference(x => x.PurchaseOrder, "PurchaseOrderId")
             .KeyReference(x => x.Product, "ProductId");
 
             Map(x => x.Quantity).Column("Quantity").Not.Nullable();
@@ -16,13 +16,6 @@ namespace IMS.Dao.Mappings.OrderDetails
             Map(x => x.DiscountedAmount).Column("Discount");
             Map(x => x.Amount).Column("Amount").Not.Nullable();
             Map(x => x.Total).Column("Total").Not.Nullable();
-
-            References(x => x.PurchaseOrder)
-                .Not.Nullable()
-                .Cascade.None();
-
-            References(x => x.Product)
-                .Cascade.None();
         }
     }
 }

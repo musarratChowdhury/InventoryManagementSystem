@@ -43,6 +43,15 @@ namespace IMS.Services.SecondaryServices
                     mappedSalesOrder.Rank = GetNextRank(session);
                     mappedSalesOrder.CreatedBy = userId;
                     mappedSalesOrder.CreationDate = DateTime.Now;
+                    foreach (var salesOrderLine in mappedSalesOrder.SalesOrderLines)
+                    {
+                        salesOrderLine.SalesOrder = mappedSalesOrder;
+                        salesOrderLine.Product = new Product
+                        {
+                            Id = salesOrderLine.ProductId
+                        };
+                    }
+                    
                     _baseDao.Create(mappedSalesOrder, session);
                     transaction.Commit();
                 }

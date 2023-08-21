@@ -18,6 +18,7 @@ namespace IMS.Dao
         int GetTotalCount(ISession session);
         IList<TEntity> GetAll( ISession session, DataRequest dataRequest);
         IList<TEntity> ExecuteRawSqlQuery(ISession session, string sqlQuery);
+        void ExecuteRawSqlQuery(ISession session, string sqlQuery, object[] parameters, Type T);
         void UpdateRank(ISession session, bool isPromoted, int oldRank, int newRank, long id);
         int GetHighestRank(ISession session);
     }
@@ -97,6 +98,16 @@ namespace IMS.Dao
             IQuery query = session.CreateSQLQuery(sqlQuery).AddEntity(typeof(TEntity));
 
             return query.List<TEntity>();
+        }
+        
+        public void ExecuteRawSqlQuery(ISession session, string sqlQuery, object[] parameters, Type T)
+        {
+            IQuery query = session.CreateSQLQuery(sqlQuery).AddEntity(T);
+
+            for (int i = 0; i < parameters.Length; i++)
+            {
+                query.SetParameter(i + 1, parameters[i]);
+            }
         }
 
         public void UpdateRank(ISession session,bool isPromoted, int oldRank, int newRank, long id)
