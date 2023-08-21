@@ -333,7 +333,7 @@ CREATE TABLE Product (
 use MyInventoryDb;
 CREATE TABLE SalesOrderLine (
     SalesOrderId BIGINT NOT NULL,
-    ProductId BIGINT NOT NULL,
+    ProductId BIGINT,
     Quantity INT NOT NULL,
     UnitPrice DECIMAL(10, 2) NOT NULL,
     Discount DECIMAL(10, 2),
@@ -345,7 +345,7 @@ CREATE TABLE SalesOrderLine (
 );
 CREATE TABLE PurchaseOrderLine (
     PurchaseOrderId BIGINT NOT NULL,
-    ProductId BIGINT NOT NULL,
+    ProductId BIGINT,
     Quantity INT NOT NULL,
     UnitPrice DECIMAL(10, 2) NOT NULL,
     Discount DECIMAL(10, 2),

@@ -8,7 +8,7 @@ namespace IMS.BusinessModel.Entity.OrderDetails
     {
         public virtual int Quantity { get; set; }
         public virtual decimal UnitPrice { get; set; }
-        public virtual decimal DiscountedAmount { get; set; }
+        public virtual decimal Discount { get; set; }
         public virtual decimal Amount { get; set; }
         public virtual decimal Total { get; set; }
 
