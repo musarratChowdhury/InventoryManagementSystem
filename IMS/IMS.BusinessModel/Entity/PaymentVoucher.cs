@@ -12,9 +12,9 @@ namespace IMS.BusinessModel.Entity
         public virtual decimal PaymentAmount { get; set; }
 
         // Navigation properties for foreign keys
-        public virtual long? BillId { get; set; }
+        public virtual long BillId { get; set; }
         public virtual Bill Bill { get; set; }
-        public virtual long? PaymentTypeId { get; set; }
+        public virtual long PaymentTypeId { get; set; }
         public virtual PaymentType PaymentType { get; set; }
         public virtual long? CashBankId { get; set; }
         public virtual CashBank CashBank { get; set; }

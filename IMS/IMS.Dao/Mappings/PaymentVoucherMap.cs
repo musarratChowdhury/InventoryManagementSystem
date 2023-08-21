@@ -24,8 +24,8 @@ namespace IMS.Dao.Mappings
             Map(x => x.PaymentDate).Column("PaymentDate").Not.Nullable();
             Map(x => x.PaymentAmount).Column("PaymentAmount").Not.Nullable();
             Map(x => x.Status).Column("Status").Not.Nullable();
-            Map(x => x.BillId).Column("BillId");
-            Map(x => x.PaymentTypeId).Column("PaymentTypeId");
+            Map(x => x.BillId).Column("BillId").Not.Nullable();
+            Map(x => x.PaymentTypeId).Column("PaymentTypeId").Not.Nullable();
             Map(x => x.CashBankId).Column("CashBankId");
 
             References(x => x.Bill) // Many-to-one relationship with Bill
