@@ -18,7 +18,6 @@ namespace IMS.BusinessModel.Dto.SalesOrder
         public string InvoiceName { get; set; } = string.Empty;
         
         public List<SalesOrderLine> SalesOrderLines { get; set; }
-        public List<Entity.Shipment> Shipments { get; set; }
     }
 
     public sealed class SalesOrderFormDto
