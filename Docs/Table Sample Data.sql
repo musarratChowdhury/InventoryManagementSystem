@@ -82,6 +82,7 @@ VALUES
 
 use MyInventoryDb;
 select * from SalesOrder;
+select * from SalesOrderLine;
 select * from Customer;
 select * from Product;
 select * from AspNetUsers;
