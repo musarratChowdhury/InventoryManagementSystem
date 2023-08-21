@@ -201,8 +201,13 @@
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\BaseController\BaseController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\IMS\BillController.cs" />
     <Compile Include="Controllers\IMS\CustomerController.cs" />
+    <Compile Include="Controllers\IMS\InvoiceController.cs" />
+    <Compile Include="Controllers\IMS\PaymentReceiveController.cs" />
+    <Compile Include="Controllers\IMS\PaymentVoucherController.cs" />
     <Compile Include="Controllers\IMS\ProductController.cs" />
+    <Compile Include="Controllers\IMS\PurchaseOrderController.cs" />
     <Compile Include="Controllers\IMS\SalesOrderController.cs" />
     <Compile Include="Controllers\IMS\ShipmentController.cs" />
     <Compile Include="Controllers\IMS\VendorController.cs" />
