@@ -43,7 +43,7 @@ namespace IMS.Dao.Mappings
 
             HasMany(x => x.PaymentVoucherList)
                 .KeyColumn("BillId")
-                .Cascade.All()
+                .Cascade.Delete()
                 .Inverse()
                 .LazyLoad();
         }
