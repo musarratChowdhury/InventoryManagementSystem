@@ -1,9 +1,10 @@
 ﻿using System.Collections.Generic;
+using IMS.BusinessModel.Dto.CommonDtos;
 using IMS.BusinessModel.Entity.OrderDetails;
 
 namespace IMS.BusinessModel.Dto.PurchaseOrder
 {
-    public sealed class PurchaseOrderDto
+    public sealed class PurchaseOrderDto : BaseDto
     {
         public string SerialNumber { get; set; }
         public int PaymentStatus { get; set; }

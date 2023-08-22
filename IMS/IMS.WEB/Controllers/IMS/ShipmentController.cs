@@ -11,7 +11,7 @@ namespace IMS.WEB.Controllers.IMS
 {
     public class ShipmentController : Controller
     {
-          private readonly ShipmentService _shipmentService;
+        private readonly ShipmentService _shipmentService;
 
         public ShipmentController()
         {

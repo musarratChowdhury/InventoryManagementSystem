@@ -1,7 +1,167 @@
-﻿namespace IMS.Services.SecondaryServices
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using IMS.BusinessModel.Dto.CommonDtos;
+using IMS.BusinessModel.Dto.GridData;
+using IMS.BusinessModel.Dto.PurchaseOrder;
+using IMS.BusinessModel.Entity;
+using IMS.Dao;
+using NHibernate;
+
+namespace IMS.Services.SecondaryServices
 {
-    public class PurchaseOrderService
+    public class PurchaseOrderService : BaseSecondaryService<PurchaseOrder>
     {
+        private readonly IBaseDao<PurchaseOrder> _baseDao;
+        public PurchaseOrderService()
+        {
+            _baseDao = new BaseDao<PurchaseOrder>();
+        }
+
+        public List<PurchaseOrderDto> GetAll(ISession session, DataRequest dataRequest)
+        {
+            try
+            {
+                var entities = _baseDao.GetAll(session, dataRequest);
+                return (from t in entities let dto = new PurchaseOrderDto() select MapToDto(t, dto)).ToList();
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                throw;
+            }
+        }
+
+        public void Create(PurchaseOrderFormDto purchaseOrderFormDto, long userId, ISession session)
+        {
+            using (var transaction = session.BeginTransaction())
+            {
+                try
+                {
+                    var purchaseOrder = new PurchaseOrder();
+                    var mappedPurchaseOrder = MapToEntity(purchaseOrderFormDto, purchaseOrder);
+                    mappedPurchaseOrder.Rank = GetNextRank(session);
+                    mappedPurchaseOrder.CreatedBy = userId;
+                    mappedPurchaseOrder.CreationDate = DateTime.Now;
+                    foreach (var purchaseOrderLine in mappedPurchaseOrder.PurchaseOrderLines)
+                    {
+                        purchaseOrderLine.PurchaseOrder = mappedPurchaseOrder;
+                        purchaseOrderLine.Product = new Product
+                        {
+                            Id = purchaseOrderLine.ProductId
+                        };
+                    }
+                    
+                    _baseDao.Create(mappedPurchaseOrder, session);
+                    transaction.Commit();
+                }
+                catch (Exception)
+                {
+                    transaction.Rollback();
+                    throw;
+                }
+            }
+        }
+
+        public void Update(PurchaseOrderDto purchaseOrderDto, long modifiedById, ISession sess)
+        {
+            using (var transaction = sess.BeginTransaction())
+            {
+                try
+                {
+                    var purchaseOrder = new PurchaseOrder();
+                    var mappedPurchaseOrder = MapToEntity(purchaseOrderDto, purchaseOrder);
+                    mappedPurchaseOrder.ModificationDate = DateTime.Now;
+                    mappedPurchaseOrder.ModifiedBy = modifiedById;
+                    
+                    _baseDao.Update(mappedPurchaseOrder, sess);
+                    
+                    transaction.Commit();
+                }
+                catch (Exception)
+                {
+                    transaction.Rollback();
+                    throw;
+                }
+            }
+        }
         
+        public List<DropDownDto> GetDropDownList(ISession session)
+        {
+            try
+            {
+                var entities = _baseDao.GetAll(session);
+                return (from t in entities let dto = new DropDownDto() select MapToDropDownDto(t, dto)).ToList();
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                throw;
+            }
+        }
+        
+        private DropDownDto MapToDropDownDto(PurchaseOrder entity, DropDownDto dto)
+        {
+            dto.Id = entity.Id;
+            dto.SerialNumber = $"#PO{entity.Id}V{entity.VendorId}";
+
+            return dto;
+        }
+        
+        private PurchaseOrderDto MapToDto(PurchaseOrder entity, PurchaseOrderDto dto)
+        {
+            dto.SerialNumber =  $"#SO{entity.Id}C{entity.VendorId}";
+            dto.Id = entity.Id;
+            dto.PaymentStatus = entity.PaymentStatus;
+            dto.IsArchived = entity.IsArchived;
+            dto.TotalAmount = entity.TotalAmount;
+            dto.VendorId = entity.VendorId;
+            dto.VendorName = entity.Vendor.FirstName + " " + entity.Vendor.LastName;
+            dto.BillId = entity.BillId;
+            dto.BillSerialNumber =entity.Bill!=null? $"#BL{entity.BillId}PO{entity.Id}":"NOT BILLED";
+            dto.Status = entity.Status;
+            dto.Rank = entity.Rank;
+            dto.CreatedBy = entity.CreatedBy;
+            dto.CreationDate = entity.CreationDate;
+            dto.ModifiedBy = entity.ModifiedBy;
+            dto.ModificationDate = entity.ModificationDate;
+            dto.Version = entity.Version;
+            dto.BusinessId = entity.BusinessId;
+
+            return dto;
+        }
+
+        //for create operation
+        private PurchaseOrder MapToEntity(PurchaseOrderFormDto dto, PurchaseOrder purchaseOrder)
+        {
+            purchaseOrder.TotalAmount = dto.TotalAmount;
+            purchaseOrder.VendorId = dto.VendorId;
+            purchaseOrder.PurchaseOrderLines = dto.PurchaseOrderLines;
+            purchaseOrder.Version = 1;
+            purchaseOrder.BusinessId = "IMS-1";
+            purchaseOrder.Status = 1;
+
+            return purchaseOrder;
+        }
+
+        //for update action
+        private PurchaseOrder MapToEntity(PurchaseOrderDto dto, PurchaseOrder purchaseOrder)
+        {
+            purchaseOrder.Id = dto.Id;
+            purchaseOrder.CreatedBy = dto.CreatedBy;
+            purchaseOrder.CreationDate = dto.CreationDate;
+            purchaseOrder.Rank = dto.Rank;
+            purchaseOrder.VendorId = dto.VendorId;
+            purchaseOrder.PaymentStatus = dto.PaymentStatus;
+            purchaseOrder.IsArchived = dto.IsArchived;
+            purchaseOrder.BillId = dto.BillId;
+            purchaseOrder.TotalAmount = dto.TotalAmount;
+            purchaseOrder.PurchaseOrderLines = dto.PurchaseOrderLines;
+            purchaseOrder.Version = 1;
+            purchaseOrder.BusinessId = "IMS-1";
+            purchaseOrder.Status = dto.Status;
+
+            return purchaseOrder;
+        }
     }
 }

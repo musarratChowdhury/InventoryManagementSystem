@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using IMS.BusinessModel.Dto.CommonDtos;
 using IMS.BusinessModel.Dto.GridData;
 using IMS.BusinessModel.Dto.Invoice;
 using IMS.BusinessModel.Entity;
@@ -74,6 +75,27 @@ namespace IMS.Services.SecondaryServices
                     throw;
                 }
             }
+        }
+        
+        public List<DropDownDto> GetDropDownList(ISession session)
+        {
+            try
+            {
+                var entities = _baseDao.GetAll(session);
+                return (from t in entities let dto = new DropDownDto() select MapToDropDownDto(t, dto)).ToList();
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                throw;
+            }
+        }
+        
+        private DropDownDto MapToDropDownDto(Invoice entity, DropDownDto dto)
+        {
+            dto.Id = entity.Id;
+            dto.SerialNumber = $"#IN{entity.Id}SO{entity.SalesOrderId}";
+            return dto;
         }
 
         private InvoiceDto MapToDto(Invoice entity, InvoiceDto dto)

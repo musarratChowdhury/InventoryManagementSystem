@@ -12,7 +12,7 @@ namespace IMS.Services.SecondaryServices
 {
     public class SalesOrderService : BaseSecondaryService<SalesOrder>
     {
-         private readonly IBaseDao<SalesOrder> _baseDao;
+        private readonly IBaseDao<SalesOrder> _baseDao;
         public SalesOrderService()
         {
             _baseDao = new BaseDao<SalesOrder>();
