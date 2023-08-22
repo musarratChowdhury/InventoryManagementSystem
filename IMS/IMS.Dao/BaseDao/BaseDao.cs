@@ -5,6 +5,7 @@ using NHibernate.Criterion;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using IMS.BusinessModel.Entity;
 
 namespace IMS.Dao
 {
@@ -71,6 +72,36 @@ namespace IMS.Dao
         public IList<TEntity> GetAll(ISession session, DataRequest dataRequest)
         {
             var criteria = session.CreateCriteria<TEntity>();
+            if(typeof(TEntity)==typeof(SalesOrder)||typeof(TEntity)==typeof(PurchaseOrder))
+            {
+                // Apply filtering for IsArchived = true
+                criteria.Add(Restrictions.Eq("IsArchived", false));
+            }
+            // Apply filters if provided in dataRequest.where
+            if (dataRequest.Where != null)
+            {
+                foreach (var filterGroup in dataRequest.Where)
+                {
+                    var filterGroupCriterion = Restrictions.Conjunction();
+            
+                    foreach (var predicate in filterGroup.Predicates)
+                    {
+                        if (predicate.Value is int)
+                        {
+                           predicate.Value = Int64.Parse(predicate.Value.ToString());
+                        }
+                        switch (predicate.Operator.ToLower())
+                        {
+                            case "equal":
+                                filterGroupCriterion.Add(Restrictions.Eq(predicate.Field, predicate.Value));
+                                break;
+                            // Add other cases for different operators as needed
+                        }
+                    }
+
+                    criteria.Add(filterGroupCriterion);
+                }
+            }
             if (dataRequest.Sorted!=null)
             {
                 foreach (var sortInfo in dataRequest.Sorted)

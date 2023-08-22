@@ -98,6 +98,28 @@ namespace IMS.Services.SecondaryServices
                 throw ;
             }
         }
+
+        public void ArchiveRecord(long entityId, ISession session)
+        {
+            using (var transaction = session.BeginTransaction())
+            {
+                try
+                {
+                    var entity = _baseDao.GetById(entityId, session);
+                    if (entity != null)
+                    {
+                        entity.IsArchived = true;
+                        _baseDao.Update(entity, session);
+                        transaction.Commit();
+                    }
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine(e);
+                    throw;
+                }
+            } 
+        }
         
         private DropDownDto MapToDropDownDto(SalesOrder entity, DropDownDto dto)
         {

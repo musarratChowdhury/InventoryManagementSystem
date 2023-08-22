@@ -132,15 +132,33 @@ namespace IMS.WEB.Controllers.IMS
             }
             
         }
-        
+
         [HttpPost]
-        public ActionResult Delete(DeleteRequest salesOrderCreateReq)
+        public ActionResult Archive(DeleteRequest salesOrderDeleteReq)
         {
             try
             {
                 using (var session = NHibernateConfig.OpenSession())
                 {
-                    _salesOrderService.Delete(salesOrderCreateReq.Key, session);
+                    _salesOrderService.ArchiveRecord(salesOrderDeleteReq.Key, session);
+
+                    return Json(new { success = true, message = "Archived successfully." });
+                }
+            }
+            catch (Exception ex)
+            {
+                return Json(new { success = false, message = "Error occurred while archiving.", ex.Message });
+            }
+        }
+        
+        [HttpPost]
+        public ActionResult Delete(DeleteRequest salesOrderDeleteReq)
+        {
+            try
+            {
+                using (var session = NHibernateConfig.OpenSession())
+                {
+                    _salesOrderService.Delete(salesOrderDeleteReq.Key, session);
 
                     return Json(new { success = true, message = "Deleted successfully." });
                 }
