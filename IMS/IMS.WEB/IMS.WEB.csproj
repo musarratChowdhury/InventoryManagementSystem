@@ -285,7 +285,12 @@
     <Content Include="Scripts\jquery.validate.unobtrusive.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
     <Content Include="Scripts\modernizr-2.8.3.js" />
+    <Content Include="Views\Bill\Index.cshtml" />
+    <Content Include="Views\Invoice\Index.cshtml" />
+    <Content Include="Views\PaymentReceive\Index.cshtml" />
+    <Content Include="Views\PaymentVoucher\Index.cshtml" />
     <Content Include="Views\Product\Index.cshtml" />
+    <Content Include="Views\PurchaseOrder\Index.cshtml" />
     <Content Include="Views\SalesOrder\Index.cshtml" />
     <Content Include="Views\Shipment\Index.cshtml" />
     <Content Include="Views\Vendor\Index.cshtml" />
