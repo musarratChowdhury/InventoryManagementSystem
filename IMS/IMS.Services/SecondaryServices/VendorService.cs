@@ -6,6 +6,7 @@ using NHibernate;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using IMS.BusinessModel.Dto.CommonDtos;
 
 namespace IMS.Services.SecondaryServices
 {
@@ -29,6 +30,33 @@ namespace IMS.Services.SecondaryServices
                 Console.WriteLine(e);
                 throw;
             }
+        }
+        
+        public List<DropDownDto> GetDropDownList(ISession session)
+        {
+            try
+            {
+                var entities = _baseDao.GetAll(session);
+                var result = new List<DropDownDto>();
+                for (int i = 0; i < entities.Count; i++)
+                {
+                    var dto = new DropDownDto();
+                    result.Add(MapToDropDownDto(entities[i], dto));
+                }
+                return result;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+        
+        private DropDownDto MapToDropDownDto(Vendor entity, DropDownDto dto)
+        {
+            dto.Id = entity.Id;
+            dto.FullName = entity.FirstName +" "+ entity.LastName;
+
+            return dto;
         }
 
         public void Create(VendorFormDto vendorFormDto, long userId, ISession session)

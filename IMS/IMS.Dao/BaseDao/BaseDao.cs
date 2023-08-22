@@ -84,20 +84,20 @@ namespace IMS.Dao
         
                 foreach (var searchItem in dataRequest.Search)
                 {
-                    var searchConjunction = Restrictions.Conjunction();
+                    var searchDisjunction2 = Restrictions.Disjunction();
             
                     foreach (var field in searchItem.Fields)
                     {
                         switch (searchItem.Operator.ToLower())
                         {
                             case "contains":
-                                searchConjunction.Add(Restrictions.InsensitiveLike(field, $"%{searchItem.Key}%"));
+                                searchDisjunction2.Add(Restrictions.InsensitiveLike(field, $"%{searchItem.Key}%"));
                                 break;
                             // Add other cases for different operators as needed
                         }
                     }
 
-                    searchDisjunction.Add(searchConjunction);
+                    searchDisjunction.Add(searchDisjunction2);
                 }
 
                 criteria.Add(searchDisjunction);

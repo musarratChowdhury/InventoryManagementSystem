@@ -39,6 +39,25 @@ namespace IMS.WEB.Controllers.IMS
                 return Json(result, JsonRequestBehavior.AllowGet);
             }
         }
+        
+        [HttpPost]
+        public ActionResult DropDownList()
+        {
+            try
+            {
+                using (var session = NHibernateConfig.OpenSession())
+                {
+                    var result = _vendorService.GetDropDownList(session);
+
+                    return Json(result, JsonRequestBehavior.AllowGet);
+                }
+
+            }
+            catch(Exception)
+            {
+                throw;
+            }
+        }
 
         [HttpPost]
         public ActionResult Insert(CRUDRequest<VendorFormDto> vendorCreateReq)
