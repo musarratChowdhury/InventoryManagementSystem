@@ -1,7 +1,134 @@
-﻿namespace IMS.Services.SecondaryServices
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using IMS.BusinessModel.Dto.GridData;
+using IMS.BusinessModel.Dto.PaymentReceive;
+using IMS.BusinessModel.Entity;
+using IMS.Dao;
+using NHibernate;
+
+namespace IMS.Services.SecondaryServices
 {
-    public class PaymentReceiveService
+    public class PaymentReceiveService : BaseSecondaryService<PaymentReceived>
     {
-        
+           private readonly IBaseDao<PaymentReceived> _baseDao;
+        public PaymentReceiveService()
+        {
+            _baseDao = new BaseDao<PaymentReceived>();
+        }
+
+        public List<PaymentReceiveDto> GetAll(ISession session, DataRequest dataRequest)
+        {
+            try
+            {
+                var entities = _baseDao.GetAll(session, dataRequest);
+                return (from t in entities let dto = new PaymentReceiveDto() select MapToDto(t, dto)).ToList();
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                throw;
+            }
+        }
+
+        public void Create(PaymentReceiveFormDto paymentReceiveFormDto, long userId, ISession session)
+        {
+            using (var transaction = session.BeginTransaction())
+            {
+                try
+                {
+                    var paymentReceive = new PaymentReceived();
+                    var mappedPaymentReceive = MapToEntity(paymentReceiveFormDto, paymentReceive);
+                    mappedPaymentReceive.Rank = GetNextRank(session);
+                    mappedPaymentReceive.CreatedBy = userId;
+                    mappedPaymentReceive.CreationDate = DateTime.Now;
+                    _baseDao.Create(mappedPaymentReceive, session);
+                    transaction.Commit();
+                }
+                catch (Exception)
+                {
+                    transaction.Rollback();
+                    throw;
+                }
+            }
+        }
+
+        public void Update(PaymentReceiveDto paymentReceiveDto, long modifiedById, ISession sess)
+        {
+            using (var transaction = sess.BeginTransaction())
+            {
+                try
+                {
+                    var paymentReceive = new PaymentReceived();
+                    var mappedPaymentReceive = MapToEntity(paymentReceiveDto, paymentReceive);
+                    mappedPaymentReceive.ModificationDate = DateTime.Now;
+                    mappedPaymentReceive.ModifiedBy = modifiedById;
+                    
+                    _baseDao.Update(mappedPaymentReceive, sess);
+                    
+                    transaction.Commit();
+                }
+                catch (Exception)
+                {
+                    transaction.Rollback();
+                    throw;
+                }
+            }
+        }
+
+        private PaymentReceiveDto MapToDto(PaymentReceived entity, PaymentReceiveDto dto)
+        {
+
+            dto.Id = entity.Id;
+            dto.SerialNumber = $"#PR{entity.Id}IN{entity.InvoiceId}";
+            dto.PaymentDate = entity.PaymentDate;
+            dto.PaymentAmount = entity.PaymentAmount;
+            dto.InvoiceId = entity.InvoiceId;
+            dto.InvoiceSerialNumber = $"#IN{entity.Invoice.Id}SO{entity.Invoice.SalesOrderId}";
+            dto.PaymentTypeId = entity.PaymentTypeId;
+            dto.PaymentTypeName = entity.PaymentType.Name;
+            dto.Status = entity.Status;
+            dto.Rank = entity.Rank;
+            dto.CreatedBy = entity.CreatedBy;
+            dto.CreationDate = entity.CreationDate;
+            dto.ModifiedBy = entity.ModifiedBy;
+            dto.ModificationDate = entity.ModificationDate;
+            dto.Version = entity.Version;
+            dto.BusinessId = entity.BusinessId;
+
+            return dto;
+        }
+
+        //for create operation
+        private PaymentReceived MapToEntity(PaymentReceiveFormDto dto, PaymentReceived paymentReceive)
+        {
+            paymentReceive.PaymentDate = dto.PaymentDate;
+            paymentReceive.PaymentAmount = dto.PaymentAmount;
+            paymentReceive.InvoiceId = dto.InvoiceId;
+            paymentReceive.PaymentTypeId = dto.PaymentTypeId;
+            paymentReceive.Version = 1;
+            paymentReceive.BusinessId = "IMS-1";
+            paymentReceive.Status = 1;
+
+            return paymentReceive;
+        }
+
+        //for update action
+        private PaymentReceived MapToEntity(PaymentReceiveDto dto, PaymentReceived paymentReceive)
+        {
+            paymentReceive.Id = dto.Id;
+            paymentReceive.CreatedBy = dto.CreatedBy;
+            paymentReceive.CreationDate = dto.CreationDate;
+            paymentReceive.Rank = dto.Rank;
+            paymentReceive.PaymentDate = dto.PaymentDate;
+            paymentReceive.PaymentAmount = dto.PaymentAmount;
+            paymentReceive.InvoiceId = dto.InvoiceId;
+            paymentReceive.PaymentTypeId = dto.PaymentTypeId;
+            paymentReceive.Version = 1;
+            paymentReceive.BusinessId = "IMS-1";
+            paymentReceive.Status = dto.Status;
+
+            return paymentReceive;
+        }
     }
 }
