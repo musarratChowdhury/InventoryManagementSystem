@@ -102,7 +102,7 @@ namespace IMS.Services.SecondaryServices
         {
 
             dto.Id = entity.Id;
-            dto.SerialNumber = $"BL{entity.Id}PO{entity.PurchaseOrderId}";
+            dto.SerialNumber = $"#BL{entity.Id}PO{entity.PurchaseOrderId}";
             dto.BillDate = entity.BillDate;
             dto.BillTypeId = entity.BillTypeId;
             dto.BillTypeName = entity.BillType.Name;
