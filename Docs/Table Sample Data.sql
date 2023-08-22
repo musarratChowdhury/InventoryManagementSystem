@@ -87,3 +87,8 @@ select * from Customer;
 select * from Product;
 select * from AspNetUsers;
 delete  from AspNetUsers;
+
+Update SalesOrder
+	SET PaymentStatus = 2,
+	ShipmentStatus = 1
+WHERE Id =11; 

@@ -77,27 +77,85 @@ namespace IMS.Dao
                 // Apply filtering for IsArchived = true
                 criteria.Add(Restrictions.Eq("IsArchived", false));
             }
+            // Apply search criteria if provided in dataRequest.search
+            if (dataRequest.Search != null)
+            {
+                var searchDisjunction = Restrictions.Disjunction();
+        
+                foreach (var searchItem in dataRequest.Search)
+                {
+                    var searchConjunction = Restrictions.Conjunction();
+            
+                    foreach (var field in searchItem.Fields)
+                    {
+                        switch (searchItem.Operator.ToLower())
+                        {
+                            case "contains":
+                                searchConjunction.Add(Restrictions.InsensitiveLike(field, $"%{searchItem.Key}%"));
+                                break;
+                            // Add other cases for different operators as needed
+                        }
+                    }
+
+                    searchDisjunction.Add(searchConjunction);
+                }
+
+                criteria.Add(searchDisjunction);
+            }
             // Apply filters if provided in dataRequest.where
             if (dataRequest.Where != null)
             {
                 foreach (var filterGroup in dataRequest.Where)
                 {
                     var filterGroupCriterion = Restrictions.Conjunction();
-            
-                    foreach (var predicate in filterGroup.Predicates)
+
+                    if (filterGroup.Field!=null)
                     {
-                        if (predicate.Value is int)
+                        if (filterGroup.Value is int)
                         {
-                           predicate.Value = Int64.Parse(predicate.Value.ToString());
+                            filterGroup.Value = Int64.Parse(filterGroup.Value.ToString());
                         }
-                        switch (predicate.Operator.ToLower())
+                        switch (filterGroup.Operator.ToLower())
                         {
                             case "equal":
-                                filterGroupCriterion.Add(Restrictions.Eq(predicate.Field, predicate.Value));
+                                filterGroupCriterion.Add(Restrictions.Eq(filterGroup.Field, filterGroup.Value));
+                                break;
+                            case "contains":
+                                filterGroupCriterion.Add(Restrictions.InsensitiveLike(filterGroup.Field, $"%{filterGroup.Value}%"));
+                                break;
+                            case "like":
+                                filterGroupCriterion.Add(Restrictions.Like(filterGroup.Field, $"%{filterGroup.Value}%"));
                                 break;
                             // Add other cases for different operators as needed
                         }
                     }
+                    else
+                    {
+                        foreach (var predicate in filterGroup.Predicates)
+                        {
+                            if (predicate.Value != null)
+                            {
+                                if (predicate.Value is int)
+                                {
+                                   predicate.Value = Int64.Parse(predicate.Value.ToString());
+                                }
+                                switch (predicate.Operator.ToLower())
+                                {
+                                    case "equal":
+                                        filterGroupCriterion.Add(Restrictions.Eq(predicate.Field, predicate.Value));
+                                        break;
+                                    case "contains":
+                                        filterGroupCriterion.Add(Restrictions.InsensitiveLike(predicate.Field, $"%{predicate.Value}%"));
+                                        break;
+                                    case "like":
+                                        filterGroupCriterion.Add(Restrictions.Like(predicate.Field, $"%{predicate.Value}%"));
+                                        break;
+                                    // Add other cases for different operators as needed
+                                }
+                            }
+                        }
+                    }
+            
 
                     criteria.Add(filterGroupCriterion);
                 }
