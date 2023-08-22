@@ -69,6 +69,30 @@ namespace IMS.Services.SecondaryServices
             }
         }
 
+        public bool SoftDelete(long entityId, ISession session)
+        {
+            using (var transaction = session.BeginTransaction())
+            {
+                try
+                {
+                    var entity = _baseDao.GetById(entityId, session);
+                    if (entity != null)
+                    {
+                        entity.Status = 404;
+                        _baseDao.Update(entity, session);
+                        transaction.Commit();
+                        return true;
+                    }
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine(e);
+                    throw;
+                }
+            }
+            return false;
+        }
+
         protected int GetNextRank(ISession session)
         {
             try
