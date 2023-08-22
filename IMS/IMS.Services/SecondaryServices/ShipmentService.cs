@@ -83,6 +83,7 @@ namespace IMS.Services.SecondaryServices
             dto.ShipmentTypeId = entity.ShipmentTypeId;
             dto.ShipmentTypeName = entity.ShipmentType.Name;
             dto.ShipmentDate = entity.ShipmentDate;
+            dto.ShippingAddress = entity.ShippingAddress;
             dto.SalesOrderId = entity.SalesOrderId;
             dto.SalesOrderSerialNumber = $"#SO{entity.SalesOrder.Id}C{entity.SalesOrder.CustomerId}";
             dto.Status = entity.Status;
@@ -102,6 +103,7 @@ namespace IMS.Services.SecondaryServices
         {
             shipment.ShipmentTypeId = dto.ShipmentTypeId;
             shipment.ShipmentDate = dto.ShipmentDate;
+            shipment.ShippingAddress = dto.ShippingAddress;
             shipment.SalesOrderId = dto.SalesOrderId;
             shipment.Version = 1;
             shipment.BusinessId = "IMS-1";
@@ -119,6 +121,7 @@ namespace IMS.Services.SecondaryServices
             shipment.Rank = dto.Rank;
             shipment.ShipmentTypeId = dto.ShipmentTypeId;
             shipment.ShipmentDate = dto.ShipmentDate;
+            shipment.ShippingAddress = dto.ShippingAddress;
             shipment.SalesOrderId = dto.SalesOrderId;
             shipment.Version = 1;
             shipment.BusinessId = "IMS-1";

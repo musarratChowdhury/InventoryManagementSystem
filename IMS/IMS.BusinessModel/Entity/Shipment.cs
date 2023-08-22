@@ -9,6 +9,7 @@ namespace IMS.BusinessModel.Entity
     public class Shipment : BaseEntity
     {
         public virtual DateTime ShipmentDate { get; set; }
+        public virtual string ShippingAddress { get; set; }
 
         // Navigation properties for foreign keys
         public virtual long SalesOrderId { get; set; }

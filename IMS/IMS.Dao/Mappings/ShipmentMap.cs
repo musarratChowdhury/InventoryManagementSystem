@@ -16,6 +16,7 @@ namespace IMS.Dao.Mappings
 
             Id(x => x.Id).Column("Id").GeneratedBy.Identity();
             Map(x => x.ShipmentDate).Column("ShipmentDate").Not.Nullable();
+            Map(x => x.ShippingAddress).Column("ShippingAddress").Length(100).Not.Nullable();
             Map(x => x.SalesOrderId).Column("SalesOrderId").Not.Nullable();
             Map(x => x.ShipmentTypeId).Column("ShipmentTypeId").Not.Nullable();
             Map(x => x.Status).Column("Status").Not.Nullable();
