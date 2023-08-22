@@ -40,13 +40,13 @@ namespace IMS.WEB.Controllers.IMS
         }
 
         [HttpPost]
-        public ActionResult Insert(CRUDRequest<PaymentReceiveFormDto> salesOrderCreateReq)
+        public ActionResult Insert(CRUDRequest<PaymentReceiveFormDto> paymentReceiveCreateReq)
         {
             try
             {
                 using (var session = NHibernateConfig.OpenSession())
                 {
-                    _paymentReceiveService.Create(salesOrderCreateReq.value, User.Identity.GetUserId<long>(), session);
+                    _paymentReceiveService.Create(paymentReceiveCreateReq.value, User.Identity.GetUserId<long>(), session);
 
                     return Json(new { success = true, message = "Added successfully." });
                 }
@@ -58,13 +58,13 @@ namespace IMS.WEB.Controllers.IMS
         }  
         
         [HttpPost]
-        public ActionResult Create(PaymentReceiveFormDto salesOrderCreateDto)
+        public ActionResult Create(PaymentReceiveFormDto paymentReceiveCreateDto)
         {
             try
             {
                 using (var session = NHibernateConfig.OpenSession())
                 {
-                    _paymentReceiveService.Create(salesOrderCreateDto, User.Identity.GetUserId<long>(), session);
+                    _paymentReceiveService.Create(paymentReceiveCreateDto, User.Identity.GetUserId<long>(), session);
 
                     return Json(new { success = true, message = "Added successfully." });
                 }
@@ -76,14 +76,14 @@ namespace IMS.WEB.Controllers.IMS
         } 
         
         [HttpPost]
-        public ActionResult Update(CRUDRequest<PaymentReceiveDto> salesOrderCreateReq)
+        public ActionResult Update(CRUDRequest<PaymentReceiveDto> paymentReceiveUpdateReq)
         {
             try
             {
                 using (var session = NHibernateConfig.OpenSession())
                 {
                     
-                    _paymentReceiveService.Update(salesOrderCreateReq.value, User.Identity.GetUserId<long>(), session);
+                    _paymentReceiveService.Update(paymentReceiveUpdateReq.value, User.Identity.GetUserId<long>(), session);
 
                     return Json(new { success = true, message = "Updated successfully." });
                 }
@@ -115,13 +115,13 @@ namespace IMS.WEB.Controllers.IMS
         }
         
         [HttpPost]
-        public ActionResult Delete(DeleteRequest salesOrderCreateReq)
+        public ActionResult Delete(DeleteRequest paymentReceiveDeleteReq)
         {
             try
             {
                 using (var session = NHibernateConfig.OpenSession())
                 {
-                    _paymentReceiveService.Delete(salesOrderCreateReq.Key, session);
+                    _paymentReceiveService.Delete(paymentReceiveDeleteReq.Key, session);
 
                     return Json(new { success = true, message = "Deleted successfully." });
                 }

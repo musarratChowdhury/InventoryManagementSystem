@@ -40,13 +40,13 @@ namespace IMS.WEB.Controllers.IMS
         }
 
         [HttpPost]
-        public ActionResult Insert(CRUDRequest<PaymentVoucherFormDto> salesOrderCreateReq)
+        public ActionResult Insert(CRUDRequest<PaymentVoucherFormDto> paymentVoucherCreateReq)
         {
             try
             {
                 using (var session = NHibernateConfig.OpenSession())
                 {
-                    _paymentVoucherService.Create(salesOrderCreateReq.value, User.Identity.GetUserId<long>(), session);
+                    _paymentVoucherService.Create(paymentVoucherCreateReq.value, User.Identity.GetUserId<long>(), session);
 
                     return Json(new { success = true, message = "Added successfully." });
                 }
@@ -58,13 +58,13 @@ namespace IMS.WEB.Controllers.IMS
         }  
         
         [HttpPost]
-        public ActionResult Create(PaymentVoucherFormDto salesOrderCreateDto)
+        public ActionResult Create(PaymentVoucherFormDto paymentVoucherCreateDto)
         {
             try
             {
                 using (var session = NHibernateConfig.OpenSession())
                 {
-                    _paymentVoucherService.Create(salesOrderCreateDto, User.Identity.GetUserId<long>(), session);
+                    _paymentVoucherService.Create(paymentVoucherCreateDto, User.Identity.GetUserId<long>(), session);
 
                     return Json(new { success = true, message = "Added successfully." });
                 }
@@ -76,14 +76,14 @@ namespace IMS.WEB.Controllers.IMS
         } 
         
         [HttpPost]
-        public ActionResult Update(CRUDRequest<PaymentVoucherDto> salesOrderCreateReq)
+        public ActionResult Update(CRUDRequest<PaymentVoucherDto> paymentVoucherCreateReq)
         {
             try
             {
                 using (var session = NHibernateConfig.OpenSession())
                 {
                     
-                    _paymentVoucherService.Update(salesOrderCreateReq.value, User.Identity.GetUserId<long>(), session);
+                    _paymentVoucherService.Update(paymentVoucherCreateReq.value, User.Identity.GetUserId<long>(), session);
 
                     return Json(new { success = true, message = "Updated successfully." });
                 }
@@ -115,13 +115,13 @@ namespace IMS.WEB.Controllers.IMS
         }
         
         [HttpPost]
-        public ActionResult Delete(DeleteRequest salesOrderCreateReq)
+        public ActionResult Delete(DeleteRequest paymentVoucherDeleteReq)
         {
             try
             {
                 using (var session = NHibernateConfig.OpenSession())
                 {
-                    _paymentVoucherService.Delete(salesOrderCreateReq.Key, session);
+                    _paymentVoucherService.Delete(paymentVoucherDeleteReq.Key, session);
 
                     return Json(new { success = true, message = "Deleted successfully." });
                 }
