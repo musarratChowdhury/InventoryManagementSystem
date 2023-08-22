@@ -172,9 +172,11 @@ CREATE TABLE Invoice (
     CONSTRAINT FK_Invoice_InvoiceType FOREIGN KEY (InvoiceTypeId) REFERENCES InvoiceType(Id)
 );
 
+use MyInventoryDb;
 CREATE TABLE Shipment (
     Id BIGINT PRIMARY KEY IDENTITY(1, 1) NOT NULL,
     ShipmentDate DATE NOT NULL,
+	ShippingAddress NVARCHAR(100) NOT NULL,
     SalesOrderId BIGINT NOT NULL,
     ShipmentTypeId BIGINT NOT NULL,
     Status INT NOT NULL,
