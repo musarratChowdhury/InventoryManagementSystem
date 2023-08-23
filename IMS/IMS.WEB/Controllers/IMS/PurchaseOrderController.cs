@@ -134,6 +134,24 @@ namespace IMS.WEB.Controllers.IMS
         }
         
         [HttpPost]
+        public ActionResult Archive(DeleteRequest purchaseOrderArchiveReq)
+        {
+            try
+            {
+                using (var session = NHibernateConfig.OpenSession())
+                {
+                    _purchaseOrderService.ArchiveRecord(purchaseOrderArchiveReq.Key, session);
+
+                    return Json(new { success = true, message = "Archived successfully." });
+                }
+            }
+            catch (Exception ex)
+            {
+                return Json(new { success = false, message = "Error occurred while archiving.", ex.Message });
+            }
+        }
+        
+        [HttpPost]
         public ActionResult Delete(DeleteRequest purchaseOrderCreateReq)
         {
             try

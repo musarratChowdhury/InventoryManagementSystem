@@ -86,6 +86,29 @@ namespace IMS.Services.SecondaryServices
             }
         }
         
+        public void ArchiveRecord(long entityId, ISession session)
+        {
+            using (var transaction = session.BeginTransaction())
+            {
+                try
+                {
+                    var entity = _baseDao.GetById(entityId, session);
+                    if (entity != null)
+                    {
+                        entity.IsArchived = true;
+                        entity.Status = 404;
+                        _baseDao.Update(entity, session);
+                        transaction.Commit();
+                    }
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine(e);
+                    throw;
+                }
+            } 
+        }
+        
         public List<DropDownDto> GetDropDownList(ISession session)
         {
             try
