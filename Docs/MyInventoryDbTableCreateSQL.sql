@@ -350,7 +350,6 @@ CREATE TABLE PurchaseOrderLine (
     ProductId BIGINT,
     Quantity INT NOT NULL,
     UnitPrice DECIMAL(10, 2) NOT NULL,
-    Discount DECIMAL(10, 2),
     Amount DECIMAL(10, 2) NOT NULL,
     Total DECIMAL(10, 2) NOT NULL,
     PRIMARY KEY (PurchaseOrderId, ProductId),

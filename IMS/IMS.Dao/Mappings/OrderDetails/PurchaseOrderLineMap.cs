@@ -13,7 +13,6 @@ namespace IMS.Dao.Mappings.OrderDetails
 
             Map(x => x.Quantity).Column("Quantity").Not.Nullable();
             Map(x => x.UnitPrice).Column("UnitPrice").Not.Nullable();
-            Map(x => x.DiscountedAmount).Column("Discount");
             Map(x => x.Amount).Column("Amount").Not.Nullable();
             Map(x => x.Total).Column("Total").Not.Nullable();
         }

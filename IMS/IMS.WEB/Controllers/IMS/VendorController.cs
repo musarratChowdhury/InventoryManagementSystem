@@ -34,8 +34,7 @@ namespace IMS.WEB.Controllers.IMS
                     count = _vendorService.GetTotalCount(session),
                     result = _vendorService.GetAll(session, request)
                 };
-
-
+                
                 return Json(result, JsonRequestBehavior.AllowGet);
             }
         }
@@ -51,7 +50,6 @@ namespace IMS.WEB.Controllers.IMS
 
                     return Json(result, JsonRequestBehavior.AllowGet);
                 }
-
             }
             catch(Exception)
             {
