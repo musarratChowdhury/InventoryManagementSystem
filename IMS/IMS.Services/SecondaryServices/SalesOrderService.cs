@@ -109,6 +109,7 @@ namespace IMS.Services.SecondaryServices
                     if (entity != null)
                     {
                         entity.IsArchived = true;
+                        entity.Status = 404;
                         _baseDao.Update(entity, session);
                         transaction.Commit();
                     }
