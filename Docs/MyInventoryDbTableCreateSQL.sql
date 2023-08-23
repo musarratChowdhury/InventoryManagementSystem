@@ -161,6 +161,7 @@ CREATE TABLE Invoice (
     InvoiceTypeId BIGINT NOT NULL,
 	PaymentStatus INT NOT NULL DEFAULT(0),
 	IsArchived BIT NOT NULL DEFAULT(0),
+	Status INT NOT NULL DEFAULT(1),
     CreatedBy BIGINT NOT NULL,
     CreationDate DATE NOT NULL,
     ModifiedBy BIGINT,
@@ -249,6 +250,7 @@ CREATE TABLE SalesOrder (
     CONSTRAINT FK_SalesOrder_Customer FOREIGN KEY (CustomerId) REFERENCES Customer(Id)
 );
 
+
 -- Create PurchaseOrder table with foreign key constraint
 CREATE TABLE PurchaseOrder (
     Id BIGINT PRIMARY KEY IDENTITY(1,1),
@@ -277,6 +279,7 @@ CREATE TABLE Bill (
 	PaymentStatus Int NOT NULL DEFAULT(0),
 	IsArchived BIT NOT NULL DEFAULT(0),
 	PurchaseOrderId BIGINT NOT NULL,
+	Status INT NOT NULL DEFAULT(1),
     CreatedBy BIGINT NOT NULL,
     CreationDate DATE NOT NULL,
     ModifiedBy BIGINT,
@@ -287,6 +290,7 @@ CREATE TABLE Bill (
     CONSTRAINT FK_Bill_BillType FOREIGN KEY (BillTypeId) REFERENCES BillType(Id),
 	CONSTRAINT FK_Bill_PuchaseOrder FOREIGN KEY (PurchaseOrderId) REFERENCES PurchaseOrder(Id)
 );
+
 
 
 -- Create PaymentVoucher table with foreign key constraints

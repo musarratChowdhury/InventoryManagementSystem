@@ -61,7 +61,7 @@ namespace IMS.Dao
 
         public int GetTotalCount(ISession session)
         {
-            return session.Query<TEntity>().Where(x=>x.Status!=404).Count();
+            return session.Query<TEntity>().Count(x => x.Status!=404);
         }
 
         public IList<TEntity> GetDataBySkipTake(int skip, int take, ISession session)
