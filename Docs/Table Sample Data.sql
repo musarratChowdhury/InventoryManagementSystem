@@ -68,6 +68,149 @@ VALUES
     ('Apparel', 'Apparel Products', 101, '2023-07-31 10:30:00', NULL, NULL, 2, 'Business456', 1),
     ('Home & Garden', 'Home and Garden Products', 101, '2023-07-31 11:45:00', NULL, NULL, 3, 'Business789', 1),
     ('Beauty & Personal Care', 'Beauty and Personal Care Products', 101, '2023-07-31 12:30:00', NULL, NULL, 4, 'BusinessXYZ', 1);
+	INSERT INTO [dbo].[ProductCategory]
+    ([Name]
+    ,[Description]
+    ,[Rank]
+    ,[Status]
+    ,[CreatedBy]
+    ,[CreationDate]
+    ,[ModifiedBy]
+    ,[ModificationDate]
+    ,[Version]
+    ,[BusinessId])
+VALUES
+    ('Electronics', -- Name (nvarchar(25))
+    'Electronics and devices category', -- Description (nvarchar(255))
+    1, -- Rank (int)
+    1, -- Status (int)
+    12345, -- CreatedBy (bigint)
+    GETDATE(), -- CreationDate (datetime)
+    12345, -- ModifiedBy (bigint)
+    GETDATE(), -- ModificationDate (datetime)
+    1, -- Version (int)
+    'Business123' -- BusinessId (nvarchar(max))
+);
+-- Category 2
+INSERT INTO [dbo].[ProductCategory]
+    ([Name]
+    ,[Description]
+    ,[Rank]
+    ,[Status]
+    ,[CreatedBy]
+    ,[CreationDate]
+    ,[ModifiedBy]
+    ,[ModificationDate]
+    ,[Version]
+    ,[BusinessId])
+VALUES
+    ('Mobile Devices',
+    'Smartphones, tablets, and wearable devices',
+    2,
+    1,
+    12345,
+    GETDATE(),
+    12345,
+    GETDATE(),
+    1,
+    'Business123');
+
+-- Category 3
+INSERT INTO [dbo].[ProductCategory]
+    ([Name]
+    ,[Description]
+    ,[Rank]
+    ,[Status]
+    ,[CreatedBy]
+    ,[CreationDate]
+    ,[ModifiedBy]
+    ,[ModificationDate]
+    ,[Version]
+    ,[BusinessId])
+VALUES
+    ('Computer Accessories',
+    'Keyboards, mice, monitors, and cables',
+    3,
+    1,
+    12345,
+    GETDATE(),
+    12345,
+    GETDATE(),
+    1,
+    'Business123');
+
+-- Category 4
+INSERT INTO [dbo].[ProductCategory]
+    ([Name]
+    ,[Description]
+    ,[Rank]
+    ,[Status]
+    ,[CreatedBy]
+    ,[CreationDate]
+    ,[ModifiedBy]
+    ,[ModificationDate]
+    ,[Version]
+    ,[BusinessId])
+VALUES
+    ('Networking Equipment',
+    'Routers, switches, and networking accessories',
+    4,
+    1,
+    12345,
+    GETDATE(),
+    12345,
+    GETDATE(),
+    1,
+    'Business123');
+
+-- Category 5
+INSERT INTO [dbo].[ProductCategory]
+    ([Name]
+    ,[Description]
+    ,[Rank]
+    ,[Status]
+    ,[CreatedBy]
+    ,[CreationDate]
+    ,[ModifiedBy]
+    ,[ModificationDate]
+    ,[Version]
+    ,[BusinessId])
+VALUES
+    ('Consumer Electronics',
+    'Televisions, home audio systems, cameras',
+    5,
+    1,
+    12345,
+    GETDATE(),
+    12345,
+    GETDATE(),
+    1,
+    'Business123');
+
+-- Category 6
+INSERT INTO [dbo].[ProductCategory]
+    ([Name]
+    ,[Description]
+    ,[Rank]
+    ,[Status]
+    ,[CreatedBy]
+    ,[CreationDate]
+    ,[ModifiedBy]
+    ,[ModificationDate]
+    ,[Version]
+    ,[BusinessId])
+VALUES
+    ('Audio and Music Equipment',
+    'Headphones, speakers, musical instruments',
+    6,
+    1,
+    12345,
+    GETDATE(),
+    12345,
+    GETDATE(),
+    1,
+    'Business123');
+
 select * from ProductCategory;
 
 
@@ -89,6 +232,18 @@ select * from Product;
 select * from AspNetUsers;
 delete  from AspNetUsers;
 
+select * from PurchaseOrder;
+select * from PurchaseOrderLine;
+
+delete from PurchaseOrderLine;
+delete from PurchaseOrder;
+delete from SalesOrderLine;
+delete from SalesOrder;
+
+delete from shipment;
+
+delete from invoice;
+delete from PaymentReceived;
 Update SalesOrder
 	SET PaymentStatus = 1,
 	ShipmentStatus = 1,
