@@ -61,22 +61,21 @@ namespace IMS.Dao
 
         public int GetTotalCount(ISession session)
         {
-            return session.Query<TEntity>().Count();
+            return session.Query<TEntity>().Where(x=>x.Status!=404).Count();
         }
 
         public IList<TEntity> GetDataBySkipTake(int skip, int take, ISession session)
         {
-            return session.Query<TEntity>().Skip(skip).Take(take).ToList();
+            return session.Query<TEntity>().Where(x=>x.Status!=404).Skip(skip).Take(take).ToList();
         }
 
         public IList<TEntity> GetAll(ISession session, DataRequest dataRequest)
         {
             var criteria = session.CreateCriteria<TEntity>();
-            if(typeof(TEntity)==typeof(SalesOrder)||typeof(TEntity)==typeof(PurchaseOrder))
-            {
-                // Apply filtering for IsArchived = true
-                criteria.Add(Restrictions.Eq("IsArchived", false));
-            }
+           
+            // Apply filtering for Status = 404
+            criteria.Add(Restrictions.Not(Restrictions.Eq("Status", 404)));
+            
             // Apply search criteria if provided in dataRequest.search
             if (dataRequest.Search != null)
             {
