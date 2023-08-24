@@ -2,9 +2,6 @@
 using IMS.Services.Helpers;
 using IMS.WEB.Areas.Admin.Controllers.BaseControllers;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
 using System.Web.Mvc;
 
 namespace IMS.WEB.Areas.Admin.Controllers
@@ -15,12 +12,8 @@ namespace IMS.WEB.Areas.Admin.Controllers
         {
             try
             {
-                using (var session = NHibernateConfig.OpenSession())
-                {
-
-                    var result = GetAll();
-                    return View(result);
-                }
+                var result = GetAll();
+                return View(result);
             }
             catch (Exception ex)
             {

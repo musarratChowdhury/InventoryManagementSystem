@@ -95,9 +95,7 @@ namespace IMS.WEB.Controllers.IMS
             catch (Exception ex)
             {
                 return Json(new { success = false, message = "Error occurred while Updating.", ex.Message });
-                throw;
             }
-            
         }
         
         [HttpPost]

@@ -1,5 +1,4 @@
 ﻿using IMS.Services.Helpers;
-using IMS.Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,7 +13,7 @@ namespace IMS.WEB.Areas.Admin.Controllers.BaseControllers
 {
     public class BaseConfigurationController<TEntity> : Controller where TEntity : class, IConfigurationEntity
     {
-        private BaseConfigurationService<ConfigurationDto, ConfigurationFormData, TEntity> _baseConfigurationService;
+        private readonly BaseConfigurationService<ConfigurationDto, ConfigurationFormData, TEntity> _baseConfigurationService;
 
         public BaseConfigurationController()
         {
@@ -24,40 +23,25 @@ namespace IMS.WEB.Areas.Admin.Controllers.BaseControllers
         [HttpPost]
         public async Task<ActionResult> DataSource()
         {
-            try
+            using (var session = NHibernateConfig.OpenSession())
             {
-                using (var session = NHibernateConfig.OpenSession())
-                {
-                    var result = new DataResult<ConfigurationDto>();
-                    var resultEnumerable =await _baseConfigurationService.GetAll(session);
-                    result.result = resultEnumerable.ToList();
-                    result.count = result.result.Count;
+                var result = new DataResult<ConfigurationDto>();
+                var resultEnumerable =await _baseConfigurationService.GetAll(session);
+                result.result = resultEnumerable.ToList();
+                result.count = result.result.Count;
 
-                    return Json(result, JsonRequestBehavior.AllowGet);  
-                }
-            }
-            catch (Exception ex)
-            {
-                throw ex;
+                return Json(result, JsonRequestBehavior.AllowGet);  
             }
         }
 
         [HttpPost]
-        public async Task<ActionResult> DropDownList() 
+        public async Task<ActionResult> DropDownList()
         {
-            try
+            using (var session = NHibernateConfig.OpenSession())
             {
-                using (var session = NHibernateConfig.OpenSession())
-                {
-                    var result = await _baseConfigurationService.GetDropDownList(session);
+                var result = await _baseConfigurationService.GetDropDownList(session);
 
-                    return Json(result, JsonRequestBehavior.AllowGet);
-                }
-
-            }
-            catch (Exception ex)
-            {
-                throw ex;
+                return Json(result, JsonRequestBehavior.AllowGet);
             }
         }
         

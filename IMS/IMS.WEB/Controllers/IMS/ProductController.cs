@@ -41,9 +41,8 @@ namespace IMS.WEB.Controllers.IMS
         {
             using (var session = NHibernateConfig.OpenSession())
             {
-                var result = _productService.GetProductById(session, req.Id);
-
-
+                var result = await _productService.GetProductById(session, req.Id);
+                
                 return Json(result, JsonRequestBehavior.AllowGet);
             }
         }
@@ -51,19 +50,11 @@ namespace IMS.WEB.Controllers.IMS
         [HttpPost]
         public async Task<ActionResult> DropDownList()
         {
-            try
+            using (var session = NHibernateConfig.OpenSession())
             {
-                using (var session = NHibernateConfig.OpenSession())
-                {
-                    var result = await _productService.GetDropDownList(session);
+                var result = await _productService.GetDropDownList(session);
 
-                    return Json(result, JsonRequestBehavior.AllowGet);
-                }
-
-            }
-            catch(Exception)
-            {
-                throw;
+                return Json(result, JsonRequestBehavior.AllowGet);
             }
         }
 
@@ -117,7 +108,6 @@ namespace IMS.WEB.Controllers.IMS
             catch (Exception ex)
             {
                 return Json(new { success = false, message = "Error occurred while Updating.", ex.Message });
-                throw;
             }
             
         }

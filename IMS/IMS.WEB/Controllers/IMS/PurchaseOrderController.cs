@@ -12,12 +12,7 @@ namespace IMS.WEB.Controllers.IMS
 {
     public class PurchaseOrderController : Controller
     {
-        private readonly PurchaseOrderService _purchaseOrderService;
-
-        public PurchaseOrderController()
-        {
-            _purchaseOrderService = new PurchaseOrderService();
-        }
+        private readonly PurchaseOrderService _purchaseOrderService = new PurchaseOrderService();
 
         // GET: PurchaseOrder
         public ActionResult Index()
@@ -43,18 +38,11 @@ namespace IMS.WEB.Controllers.IMS
         [HttpPost]
         public async Task<ActionResult> DropDownList()
         {
-            try
+            using (var session = NHibernateConfig.OpenSession())
             {
-                using (var session = NHibernateConfig.OpenSession())
-                {
-                    var result = _purchaseOrderService.GetDropDownList(session);
+                var result = await _purchaseOrderService.GetDropDownList(session);
 
-                    return Json(result, JsonRequestBehavior.AllowGet);
-                }
-            }
-            catch (Exception)
-            {
-                throw;
+                return Json(result, JsonRequestBehavior.AllowGet);
             }
         }
 
@@ -129,7 +117,6 @@ namespace IMS.WEB.Controllers.IMS
             catch (Exception ex)
             {
                 return Json(new { success = false, message = "Error occurred while Updating.", ex.Message });
-                throw;
             }
         }
 
