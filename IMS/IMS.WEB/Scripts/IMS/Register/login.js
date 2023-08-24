@@ -49,7 +49,8 @@ $(document).ready(function () {
         success: function (response) {
           if (response.success) {
             console.log("Login successful", response);
-            window.location.href = "/Home/Index";
+            let returnUrl = extractReturnUrlFromQueryString();
+            window.location.href = returnUrl;
           } else {
             console.log("Login failed", response.errors);
           }
@@ -67,3 +68,23 @@ $(document).ready(function () {
     window.location.href = "/Account/Register";
   });
 });
+
+function extractReturnUrlFromQueryString() {
+  // Get the query parameters from the URL
+  var queryParams = window.location.search.substring(1);
+
+  // Split the parameters into an array
+  var paramPairs = queryParams.split("&");
+
+  // Search for the ReturnUrl parameter
+  for (var i = 0; i < paramPairs.length; i++) {
+    var paramPair = paramPairs[i].split("=");
+    if (paramPair[0] === "ReturnUrl") {
+      // Decode and return the parameter value
+      return decodeURIComponent(paramPair[1]);
+    }
+  }
+
+  // Return null if ReturnUrl parameter is not found
+  return null;
+}

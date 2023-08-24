@@ -222,6 +222,7 @@ function renderEjGrid(api) {
             headerText: "Rank",
             editType: "numericedit",
             defaultValue: 1,
+            visible: false,
           },
           { field: "CreatedBy", headerText: "CreatedBy", allowSorting: false },
           { field: "CreationDate", headerText: "Creation Date" },
