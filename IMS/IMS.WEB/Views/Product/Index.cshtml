@@ -4,7 +4,7 @@
 }
 <!-- Content Wrapper. Contains page content -->
 <div class="content-wrapper">
-
+      <div id="notification" class="notification"></div>
     <!-- Main content -->
     <section class="content">
         <!-- Default box -->
@@ -41,7 +41,14 @@
 
 @section Styles{
     .hidden{
-    display:none
+        display:none
+    }
+    .notification {
+      position: absolute;
+      z-index: 2;
+      width: 40%;
+      top: 3.5%;
+      right: 0;
     }
 }
 @section Scripts{
