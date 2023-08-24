@@ -5,6 +5,7 @@ using System.Web.Mvc;
 
 namespace IMS.WEB.Areas.Admin.Controllers
 {
+    [Authorize]
     public class CashBankController : BaseConfigurationController<CashBank>
     {
         public ActionResult Index()

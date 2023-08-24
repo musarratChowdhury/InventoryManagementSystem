@@ -12,6 +12,7 @@ using Microsoft.AspNet.Identity;
 
 namespace IMS.WEB.Controllers.IMS
 {
+    [Authorize]
     public class PurchaseOrderController : Controller
     {
         private readonly PurchaseOrderService _purchaseOrderService = new PurchaseOrderService();

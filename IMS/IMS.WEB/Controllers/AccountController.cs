@@ -80,7 +80,7 @@ namespace IMS.WEB.Controllers
                 switch (result)
                 {
                     case SignInStatus.Success:
-                        return Json(new { success = true, returnUrl });
+                        return Json(new { success = true, returnUrl = returnUrl });
                     case SignInStatus.LockedOut:
                         return Json(new { success = false, error = "Account locked. Please contact support." });
                     case SignInStatus.RequiresVerification:

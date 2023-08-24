@@ -11,6 +11,7 @@ using Microsoft.AspNet.Identity;
 
 namespace IMS.WEB.Controllers.IMS
 {
+    [Authorize]
     public class ProductController : Controller
     {
          private readonly ProductService _productService = new ProductService();

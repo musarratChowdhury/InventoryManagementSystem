@@ -11,6 +11,7 @@ using Microsoft.AspNet.Identity;
 
 namespace IMS.WEB.Controllers.IMS
 {
+    [Authorize]
     public class BillController : Controller
     {
         private readonly BillService _billService = new BillService();

@@ -6,6 +6,7 @@ using System.Web.Mvc;
 
 namespace IMS.WEB.Areas.Admin.Controllers
 {
+    [Authorize]
     public class ShipmentTypeController : BaseConfigurationController<ShipmentType>
     {
         public ActionResult Index()

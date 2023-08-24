@@ -5,6 +5,7 @@ using IMS.BusinessModel.Entity.Configuration;
 
 namespace IMS.WEB.Areas.Admin.Controllers
 {
+    [Authorize]
     public class PaymentTypeController : BaseConfigurationController<PaymentType>
     {
         public ActionResult Index()

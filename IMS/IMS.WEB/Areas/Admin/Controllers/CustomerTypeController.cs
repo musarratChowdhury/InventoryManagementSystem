@@ -5,6 +5,7 @@ using System;
 
 namespace IMS.WEB.Areas.Admin.Controllers
 {
+    [Authorize]
     public class CustomerTypeController : BaseConfigurationController<CustomerType>
     {
         public ActionResult Index()

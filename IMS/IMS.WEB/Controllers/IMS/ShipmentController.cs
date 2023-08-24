@@ -11,6 +11,7 @@ using Microsoft.AspNet.Identity;
 
 namespace IMS.WEB.Controllers.IMS
 {
+    [Authorize]
     public class ShipmentController : Controller
     {
         private readonly ShipmentService _shipmentService = new ShipmentService();

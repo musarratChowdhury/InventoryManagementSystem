@@ -25,14 +25,8 @@ namespace IMS.Services.BaseServices
     }
     public class BaseConfigurationService<TDto, TDtoForm, TEntity> : IBaseConfigurationService<IConfigurationDto, IConfigurationFormData, TEntity> where TEntity :class, IConfigurationEntity
     {
-        private IBaseDao<TEntity> _BaseDao;
-        private long _currentUserId;
-
-        public BaseConfigurationService()
-        {
-            _BaseDao = new BaseDao<TEntity>();
-            _currentUserId = Int64.Parse(ClaimsPrincipal.Current.FindFirst(ClaimTypes.NameIdentifier).Value);
-        }
+        private IBaseDao<TEntity> _BaseDao = new BaseDao<TEntity>();
+        private long _currentUserId = Int64.Parse(ClaimsPrincipal.Current.FindFirst(ClaimTypes.NameIdentifier).Value);
 
         public async Task<IEnumerable<ConfigurationDto>> GetAll(ISession session)
         {

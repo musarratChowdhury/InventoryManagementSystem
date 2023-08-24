@@ -11,6 +11,7 @@ using Microsoft.AspNet.Identity;
 
 namespace IMS.WEB.Controllers.IMS
 {
+    [Authorize]
     public class PaymentReceiveController : Controller
     {
         private readonly PaymentReceiveService _paymentReceiveService = new PaymentReceiveService();
