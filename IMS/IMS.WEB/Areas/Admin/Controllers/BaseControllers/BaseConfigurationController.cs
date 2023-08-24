@@ -3,6 +3,7 @@ using IMS.Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Web.Mvc;
 using IMS.BusinessModel.Dto.CommonDtos;
 using IMS.Services.BaseServices;
@@ -21,15 +22,15 @@ namespace IMS.WEB.Areas.Admin.Controllers.BaseControllers
         }
 
         [HttpPost]
-        public ActionResult DataSource()
+        public async Task<ActionResult> DataSource()
         {
             try
             {
                 using (var session = NHibernateConfig.OpenSession())
                 {
-
                     var result = new DataResult<ConfigurationDto>();
-                    result.result = _baseConfigurationService.GetAll(session).ToList();
+                    var resultEnumerable =await _baseConfigurationService.GetAll(session);
+                    result.result = resultEnumerable.ToList();
                     result.count = result.result.Count;
 
                     return Json(result, JsonRequestBehavior.AllowGet);  
@@ -42,13 +43,13 @@ namespace IMS.WEB.Areas.Admin.Controllers.BaseControllers
         }
 
         [HttpPost]
-        public ActionResult DropDownList() 
+        public async Task<ActionResult> DropDownList() 
         {
             try
             {
                 using (var session = NHibernateConfig.OpenSession())
                 {
-                    var result = _baseConfigurationService.GetDropDownList(session);
+                    var result = await _baseConfigurationService.GetDropDownList(session);
 
                     return Json(result, JsonRequestBehavior.AllowGet);
                 }
@@ -59,25 +60,23 @@ namespace IMS.WEB.Areas.Admin.Controllers.BaseControllers
                 throw ex;
             }
         }
-
-
+        
         [HttpGet]
-        public ActionResult GetAll()
+        public async Task<ActionResult> GetAll()
         {
             try
             {
                 using (var session = NHibernateConfig.OpenSession())
                 {
 
-                    var CustomerTypes = _baseConfigurationService.GetAll(session);
-                    CustomerTypes.OrderBy(x => x.Rank);
-
-                    if (CustomerTypes == null || !CustomerTypes.Any())
+                    var customerTypes =await _baseConfigurationService.GetAll(session);
+                    
+                    if (customerTypes == null || !customerTypes.Any())
                     {
                         return Json(new List<ConfigurationDto>(), JsonRequestBehavior.AllowGet);
                     }
 
-                    return Json(CustomerTypes, JsonRequestBehavior.AllowGet);
+                    return Json(customerTypes, JsonRequestBehavior.AllowGet);
                 }
             }
             catch (Exception ex)
@@ -91,7 +90,7 @@ namespace IMS.WEB.Areas.Admin.Controllers.BaseControllers
 
         // POST: Admin/Type/Create
         [HttpPost]
-        public ActionResult Create(ConfigurationFormData CustomerTypeFormData)
+        public async Task<ActionResult> Create(ConfigurationFormData customerTypeFormData)
         {
             try
             {
@@ -99,7 +98,7 @@ namespace IMS.WEB.Areas.Admin.Controllers.BaseControllers
                 {
                     using (var session = NHibernateConfig.OpenSession())
                     {
-                        _baseConfigurationService.Create(CustomerTypeFormData, session);
+                       await _baseConfigurationService.Create(customerTypeFormData, session);
 
 
                         return Json(new { success = true, message = "Added successfully." });
@@ -115,11 +114,10 @@ namespace IMS.WEB.Areas.Admin.Controllers.BaseControllers
             }
 
         }
-
-
+        
         // POST: Admin/Type/Edit/
         [HttpPost]
-        public ActionResult Edit(ConfigurationFormData CustomerTypeFormData)
+        public async Task<ActionResult> Edit(ConfigurationFormData customerTypeFormData)
         {
             try
             {
@@ -128,7 +126,7 @@ namespace IMS.WEB.Areas.Admin.Controllers.BaseControllers
                 {
                     using (var session = NHibernateConfig.OpenSession())
                     {
-                        _baseConfigurationService.Update(CustomerTypeFormData, session);
+                        await _baseConfigurationService.Update(customerTypeFormData, session);
 
                         return Json(new { success = true, message = "Updated successfully." });
 
@@ -142,18 +140,16 @@ namespace IMS.WEB.Areas.Admin.Controllers.BaseControllers
                 return Json(new { success = false, message = "Error occurred while updating", ex.Message });
             }
         }
-
-
-
+        
         // POST: Admin/Type/Delete/5
         [HttpPost]
-        public ActionResult Delete(long id)
+        public async Task<ActionResult> Delete(long id)
         {
             try
             {
                 using (var session = NHibernateConfig.OpenSession())
                 {
-                    _baseConfigurationService.Delete(id, session);
+                    await _baseConfigurationService.Delete(id, session);
 
                     return Json(new { success = true, message = "Deleted successfully." });
                 }

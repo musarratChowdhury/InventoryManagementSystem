@@ -1,5 +1,6 @@
 ﻿using IMS.BusinessModel.Dto.GridData;
 using System;
+using System.Threading.Tasks;
 using IMS.BusinessModel.Dto.Customer;
 using System.Web.Mvc;
 using IMS.BusinessModel.Dto.CommonDtos;
@@ -12,12 +13,8 @@ namespace IMS.WEB.Controllers.IMS
     [Authorize]
     public class CustomerController : Controller
     {
-        private readonly CustomerService _customerService;
+        private readonly CustomerService _customerService = new CustomerService();
 
-        public CustomerController()
-        {
-            _customerService = new CustomerService();
-        }
         // GET: Customer
         public ActionResult Index()
         {
@@ -25,49 +22,38 @@ namespace IMS.WEB.Controllers.IMS
         }
 
         [HttpPost]
-        public ActionResult DataSource(DataRequest request)
+        public async Task<ActionResult> DataSource(DataRequest request)
         {
             using (var session = NHibernateConfig.OpenSession())
             {
                 var result = new DataResult<CustomerDto>
                 {
-                    count = _customerService.GetTotalCount(session),
-                    result = _customerService.GetAll(session, request)
+                    count = await _customerService.GetTotalCount(session),
+                    result = await _customerService.GetAll(session, request)
                 };
-
-
+                
                 return Json(result, JsonRequestBehavior.AllowGet);
             }
         }
 
         [HttpPost]
-        public ActionResult DropDownList()
+        public async Task<ActionResult> DropDownList()
         {
-            try
+            using (var session = NHibernateConfig.OpenSession())
             {
-                using (var session = NHibernateConfig.OpenSession())
-                {
-                    var result = _customerService.GetDropDownList(session);
-
-                    return Json(result, JsonRequestBehavior.AllowGet);
-                }
-
-            }
-            catch(Exception)
-            {
-                throw;
+                var result = await _customerService.GetDropDownList(session);
+                return Json(result, JsonRequestBehavior.AllowGet);
             }
         }
 
         [HttpPost]
-        public ActionResult Insert(CRUDRequest<CustomerFormDto> customerCreateReq)
+        public async Task<ActionResult> Insert(CRUDRequest<CustomerFormDto> customerCreateReq)
         {
             try
             {
                 using (var session = NHibernateConfig.OpenSession())
                 {
-                    _customerService.Create(customerCreateReq.value, User.Identity.GetUserId<long>(), session);
-
+                    await _customerService.Create(customerCreateReq.value, User.Identity.GetUserId<long>(), session);
                     return Json(new { success = true, message = "Added successfully." });
                 }
             }
@@ -78,15 +64,13 @@ namespace IMS.WEB.Controllers.IMS
         } 
         
         [HttpPost]
-        public ActionResult Update(CRUDRequest<CustomerDto> customerCreateReq)
+        public async Task<ActionResult> Update(CRUDRequest<CustomerDto> customerCreateReq)
         {
             try
             {
                 using (var session = NHibernateConfig.OpenSession())
                 {
-                    
-                    _customerService.Update(customerCreateReq.value, User.Identity.GetUserId<long>(), session);
-
+                    await _customerService.Update(customerCreateReq.value, User.Identity.GetUserId<long>(), session);
                     return Json(new { success = true, message = "Updated successfully." });
                 }
             }
@@ -97,13 +81,13 @@ namespace IMS.WEB.Controllers.IMS
         } 
         
         [HttpPost]
-        public ActionResult UpdateRank(ChangeRankDto changeRankDto)
+        public async Task<ActionResult> UpdateRank(ChangeRankDto changeRankDto)
         {
             try
             {
                 using (var session = NHibernateConfig.OpenSession())
                 {
-                    _customerService.UpdateRank(changeRankDto, session);
+                    await _customerService.UpdateRank(changeRankDto, session);
                     var response = new { message = "Rank updated successfully." };
                     return Json(response);
                 }
@@ -117,14 +101,13 @@ namespace IMS.WEB.Controllers.IMS
         }
         
         [HttpPost]
-        public ActionResult Delete(DeleteRequest customerCreateReq)
+        public async Task<ActionResult> Delete(DeleteRequest customerCreateReq)
         {
             try
             {
                 using (var session = NHibernateConfig.OpenSession())
                 {
-                    _customerService.Delete(customerCreateReq.Key, session);
-
+                    await _customerService.Delete(customerCreateReq.Key, session);
                     return Json(new { success = true, message = "Deleted successfully." });
                 }
             }

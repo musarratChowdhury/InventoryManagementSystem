@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using IMS.BusinessModel.Dto.Bill;
 using IMS.BusinessModel.Dto.CommonDtos;
 using IMS.BusinessModel.Dto.GridData;
@@ -12,17 +13,13 @@ namespace IMS.Services.SecondaryServices
 {
     public class BillService : BaseSecondaryService<Bill>
     {
-          private readonly IBaseDao<Bill> _baseDao;
-        public BillService()
-        {
-            _baseDao = new BaseDao<Bill>();
-        }
+        private readonly IBaseDao<Bill> _baseDao = new BaseDao<Bill>();
 
-        public List<BillDto> GetAll(ISession session, DataRequest dataRequest)
+        public async Task<List<BillDto>> GetAll(ISession session, DataRequest dataRequest)
         {
             try
             {
-                var entities = _baseDao.GetAll(session, dataRequest);
+                var entities =await _baseDao.GetAll(session, dataRequest);
                 return (from t in entities let dto = new BillDto() select MapToDto(t, dto)).ToList();
             }
             catch (Exception e)
@@ -32,56 +29,56 @@ namespace IMS.Services.SecondaryServices
             }
         }
 
-        public void Create(BillFormDto billFormDto, long userId, ISession session)
+        public async Task Create(BillFormDto billFormDto, long userId, ISession session)
         {
             using (var transaction = session.BeginTransaction())
             {
                 try
                 {
                     var bill = new Bill();
-                    var mappedbill = MapToEntity(billFormDto, bill);
-                    mappedbill.Rank = GetNextRank(session);
-                    mappedbill.CreatedBy = userId;
-                    mappedbill.CreationDate = DateTime.Now;
-                    _baseDao.Create(mappedbill, session);
-                    transaction.Commit();
+                    var mappedBill = MapToEntity(billFormDto, bill);
+                    mappedBill.Rank = GetNextRank(session);
+                    mappedBill.CreatedBy = userId;
+                    mappedBill.CreationDate = DateTime.Now;
+                    await _baseDao.Create(mappedBill, session);
+                    await transaction.CommitAsync();
                 }
                 catch (Exception)
                 {
-                    transaction.Rollback();
+                    await transaction.RollbackAsync();
                     throw;
                 }
             }
         }
 
-        public void Update(BillDto billDto, long modifiedById, ISession sess)
+        public async Task Update(BillDto billDto, long modifiedById, ISession sess)
         {
             using (var transaction = sess.BeginTransaction())
             {
                 try
                 {
                     var bill = new Bill();
-                    var mappedbill = MapToEntity(billDto, bill);
-                    mappedbill.ModificationDate = DateTime.Now;
-                    mappedbill.ModifiedBy = modifiedById;
-                    
-                    _baseDao.Update(mappedbill, sess);
-                    
-                    transaction.Commit();
+                    var mappedBill = MapToEntity(billDto, bill);
+                    mappedBill.ModificationDate = DateTime.Now;
+                    mappedBill.ModifiedBy = modifiedById;
+
+                    await _baseDao.Update(mappedBill, sess);
+
+                    await transaction.CommitAsync();
                 }
                 catch (Exception)
                 {
-                    transaction.Rollback();
+                    await transaction.RollbackAsync();
                     throw;
                 }
             }
         }
-        
-        public List<DropDownDto> GetDropDownList(ISession session)
+
+        public async Task<List<DropDownDto>> GetDropDownList(ISession session)
         {
             try
             {
-                var entities = _baseDao.GetAll(session);
+                var entities =await _baseDao.GetAll(session);
                 return (from t in entities let dto = new DropDownDto() select MapToDropDownDto(t, dto)).ToList();
             }
             catch (Exception e)
@@ -90,7 +87,7 @@ namespace IMS.Services.SecondaryServices
                 throw;
             }
         }
-        
+
         private DropDownDto MapToDropDownDto(Bill entity, DropDownDto dto)
         {
             dto.Id = entity.Id;
@@ -100,7 +97,6 @@ namespace IMS.Services.SecondaryServices
 
         private BillDto MapToDto(Bill entity, BillDto dto)
         {
-
             dto.Id = entity.Id;
             dto.SerialNumber = $"#BL{entity.Id}PO{entity.PurchaseOrderId}";
             dto.BillDate = entity.BillDate;

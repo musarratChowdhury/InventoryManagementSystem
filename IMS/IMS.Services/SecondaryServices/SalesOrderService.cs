@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using IMS.BusinessModel.Dto.CommonDtos;
 using IMS.BusinessModel.Dto.SalesOrder;
 using IMS.BusinessModel.Dto.GridData;
@@ -18,11 +19,11 @@ namespace IMS.Services.SecondaryServices
             _baseDao = new BaseDao<SalesOrder>();
         }
 
-        public List<SalesOrderDto> GetAll(ISession session, DataRequest dataRequest)
+        public async Task<List<SalesOrderDto>> GetAll(ISession session, DataRequest dataRequest)
         {
             try
             {
-                var entities = _baseDao.GetAll(session, dataRequest);
+                var entities =await _baseDao.GetAll(session, dataRequest);
                 return (from t in entities let dto = new SalesOrderDto() select MapToDto(t, dto)).ToList();
             }
             catch (Exception e)
@@ -32,7 +33,7 @@ namespace IMS.Services.SecondaryServices
             }
         }
 
-        public void Create(SalesOrderFormDto salesOrderFormDto, long userId, ISession session)
+        public async Task Create(SalesOrderFormDto salesOrderFormDto, long userId, ISession session)
         {
             using (var transaction = session.BeginTransaction())
             {
@@ -52,18 +53,18 @@ namespace IMS.Services.SecondaryServices
                         };
                     }
                     
-                    _baseDao.Create(mappedSalesOrder, session);
-                    transaction.Commit();
+                    await _baseDao.Create(mappedSalesOrder, session);
+                    await transaction.CommitAsync();
                 }
                 catch (Exception)
                 {
-                    transaction.Rollback();
+                    await transaction.RollbackAsync();
                     throw;
                 }
             }
         }
 
-        public void Update(SalesOrderDto salesOrderDto, long modifiedById, ISession sess)
+        public async Task Update(SalesOrderDto salesOrderDto, long modifiedById, ISession sess)
         {
             using (var transaction = sess.BeginTransaction())
             {
@@ -74,23 +75,23 @@ namespace IMS.Services.SecondaryServices
                     mappedSalesOrder.ModificationDate = DateTime.Now;
                     mappedSalesOrder.ModifiedBy = modifiedById;
                     
-                    _baseDao.Update(mappedSalesOrder, sess);
+                    await _baseDao.Update(mappedSalesOrder, sess);
                     
-                    transaction.Commit();
+                    await transaction.CommitAsync();
                 }
                 catch (Exception)
                 {
-                    transaction.Rollback();
+                    await transaction.RollbackAsync();
                     throw;
                 }
             }
         }
         
-        public List<DropDownDto> GetDropDownList(ISession session)
+        public async Task<List<DropDownDto>> GetDropDownList(ISession session)
         {
             try
             {
-                var entities = _baseDao.GetAll(session);
+                var entities =await _baseDao.GetAll(session);
                 return (from t in entities let dto = new DropDownDto() select MapToDropDownDto(t, dto)).ToList();
             }
             catch (Exception)
@@ -99,19 +100,19 @@ namespace IMS.Services.SecondaryServices
             }
         }
 
-        public void ArchiveRecord(long entityId, ISession session)
+        public async Task ArchiveRecord(long entityId, ISession session)
         {
             using (var transaction = session.BeginTransaction())
             {
                 try
                 {
-                    var entity = _baseDao.GetById(entityId, session);
+                    var entity =await _baseDao.GetById(entityId, session);
                     if (entity != null)
                     {
                         entity.IsArchived = true;
                         entity.Status = 404;
-                        _baseDao.Update(entity, session);
-                        transaction.Commit();
+                        await _baseDao.Update(entity, session);
+                        await transaction.CommitAsync();
                     }
                 }
                 catch (Exception e)

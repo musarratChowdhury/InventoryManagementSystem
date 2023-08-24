@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 using System.Web.Mvc;
 using IMS.BusinessModel.Dto.CommonDtos;
 using IMS.BusinessModel.Dto.GridData;
@@ -11,12 +12,8 @@ namespace IMS.WEB.Controllers.IMS
 {
     public class InvoiceController : Controller
     {
-        private readonly InvoiceService _invoiceService;
+        private readonly InvoiceService _invoiceService = new InvoiceService();
 
-        public InvoiceController()
-        {
-            _invoiceService = new InvoiceService();
-        }
         // GET: Invoice
         public ActionResult Index()
         {
@@ -24,14 +21,14 @@ namespace IMS.WEB.Controllers.IMS
         }
 
         [HttpPost]
-        public ActionResult DataSource(DataRequest request)
+        public async Task<ActionResult> DataSource(DataRequest request)
         {
             using (var session = NHibernateConfig.OpenSession())
             {
                 var result = new DataResult<InvoiceDto>
                 {
-                    count = _invoiceService.GetTotalCount(session),
-                    result = _invoiceService.GetAll(session, request)
+                    count = await _invoiceService.GetTotalCount(session),
+                    result = await _invoiceService.GetAll(session, request)
                 };
 
 
@@ -40,13 +37,13 @@ namespace IMS.WEB.Controllers.IMS
         }
         
         [HttpPost]
-        public ActionResult DropDownList()
+        public async Task<ActionResult> DropDownList()
         {
             try
             {
                 using (var session = NHibernateConfig.OpenSession())
                 {
-                    var result = _invoiceService.GetDropDownList(session);
+                    var result =await _invoiceService.GetDropDownList(session);
 
                     return Json(result, JsonRequestBehavior.AllowGet);
                 }
@@ -58,13 +55,13 @@ namespace IMS.WEB.Controllers.IMS
         }
 
         [HttpPost]
-        public ActionResult Insert(CRUDRequest<InvoiceFormDto> invoiceCreateReq)
+        public async Task<ActionResult> Insert(CRUDRequest<InvoiceFormDto> invoiceCreateReq)
         {
             try
             {
                 using (var session = NHibernateConfig.OpenSession())
                 {
-                    _invoiceService.Create(invoiceCreateReq.value, User.Identity.GetUserId<long>(), session);
+                    await _invoiceService.Create(invoiceCreateReq.value, User.Identity.GetUserId<long>(), session);
 
                     return Json(new { success = true, message = "Added successfully." });
                 }
@@ -76,14 +73,14 @@ namespace IMS.WEB.Controllers.IMS
         } 
         
         [HttpPost]
-        public ActionResult Update(CRUDRequest<InvoiceDto> invoiceCreateReq)
+        public async Task<ActionResult> Update(CRUDRequest<InvoiceDto> invoiceCreateReq)
         {
             try
             {
                 using (var session = NHibernateConfig.OpenSession())
                 {
                     
-                    _invoiceService.Update(invoiceCreateReq.value, User.Identity.GetUserId<long>(), session);
+                    await _invoiceService.Update(invoiceCreateReq.value, User.Identity.GetUserId<long>(), session);
 
                     return Json(new { success = true, message = "Updated successfully." });
                 }
@@ -95,13 +92,13 @@ namespace IMS.WEB.Controllers.IMS
         } 
         
         [HttpPost]
-        public ActionResult UpdateRank(ChangeRankDto changeRankDto)
+        public async Task<ActionResult> UpdateRank(ChangeRankDto changeRankDto)
         {
             try
             {
                 using (var session = NHibernateConfig.OpenSession())
                 {
-                    _invoiceService.UpdateRank(changeRankDto, session);
+                    await _invoiceService.UpdateRank(changeRankDto, session);
                     var response = new { message = "Rank updated successfully." };
                     return Json(response);
                 }
@@ -115,13 +112,13 @@ namespace IMS.WEB.Controllers.IMS
         }
         
         [HttpPost]
-        public ActionResult Delete(DeleteRequest invoiceCreateReq)
+        public async Task<ActionResult> Delete(DeleteRequest invoiceCreateReq)
         {
             try
             {
                 using (var session = NHibernateConfig.OpenSession())
                 {
-                    _invoiceService.Delete(invoiceCreateReq.Key, session);
+                    await _invoiceService.Delete(invoiceCreateReq.Key, session);
 
                     return Json(new { success = true, message = "Deleted successfully." });
                 }

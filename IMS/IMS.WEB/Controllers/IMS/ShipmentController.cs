@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 using System.Web.Mvc;
 using IMS.BusinessModel.Dto.CommonDtos;
 using IMS.BusinessModel.Dto.GridData;
@@ -11,12 +12,8 @@ namespace IMS.WEB.Controllers.IMS
 {
     public class ShipmentController : Controller
     {
-        private readonly ShipmentService _shipmentService;
+        private readonly ShipmentService _shipmentService = new ShipmentService();
 
-        public ShipmentController()
-        {
-            _shipmentService = new ShipmentService();
-        }
         // GET: Shipment
         public ActionResult Index()
         {
@@ -24,14 +21,14 @@ namespace IMS.WEB.Controllers.IMS
         }
 
         [HttpPost]
-        public ActionResult DataSource(DataRequest request)
+        public async Task<ActionResult> DataSource(DataRequest request)
         {
             using (var session = NHibernateConfig.OpenSession())
             {
                 var result = new DataResult<ShipmentDto>
                 {
-                    count = _shipmentService.GetTotalCount(session),
-                    result = _shipmentService.GetAll(session, request)
+                    count = await _shipmentService.GetTotalCount(session),
+                    result = await _shipmentService.GetAll(session, request)
                 };
 
 
@@ -40,13 +37,13 @@ namespace IMS.WEB.Controllers.IMS
         }
 
         [HttpPost]
-        public ActionResult Insert(CRUDRequest<ShipmentFormDto> shipmentCreateReq)
+        public async Task<ActionResult> Insert(CRUDRequest<ShipmentFormDto> shipmentCreateReq)
         {
             try
             {
                 using (var session = NHibernateConfig.OpenSession())
                 {
-                    _shipmentService.Create(shipmentCreateReq.value, User.Identity.GetUserId<long>(), session);
+                    await _shipmentService.Create(shipmentCreateReq.value, User.Identity.GetUserId<long>(), session);
 
                     return Json(new { success = true, message = "Added successfully." });
                 }
@@ -55,17 +52,16 @@ namespace IMS.WEB.Controllers.IMS
             {
                 return Json(new { success = false, message = "Error occurred while Adding.", ex.Message });
             }
-        } 
-        
+        }
+
         [HttpPost]
-        public ActionResult Update(CRUDRequest<ShipmentDto> shipmentCreateReq)
+        public async Task<ActionResult> Update(CRUDRequest<ShipmentDto> shipmentCreateReq)
         {
             try
             {
                 using (var session = NHibernateConfig.OpenSession())
                 {
-                    
-                    _shipmentService.Update(shipmentCreateReq.value, User.Identity.GetUserId<long>(), session);
+                    await _shipmentService.Update(shipmentCreateReq.value, User.Identity.GetUserId<long>(), session);
 
                     return Json(new { success = true, message = "Updated successfully." });
                 }
@@ -74,16 +70,16 @@ namespace IMS.WEB.Controllers.IMS
             {
                 return Json(new { success = false, message = "Error occurred while Updating.", ex.Message });
             }
-        } 
-        
+        }
+
         [HttpPost]
-        public ActionResult UpdateRank(ChangeRankDto changeRankDto)
+        public async Task<ActionResult> UpdateRank(ChangeRankDto changeRankDto)
         {
             try
             {
                 using (var session = NHibernateConfig.OpenSession())
                 {
-                    _shipmentService.UpdateRank(changeRankDto, session);
+                    await _shipmentService.UpdateRank(changeRankDto, session);
                     var response = new { message = "Rank updated successfully." };
                     return Json(response);
                 }
@@ -93,17 +89,16 @@ namespace IMS.WEB.Controllers.IMS
                 return Json(new { success = false, message = "Error occurred while Updating.", ex.Message });
                 throw;
             }
-            
         }
-        
+
         [HttpPost]
-        public ActionResult Delete(DeleteRequest shipmentCreateReq)
+        public async Task<ActionResult> Delete(DeleteRequest shipmentCreateReq)
         {
             try
             {
                 using (var session = NHibernateConfig.OpenSession())
                 {
-                    _shipmentService.Delete(shipmentCreateReq.Key, session);
+                    await _shipmentService.Delete(shipmentCreateReq.Key, session);
 
                     return Json(new { success = true, message = "Deleted successfully." });
                 }

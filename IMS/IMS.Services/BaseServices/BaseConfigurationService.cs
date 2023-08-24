@@ -8,6 +8,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
+using System.Threading.Tasks;
 using System.Web;
 
 namespace IMS.Services.BaseServices
@@ -15,12 +16,12 @@ namespace IMS.Services.BaseServices
     public interface IBaseConfigurationService<IConfigurationDto, IConfigurationFormData, TEntity> where TEntity : IConfigurationEntity
                                                            
     {
-        IEnumerable<ConfigurationDto> GetAll(ISession session);
-        void Create(ConfigurationFormData dtoFormData, ISession session);
-        void Update(ConfigurationFormData dtoFormData, ISession session);
-        void Delete(long entityId, ISession session);
+        Task<IEnumerable<ConfigurationDto>> GetAll(ISession session);
+        Task Create(ConfigurationFormData dtoFormData, ISession session);
+        Task Update(ConfigurationFormData dtoFormData, ISession session);
+        Task Delete(long entityId, ISession session);
         ConfigurationDto MapToDto(TEntity entity, ConfigurationDto dto);
-        TEntity MapToEntity(ConfigurationFormData DtoForm, TEntity entity);
+        TEntity MapToEntity(ConfigurationFormData dtoForm, TEntity entity);
     }
     public class BaseConfigurationService<TDto, TDtoForm, TEntity> : IBaseConfigurationService<IConfigurationDto, IConfigurationFormData, TEntity> where TEntity :class, IConfigurationEntity
     {
@@ -33,16 +34,16 @@ namespace IMS.Services.BaseServices
             _currentUserId = Int64.Parse(ClaimsPrincipal.Current.FindFirst(ClaimTypes.NameIdentifier).Value);
         }
 
-        public IEnumerable<ConfigurationDto> GetAll(ISession session)
+        public async Task<IEnumerable<ConfigurationDto>> GetAll(ISession session)
         {
             try
             {
-                var entities = _BaseDao.GetAll(session);
+                var entities =await _BaseDao.GetAll(session);
                 var result  =  new List<ConfigurationDto>();
-                for(int i =0; i < entities.Count; i++)
+                foreach (var t in entities)
                 {
                     var dto = new ConfigurationDto();
-                    result.Add(MapToDto(entities[i], dto));
+                    result.Add(MapToDto(t, dto));
                 }
                 return result;
             }
@@ -52,11 +53,11 @@ namespace IMS.Services.BaseServices
             }
         }
 
-        public List<DropDownDto> GetDropDownList(ISession session)
+        public async Task<List<DropDownDto>> GetDropDownList(ISession session)
         {
             try
             {
-                var entities = _BaseDao.GetAll(session);
+                var entities =await _BaseDao.GetAll(session);
                 var result = new List<DropDownDto>();
                 for (int i = 0; i < entities.Count; i++)
                 {
@@ -71,7 +72,7 @@ namespace IMS.Services.BaseServices
             }
         }
 
-        public void Create(ConfigurationFormData dtoFormData, ISession session)
+        public async Task Create(ConfigurationFormData dtoFormData, ISession session)
         {
             using (var transaction = session.BeginTransaction())
             {
@@ -80,17 +81,17 @@ namespace IMS.Services.BaseServices
                     var entityType = ConfigurationEntity.CreateInstance<TEntity>();
                     var entity = MapToEntity(dtoFormData, entityType);
                     entity.Rank = GetNextRank(session);
-                    _BaseDao.Create(entity, session);
-                    transaction.Commit();
+                     await _BaseDao.Create(entity, session);
+                    await transaction.CommitAsync();
                 }
                 catch (Exception ex)
                 {
-                    transaction.Rollback();
+                    await transaction.RollbackAsync();
                     throw ex;
                 }
             }
         }
-        public void Update(ConfigurationFormData dtoFormData, ISession session)
+        public async Task Update(ConfigurationFormData dtoFormData, ISession session)
         {
             using (var transaction = session.BeginTransaction())
             {
@@ -98,33 +99,33 @@ namespace IMS.Services.BaseServices
                 {
                     var entityType = ConfigurationEntity.CreateInstance<TEntity>();
                     var entity = MapToEntity(dtoFormData, entityType);
-                    _BaseDao.Update(entityType, session);
-                    transaction.Commit();
+                    await _BaseDao.Update(entityType, session);
+                    await transaction.CommitAsync();
                 }
                 catch (Exception ex)
                 {
-                    transaction.Rollback();
+                    await transaction.RollbackAsync();
                     throw ex;
                 }
             }
         }
 
-        public void Delete(long entityId, ISession session)
+        public async Task Delete(long entityId, ISession session)
         {
             using (var transaction = session.BeginTransaction())
             {
                 try
                 {
-                    var entity = _BaseDao.GetById(entityId, session);
+                    var entity = await _BaseDao.GetById(entityId, session);
                     if (entity != null)
                     {
-                        _BaseDao.Delete(entity, session);
+                       await _BaseDao.Delete(entity, session);
                     }
-                    transaction.Commit();
+                    await transaction.CommitAsync();
                 }
                 catch (Exception ex)
                 {
-                    transaction.Rollback();
+                    await transaction.RollbackAsync();
                     throw ex;
                 }
             }

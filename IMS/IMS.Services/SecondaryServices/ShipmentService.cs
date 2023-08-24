@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using IMS.BusinessModel.Dto.GridData;
 using IMS.BusinessModel.Dto.Shipment;
 using IMS.BusinessModel.Entity;
@@ -11,17 +12,13 @@ namespace IMS.Services.SecondaryServices
 {
     public class ShipmentService : BaseSecondaryService<Shipment>
     {
-         private readonly IBaseDao<Shipment> _baseDao;
-        public ShipmentService()
-        {
-            _baseDao = new BaseDao<Shipment>();
-        }
+         private readonly IBaseDao<Shipment> _baseDao = new BaseDao<Shipment>();
 
-        public List<ShipmentDto> GetAll(ISession session, DataRequest dataRequest)
+         public async Task<List<ShipmentDto>> GetAll(ISession session, DataRequest dataRequest)
         {
             try
             {
-                var entities = _baseDao.GetAll(session, dataRequest);
+                var entities =await _baseDao.GetAll(session, dataRequest);
                 return (from t in entities let dto = new ShipmentDto() select MapToDto(t, dto)).ToList();
             }
             catch (Exception e)
@@ -31,7 +28,7 @@ namespace IMS.Services.SecondaryServices
             }
         }
 
-        public void Create(ShipmentFormDto shipmentFormDto, long userId, ISession session)
+        public async Task Create(ShipmentFormDto shipmentFormDto, long userId, ISession session)
         {
             using (var transaction = session.BeginTransaction())
             {
@@ -42,18 +39,18 @@ namespace IMS.Services.SecondaryServices
                     mappedShipment.Rank = GetNextRank(session);
                     mappedShipment.CreatedBy = userId;
                     mappedShipment.CreationDate = DateTime.Now;
-                    _baseDao.Create(mappedShipment, session);
-                    transaction.Commit();
+                    await _baseDao.Create(mappedShipment, session);
+                    await transaction.CommitAsync();
                 }
                 catch (Exception)
                 {
-                    transaction.Rollback();
+                    await transaction.RollbackAsync();
                     throw;
                 }
             }
         }
 
-        public void Update(ShipmentDto shipmentDto, long modifiedById, ISession sess)
+        public async Task Update(ShipmentDto shipmentDto, long modifiedById, ISession sess)
         {
             using (var transaction = sess.BeginTransaction())
             {
@@ -64,13 +61,13 @@ namespace IMS.Services.SecondaryServices
                     mappedShipment.ModificationDate = DateTime.Now;
                     mappedShipment.ModifiedBy = modifiedById;
                     
-                    _baseDao.Update(mappedShipment, sess);
+                    await _baseDao.Update(mappedShipment, sess);
                     
-                    transaction.Commit();
+                    await transaction.CommitAsync();
                 }
                 catch (Exception)
                 {
-                    transaction.Rollback();
+                    await transaction.RollbackAsync();
                     throw;
                 }
             }

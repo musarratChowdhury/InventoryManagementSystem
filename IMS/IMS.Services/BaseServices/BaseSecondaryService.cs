@@ -2,6 +2,7 @@
 using IMS.Dao;
 using NHibernate;
 using System;
+using System.Threading.Tasks;
 using IMS.BusinessModel.Dto.CommonDtos;
 using IMS.BusinessModel.Entity.Common;
 
@@ -16,13 +17,13 @@ namespace IMS.Services.SecondaryServices
             _baseDao = new BaseDao<TEntity>();
         }
 
-        public int GetTotalCount(ISession session)
+        public async Task<int> GetTotalCount(ISession session)
         {
-            var result = _baseDao.GetTotalCount(session);
+            var result =await _baseDao.GetTotalCount(session);
             return result;
         }
 
-        public void UpdateRank(ChangeRankDto changeRankDto, ISession sess)
+        public async Task UpdateRank(ChangeRankDto changeRankDto, ISession sess)
         {
             using (var transaction = sess.BeginTransaction())
             {
@@ -30,57 +31,57 @@ namespace IMS.Services.SecondaryServices
                 {
                     if (changeRankDto.OldRank > changeRankDto.NewRank)
                     {
-                        _baseDao.UpdateRank(sess,true, 
+                        await _baseDao.UpdateRank(sess,true, 
                             changeRankDto.OldRank, changeRankDto.NewRank, changeRankDto.Id);
                     }
                     else if(changeRankDto.OldRank < changeRankDto.NewRank)
                     {
-                        _baseDao.UpdateRank(sess,false, 
+                       await _baseDao.UpdateRank(sess,false, 
                             changeRankDto.OldRank, changeRankDto.NewRank, changeRankDto.Id);
                     }
-                    transaction.Commit();
+                    await transaction.CommitAsync();
                 }
                 catch (Exception)
                 {
-                    transaction.Rollback();
+                    await transaction.RollbackAsync();
                     throw;
                 }
             }
         }
 
-        public void Delete(long entityId, ISession sess)
+        public async Task Delete(long entityId, ISession sess)
         {
             using (var transaction = sess.BeginTransaction())
             {
                 try
                 {
-                    var entity = _baseDao.GetById(entityId, sess);
+                    var entity = await _baseDao.GetById(entityId, sess);
                     if (entity != null)
                     {
-                        _baseDao.Delete(entity, sess);
+                       await _baseDao.Delete(entity, sess);
                     }
-                    transaction.Commit();
+                    await transaction.CommitAsync();
                 }
                 catch (Exception)
                 {
-                    transaction.Rollback();
+                    await transaction.RollbackAsync();
                     throw;
                 }
             }
         }
 
-        public bool SoftDelete(long entityId, ISession session)
+        public async Task<bool> SoftDelete(long entityId, ISession session)
         {
             using (var transaction = session.BeginTransaction())
             {
                 try
                 {
-                    var entity = _baseDao.GetById(entityId, session);
+                    var entity = await _baseDao.GetById(entityId, session);
                     if (entity != null)
                     {
                         entity.Status = 404;
-                        _baseDao.Update(entity, session);
-                        transaction.Commit();
+                        await _baseDao.Update(entity, session);
+                        await transaction.CommitAsync();
                         return true;
                     }
                 }

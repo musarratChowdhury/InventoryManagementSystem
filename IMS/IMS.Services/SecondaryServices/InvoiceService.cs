@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using IMS.BusinessModel.Dto.CommonDtos;
 using IMS.BusinessModel.Dto.GridData;
 using IMS.BusinessModel.Dto.Invoice;
@@ -12,17 +13,13 @@ namespace IMS.Services.SecondaryServices
 {
     public class InvoiceService : BaseSecondaryService<Invoice>
     {
-         private readonly IBaseDao<Invoice> _baseDao;
-        public InvoiceService()
-        {
-            _baseDao = new BaseDao<Invoice>();
-        }
+        private readonly IBaseDao<Invoice> _baseDao = new BaseDao<Invoice>();
 
-        public List<InvoiceDto> GetAll(ISession session, DataRequest dataRequest)
+        public async Task<List<InvoiceDto>> GetAll(ISession session, DataRequest dataRequest)
         {
             try
             {
-                var entities = _baseDao.GetAll(session, dataRequest);
+                var entities = await _baseDao.GetAll(session, dataRequest);
                 return (from t in entities let dto = new InvoiceDto() select MapToDto(t, dto)).ToList();
             }
             catch (Exception e)
@@ -32,7 +29,7 @@ namespace IMS.Services.SecondaryServices
             }
         }
 
-        public void Create(InvoiceFormDto invoiceFormDto, long userId, ISession session)
+        public async Task Create(InvoiceFormDto invoiceFormDto, long userId, ISession session)
         {
             using (var transaction = session.BeginTransaction())
             {
@@ -43,18 +40,18 @@ namespace IMS.Services.SecondaryServices
                     mappedInvoice.Rank = GetNextRank(session);
                     mappedInvoice.CreatedBy = userId;
                     mappedInvoice.CreationDate = DateTime.Now;
-                    _baseDao.Create(mappedInvoice, session);
-                    transaction.Commit();
+                    await _baseDao.Create(mappedInvoice, session);
+                    await transaction.CommitAsync();
                 }
                 catch (Exception)
                 {
-                    transaction.Rollback();
+                    await transaction.RollbackAsync();
                     throw;
                 }
             }
         }
 
-        public void Update(InvoiceDto invoiceDto, long modifiedById, ISession sess)
+        public async Task Update(InvoiceDto invoiceDto, long modifiedById, ISession sess)
         {
             using (var transaction = sess.BeginTransaction())
             {
@@ -64,24 +61,24 @@ namespace IMS.Services.SecondaryServices
                     var mappedInvoice = MapToEntity(invoiceDto, invoice);
                     mappedInvoice.ModificationDate = DateTime.Now;
                     mappedInvoice.ModifiedBy = modifiedById;
-                    
-                    _baseDao.Update(mappedInvoice, sess);
-                    
-                    transaction.Commit();
+
+                    await _baseDao.Update(mappedInvoice, sess);
+
+                    await transaction.CommitAsync();
                 }
                 catch (Exception)
                 {
-                    transaction.Rollback();
+                    await transaction.RollbackAsync();
                     throw;
                 }
             }
         }
-        
-        public List<DropDownDto> GetDropDownList(ISession session)
+
+        public async Task<List<DropDownDto>> GetDropDownList(ISession session)
         {
             try
             {
-                var entities = _baseDao.GetAll(session);
+                var entities = await _baseDao.GetAll(session);
                 return (from t in entities let dto = new DropDownDto() select MapToDropDownDto(t, dto)).ToList();
             }
             catch (Exception e)
@@ -90,7 +87,7 @@ namespace IMS.Services.SecondaryServices
                 throw;
             }
         }
-        
+
         private DropDownDto MapToDropDownDto(Invoice entity, DropDownDto dto)
         {
             dto.Id = entity.Id;
@@ -100,7 +97,6 @@ namespace IMS.Services.SecondaryServices
 
         private InvoiceDto MapToDto(Invoice entity, InvoiceDto dto)
         {
-
             dto.Id = entity.Id;
             dto.SerialNumber = $"#IN{entity.Id}SO{entity.SalesOrderId}";
             dto.InvoiceDueDate = entity.InvoiceDueDate;

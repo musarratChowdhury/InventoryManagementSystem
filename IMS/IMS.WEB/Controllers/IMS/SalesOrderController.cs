@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 using System.Web.Mvc;
 using IMS.BusinessModel.Dto.CommonDtos;
 using IMS.BusinessModel.Dto.GridData;
@@ -11,27 +12,23 @@ namespace IMS.WEB.Controllers.IMS
 {
     public class SalesOrderController : Controller
     {
-         private readonly SalesOrderService _salesOrderService;
+         private readonly SalesOrderService _salesOrderService = new SalesOrderService();
 
-        public SalesOrderController()
-        {
-            _salesOrderService = new SalesOrderService();
-        }
-        // GET: SalesOrder
+         // GET: SalesOrder
         public ActionResult Index()
         {
             return View();
         }
 
         [HttpPost]
-        public ActionResult DataSource(DataRequest request)
+        public async Task<ActionResult> DataSource(DataRequest request)
         {
             using (var session = NHibernateConfig.OpenSession())
             {
                 var result = new DataResult<SalesOrderDto>
                 {
-                    count = _salesOrderService.GetTotalCount(session),
-                    result = _salesOrderService.GetAll(session, request)
+                    count = await _salesOrderService.GetTotalCount(session),
+                    result = await _salesOrderService.GetAll(session, request)
                 };
 
 
@@ -40,13 +37,13 @@ namespace IMS.WEB.Controllers.IMS
         }
         
         [HttpPost]
-        public ActionResult DropDownList()
+        public async Task<ActionResult> DropDownList()
         {
             try
             {
                 using (var session = NHibernateConfig.OpenSession())
                 {
-                    var result = _salesOrderService.GetDropDownList(session);
+                    var result = await _salesOrderService.GetDropDownList(session);
 
                     return Json(result, JsonRequestBehavior.AllowGet);
                 }
@@ -59,13 +56,13 @@ namespace IMS.WEB.Controllers.IMS
         }
 
         [HttpPost]
-        public ActionResult Insert(CRUDRequest<SalesOrderFormDto> salesOrderCreateReq)
+        public async Task<ActionResult> Insert(CRUDRequest<SalesOrderFormDto> salesOrderCreateReq)
         {
             try
             {
                 using (var session = NHibernateConfig.OpenSession())
                 {
-                    _salesOrderService.Create(salesOrderCreateReq.value, User.Identity.GetUserId<long>(), session);
+                    await _salesOrderService.Create(salesOrderCreateReq.value, User.Identity.GetUserId<long>(), session);
 
                     return Json(new { success = true, message = "Added successfully." });
                 }
@@ -77,13 +74,13 @@ namespace IMS.WEB.Controllers.IMS
         }  
         
         [HttpPost]
-        public ActionResult Create(SalesOrderFormDto salesOrderCreateDto)
+        public async Task<ActionResult> Create(SalesOrderFormDto salesOrderCreateDto)
         {
             try
             {
                 using (var session = NHibernateConfig.OpenSession())
                 {
-                    _salesOrderService.Create(salesOrderCreateDto, User.Identity.GetUserId<long>(), session);
+                    await _salesOrderService.Create(salesOrderCreateDto, User.Identity.GetUserId<long>(), session);
 
                     return Json(new { success = true, message = "Added successfully." });
                 }
@@ -95,14 +92,14 @@ namespace IMS.WEB.Controllers.IMS
         } 
         
         [HttpPost]
-        public ActionResult Update(CRUDRequest<SalesOrderDto> salesOrderCreateReq)
+        public async Task<ActionResult> Update(CRUDRequest<SalesOrderDto> salesOrderCreateReq)
         {
             try
             {
                 using (var session = NHibernateConfig.OpenSession())
                 {
                     
-                    _salesOrderService.Update(salesOrderCreateReq.value, User.Identity.GetUserId<long>(), session);
+                    await _salesOrderService.Update(salesOrderCreateReq.value, User.Identity.GetUserId<long>(), session);
 
                     return Json(new { success = true, message = "Updated successfully." });
                 }
@@ -114,13 +111,13 @@ namespace IMS.WEB.Controllers.IMS
         } 
         
         [HttpPost]
-        public ActionResult UpdateRank(ChangeRankDto changeRankDto)
+        public async Task<ActionResult> UpdateRank(ChangeRankDto changeRankDto)
         {
             try
             {
                 using (var session = NHibernateConfig.OpenSession())
                 {
-                    _salesOrderService.UpdateRank(changeRankDto, session);
+                    await _salesOrderService.UpdateRank(changeRankDto, session);
                     var response = new { message = "Rank updated successfully." };
                     return Json(response);
                 }
@@ -134,13 +131,13 @@ namespace IMS.WEB.Controllers.IMS
         }
 
         [HttpPost]
-        public ActionResult Archive(DeleteRequest salesOrderDeleteReq)
+        public async Task<ActionResult> Archive(DeleteRequest salesOrderDeleteReq)
         {
             try
             {
                 using (var session = NHibernateConfig.OpenSession())
                 {
-                    _salesOrderService.ArchiveRecord(salesOrderDeleteReq.Key, session);
+                    await _salesOrderService.ArchiveRecord(salesOrderDeleteReq.Key, session);
 
                     return Json(new { success = true, message = "Archived successfully." });
                 }
@@ -152,13 +149,13 @@ namespace IMS.WEB.Controllers.IMS
         }
         
         [HttpPost]
-        public ActionResult Delete(DeleteRequest salesOrderDeleteReq)
+        public async Task<ActionResult> Delete(DeleteRequest salesOrderDeleteReq)
         {
             try
             {
                 using (var session = NHibernateConfig.OpenSession())
                 {
-                    _salesOrderService.Delete(salesOrderDeleteReq.Key, session);
+                    await _salesOrderService.Delete(salesOrderDeleteReq.Key, session);
 
                     return Json(new { success = true, message = "Deleted successfully." });
                 }

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using IMS.BusinessModel.Dto.CommonDtos;
 using IMS.BusinessModel.Dto.GridData;
 using IMS.BusinessModel.Dto.Product;
@@ -12,17 +13,13 @@ namespace IMS.Services.SecondaryServices
 {
     public class ProductService : BaseSecondaryService<Product>
     {
-         private readonly IBaseDao<Product> _baseDao;
-        public ProductService()
-        {
-            _baseDao = new BaseDao<Product>();
-        }
+         private readonly IBaseDao<Product> _baseDao = new BaseDao<Product>();
 
-        public List<ProductDto> GetAll(ISession session, DataRequest dataRequest)
+         public async Task<List<ProductDto>> GetAll(ISession session, DataRequest dataRequest)
         {
             try
             {
-                var entities = _baseDao.GetAll(session, dataRequest);
+                var entities = await _baseDao.GetAll(session, dataRequest);
                 return (from t in entities let dto = new ProductDto() select MapToDto(t, dto)).ToList();
             }
             catch (Exception e)
@@ -32,15 +29,15 @@ namespace IMS.Services.SecondaryServices
             }
         }
 
-        public ProductDto GetProductById(ISession session, long Id)
+        public async Task<ProductDto> GetProductById(ISession session, long Id)
         {
-            var product =  _baseDao.GetById(Id, session);
+            var product = await _baseDao.GetById(Id, session);
             var productDto = new ProductDto();
             var result = MapToDto(product, productDto);
             return result;
         }
 
-        public void Create(ProductFormDto productFormDto, long userId, ISession session)
+        public async Task Create(ProductFormDto productFormDto, long userId, ISession session)
         {
             using (var transaction = session.BeginTransaction())
             {
@@ -52,21 +49,21 @@ namespace IMS.Services.SecondaryServices
                     mappedProduct.CreatedBy = userId;
                     mappedProduct.CreationDate = DateTime.Now;
                     _baseDao.Create(mappedProduct, session);
-                    transaction.Commit();
+                    await transaction.CommitAsync();
                 }
                 catch (Exception)
                 {
-                    transaction.Rollback();
+                    await transaction.RollbackAsync();
                     throw;
                 }
             }
         }
         
-        public List<DropDownDto> GetDropDownList(ISession session)
+        public async Task<List<DropDownDto>> GetDropDownList(ISession session)
         {
             try
             {
-                var entities = _baseDao.GetAll(session);
+                var entities = await _baseDao.GetAll(session);
                 return (from t in entities let dto = new DropDownDto() select MapToDropDownDto(t, dto)).ToList();
             }
             catch (Exception)
@@ -83,7 +80,7 @@ namespace IMS.Services.SecondaryServices
             return dto;
         }
 
-        public void Update(ProductDto productDto, long modifiedById, ISession sess)
+        public async Task Update(ProductDto productDto, long modifiedById, ISession sess)
         {
             using (var transaction = sess.BeginTransaction())
             {
@@ -94,13 +91,13 @@ namespace IMS.Services.SecondaryServices
                     mappedProduct.ModificationDate = DateTime.Now;
                     mappedProduct.ModifiedBy = modifiedById;
                     
-                    _baseDao.Update(mappedProduct, sess);
+                    await _baseDao.Update(mappedProduct, sess);
                     
-                    transaction.Commit();
+                    await transaction.CommitAsync();
                 }
                 catch (Exception)
                 {
-                    transaction.Rollback();
+                    await transaction.RollbackAsync();
                     throw;
                 }
             }

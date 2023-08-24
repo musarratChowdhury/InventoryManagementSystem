@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using IMS.BusinessModel.Dto.GridData;
 using IMS.BusinessModel.Dto.PaymentReceive;
 using IMS.BusinessModel.Entity;
@@ -11,17 +12,13 @@ namespace IMS.Services.SecondaryServices
 {
     public class PaymentReceiveService : BaseSecondaryService<PaymentReceived>
     {
-           private readonly IBaseDao<PaymentReceived> _baseDao;
-        public PaymentReceiveService()
-        {
-            _baseDao = new BaseDao<PaymentReceived>();
-        }
+        private readonly IBaseDao<PaymentReceived> _baseDao = new BaseDao<PaymentReceived>();
 
-        public List<PaymentReceiveDto> GetAll(ISession session, DataRequest dataRequest)
+        public async Task<List<PaymentReceiveDto>> GetAll(ISession session, DataRequest dataRequest)
         {
             try
             {
-                var entities = _baseDao.GetAll(session, dataRequest);
+                var entities = await _baseDao.GetAll(session, dataRequest);
                 return (from t in entities let dto = new PaymentReceiveDto() select MapToDto(t, dto)).ToList();
             }
             catch (Exception e)
@@ -31,7 +28,7 @@ namespace IMS.Services.SecondaryServices
             }
         }
 
-        public void Create(PaymentReceiveFormDto paymentReceiveFormDto, long userId, ISession session)
+        public async Task Create(PaymentReceiveFormDto paymentReceiveFormDto, long userId, ISession session)
         {
             using (var transaction = session.BeginTransaction())
             {
@@ -42,18 +39,18 @@ namespace IMS.Services.SecondaryServices
                     mappedPaymentReceive.Rank = GetNextRank(session);
                     mappedPaymentReceive.CreatedBy = userId;
                     mappedPaymentReceive.CreationDate = DateTime.Now;
-                    _baseDao.Create(mappedPaymentReceive, session);
-                    transaction.Commit();
+                    await _baseDao.Create(mappedPaymentReceive, session);
+                    await transaction.CommitAsync();
                 }
                 catch (Exception)
                 {
-                    transaction.Rollback();
+                    await transaction.RollbackAsync();
                     throw;
                 }
             }
         }
 
-        public void Update(PaymentReceiveDto paymentReceiveDto, long modifiedById, ISession sess)
+        public async Task Update(PaymentReceiveDto paymentReceiveDto, long modifiedById, ISession sess)
         {
             using (var transaction = sess.BeginTransaction())
             {
@@ -63,14 +60,14 @@ namespace IMS.Services.SecondaryServices
                     var mappedPaymentReceive = MapToEntity(paymentReceiveDto, paymentReceive);
                     mappedPaymentReceive.ModificationDate = DateTime.Now;
                     mappedPaymentReceive.ModifiedBy = modifiedById;
-                    
-                    _baseDao.Update(mappedPaymentReceive, sess);
-                    
-                    transaction.Commit();
+
+                    await _baseDao.Update(mappedPaymentReceive, sess);
+
+                    await transaction.CommitAsync();
                 }
                 catch (Exception)
                 {
-                    transaction.Rollback();
+                    await transaction.RollbackAsync();
                     throw;
                 }
             }
@@ -78,7 +75,6 @@ namespace IMS.Services.SecondaryServices
 
         private PaymentReceiveDto MapToDto(PaymentReceived entity, PaymentReceiveDto dto)
         {
-
             dto.Id = entity.Id;
             dto.SerialNumber = $"#PR{entity.Id}IN{entity.InvoiceId}";
             dto.PaymentDate = entity.PaymentDate;

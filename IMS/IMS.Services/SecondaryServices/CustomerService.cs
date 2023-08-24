@@ -6,6 +6,7 @@ using NHibernate;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using IMS.BusinessModel.Dto.CommonDtos;
 
 namespace IMS.Services.SecondaryServices
@@ -18,11 +19,11 @@ namespace IMS.Services.SecondaryServices
             _baseDao = new BaseDao<Customer>();
         }
 
-        public List<CustomerDto> GetAll(ISession session, DataRequest dataRequest)
+        public async Task<List<CustomerDto>> GetAll(ISession session, DataRequest dataRequest)
         {
             try
             {
-                var entities = _baseDao.GetAll(session, dataRequest);
+                var entities = await _baseDao.GetAll(session, dataRequest);
                 return (from t in entities let dto = new CustomerDto() select MapToDto(t, dto)).ToList();
             }
             catch (Exception e)
@@ -31,11 +32,11 @@ namespace IMS.Services.SecondaryServices
                 throw;
             }
         }
-        public List<DropDownDto> GetDropDownList(ISession session)
+        public async Task<List<DropDownDto>> GetDropDownList(ISession session)
         {
             try
             {
-                var entities = _baseDao.GetAll(session);
+                var entities = await _baseDao.GetAll(session);
                 var result = new List<DropDownDto>();
                 for (int i = 0; i < entities.Count; i++)
                 {
@@ -58,7 +59,7 @@ namespace IMS.Services.SecondaryServices
             return dto;
         }
 
-        public void Create(CustomerFormDto customerFormDto, long userId, ISession session)
+        public async Task Create(CustomerFormDto customerFormDto, long userId, ISession session)
         {
             using (var transaction = session.BeginTransaction())
             {
@@ -69,18 +70,18 @@ namespace IMS.Services.SecondaryServices
                     mappedCustomer.Rank = GetNextRank(session);
                     mappedCustomer.CreatedBy = userId;
                     mappedCustomer.CreationDate = DateTime.Now;
-                    _baseDao.Create(mappedCustomer, session);
-                    transaction.Commit();
+                    await _baseDao.Create(mappedCustomer, session);
+                    await transaction.CommitAsync();
                 }
                 catch (Exception)
                 {
-                    transaction.Rollback();
+                    await transaction.RollbackAsync();
                     throw;
                 }
             }
         }
 
-        public void Update(CustomerDto customerDto, long modifiedById, ISession sess)
+        public async Task Update(CustomerDto customerDto, long modifiedById, ISession sess)
         {
             using (var transaction = sess.BeginTransaction())
             {
@@ -91,19 +92,19 @@ namespace IMS.Services.SecondaryServices
                     mappedCustomer.ModificationDate = DateTime.Now;
                     mappedCustomer.ModifiedBy = modifiedById;
                     
-                    _baseDao.Update(mappedCustomer, sess);
+                    await _baseDao.Update(mappedCustomer, sess);
                     
-                    transaction.Commit();
+                    await transaction.CommitAsync();
                 }
                 catch (Exception)
                 {
-                    transaction.Rollback();
+                    await transaction.RollbackAsync();
                     throw;
                 }
             }
         }
-        
-        public CustomerDto MapToDto(Customer entity, CustomerDto dto)
+
+        private CustomerDto MapToDto(Customer entity, CustomerDto dto)
         {
 
             dto.Id = entity.Id;

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using IMS.BusinessModel.Dto.CommonDtos;
 using IMS.BusinessModel.Dto.GridData;
 using IMS.BusinessModel.Dto.PurchaseOrder;
@@ -18,11 +19,11 @@ namespace IMS.Services.SecondaryServices
             _baseDao = new BaseDao<PurchaseOrder>();
         }
 
-        public List<PurchaseOrderDto> GetAll(ISession session, DataRequest dataRequest)
+        public async Task<List<PurchaseOrderDto>> GetAll(ISession session, DataRequest dataRequest)
         {
             try
             {
-                var entities = _baseDao.GetAll(session, dataRequest);
+                var entities =await _baseDao.GetAll(session, dataRequest);
                 return (from t in entities let dto = new PurchaseOrderDto() select MapToDto(t, dto)).ToList();
             }
             catch (Exception e)
@@ -32,7 +33,7 @@ namespace IMS.Services.SecondaryServices
             }
         }
 
-        public void Create(PurchaseOrderFormDto purchaseOrderFormDto, long userId, ISession session)
+        public async Task Create(PurchaseOrderFormDto purchaseOrderFormDto, long userId, ISession session)
         {
             using (var transaction = session.BeginTransaction())
             {
@@ -52,18 +53,18 @@ namespace IMS.Services.SecondaryServices
                         };
                     }
                     
-                    _baseDao.Create(mappedPurchaseOrder, session);
-                    transaction.Commit();
+                    await _baseDao.Create(mappedPurchaseOrder, session);
+                    await transaction.CommitAsync();
                 }
                 catch (Exception)
                 {
-                    transaction.Rollback();
+                    await transaction.RollbackAsync();
                     throw;
                 }
             }
         }
 
-        public void Update(PurchaseOrderDto purchaseOrderDto, long modifiedById, ISession sess)
+        public async Task Update(PurchaseOrderDto purchaseOrderDto, long modifiedById, ISession sess)
         {
             using (var transaction = sess.BeginTransaction())
             {
@@ -74,31 +75,31 @@ namespace IMS.Services.SecondaryServices
                     mappedPurchaseOrder.ModificationDate = DateTime.Now;
                     mappedPurchaseOrder.ModifiedBy = modifiedById;
                     
-                    _baseDao.Update(mappedPurchaseOrder, sess);
+                    await _baseDao.Update(mappedPurchaseOrder, sess);
                     
-                    transaction.Commit();
+                    await transaction.CommitAsync();
                 }
                 catch (Exception)
                 {
-                    transaction.Rollback();
+                    await transaction.RollbackAsync();
                     throw;
                 }
             }
         }
         
-        public void ArchiveRecord(long entityId, ISession session)
+        public async Task ArchiveRecord(long entityId, ISession session)
         {
             using (var transaction = session.BeginTransaction())
             {
                 try
                 {
-                    var entity = _baseDao.GetById(entityId, session);
+                    var entity =await _baseDao.GetById(entityId, session);
                     if (entity != null)
                     {
                         entity.IsArchived = true;
                         entity.Status = 404;
-                        _baseDao.Update(entity, session);
-                        transaction.Commit();
+                        await _baseDao.Update(entity, session);
+                        await transaction.CommitAsync();
                     }
                 }
                 catch (Exception e)
@@ -109,11 +110,11 @@ namespace IMS.Services.SecondaryServices
             } 
         }
         
-        public List<DropDownDto> GetDropDownList(ISession session)
+        public async Task<List<DropDownDto>> GetDropDownList(ISession session)
         {
             try
             {
-                var entities = _baseDao.GetAll(session);
+                var entities =await _baseDao.GetAll(session);
                 return (from t in entities let dto = new DropDownDto() select MapToDropDownDto(t, dto)).ToList();
             }
             catch (Exception e)

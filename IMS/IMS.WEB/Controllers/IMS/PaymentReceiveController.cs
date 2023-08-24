@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 using System.Web.Mvc;
 using IMS.BusinessModel.Dto.CommonDtos;
 using IMS.BusinessModel.Dto.GridData;
@@ -11,12 +12,8 @@ namespace IMS.WEB.Controllers.IMS
 {
     public class PaymentReceiveController : Controller
     {
-        private readonly PaymentReceiveService _paymentReceiveService;
+        private readonly PaymentReceiveService _paymentReceiveService = new PaymentReceiveService();
 
-        public PaymentReceiveController()
-        {
-            _paymentReceiveService = new PaymentReceiveService();
-        }
         // GET: PaymentReceive
         public ActionResult Index()
         {
@@ -24,29 +21,29 @@ namespace IMS.WEB.Controllers.IMS
         }
 
         [HttpPost]
-        public ActionResult DataSource(DataRequest request)
+        public async Task<ActionResult> DataSource(DataRequest request)
         {
             using (var session = NHibernateConfig.OpenSession())
             {
                 var result = new DataResult<PaymentReceiveDto>
                 {
-                    count = _paymentReceiveService.GetTotalCount(session),
-                    result = _paymentReceiveService.GetAll(session, request)
+                    count = await _paymentReceiveService.GetTotalCount(session),
+                    result = await _paymentReceiveService.GetAll(session, request)
                 };
-
 
                 return Json(result, JsonRequestBehavior.AllowGet);
             }
         }
 
         [HttpPost]
-        public ActionResult Insert(CRUDRequest<PaymentReceiveFormDto> paymentReceiveCreateReq)
+        public async Task<ActionResult> Insert(CRUDRequest<PaymentReceiveFormDto> paymentReceiveCreateReq)
         {
             try
             {
                 using (var session = NHibernateConfig.OpenSession())
                 {
-                    _paymentReceiveService.Create(paymentReceiveCreateReq.value, User.Identity.GetUserId<long>(), session);
+                    await _paymentReceiveService.Create(paymentReceiveCreateReq.value, User.Identity.GetUserId<long>(),
+                        session);
 
                     return Json(new { success = true, message = "Added successfully." });
                 }
@@ -55,16 +52,17 @@ namespace IMS.WEB.Controllers.IMS
             {
                 return Json(new { success = false, message = "Error occurred while Adding.", ex.Message });
             }
-        }  
-        
+        }
+
         [HttpPost]
-        public ActionResult Create(PaymentReceiveFormDto paymentReceiveCreateDto)
+        public async Task<ActionResult> Create(PaymentReceiveFormDto paymentReceiveCreateDto)
         {
             try
             {
                 using (var session = NHibernateConfig.OpenSession())
                 {
-                    _paymentReceiveService.Create(paymentReceiveCreateDto, User.Identity.GetUserId<long>(), session);
+                    await _paymentReceiveService.Create(paymentReceiveCreateDto, User.Identity.GetUserId<long>(),
+                        session);
 
                     return Json(new { success = true, message = "Added successfully." });
                 }
@@ -73,17 +71,17 @@ namespace IMS.WEB.Controllers.IMS
             {
                 return Json(new { success = false, message = "Error occurred while Adding.", ex.Message });
             }
-        } 
-        
+        }
+
         [HttpPost]
-        public ActionResult Update(CRUDRequest<PaymentReceiveDto> paymentReceiveUpdateReq)
+        public async Task<ActionResult> Update(CRUDRequest<PaymentReceiveDto> paymentReceiveUpdateReq)
         {
             try
             {
                 using (var session = NHibernateConfig.OpenSession())
                 {
-                    
-                    _paymentReceiveService.Update(paymentReceiveUpdateReq.value, User.Identity.GetUserId<long>(), session);
+                    await _paymentReceiveService.Update(paymentReceiveUpdateReq.value, User.Identity.GetUserId<long>(),
+                        session);
 
                     return Json(new { success = true, message = "Updated successfully." });
                 }
@@ -92,16 +90,16 @@ namespace IMS.WEB.Controllers.IMS
             {
                 return Json(new { success = false, message = "Error occurred while Updating.", ex.Message });
             }
-        } 
-        
+        }
+
         [HttpPost]
-        public ActionResult UpdateRank(ChangeRankDto changeRankDto)
+        public async Task<ActionResult> UpdateRank(ChangeRankDto changeRankDto)
         {
             try
             {
                 using (var session = NHibernateConfig.OpenSession())
                 {
-                    _paymentReceiveService.UpdateRank(changeRankDto, session);
+                    await _paymentReceiveService.UpdateRank(changeRankDto, session);
                     var response = new { message = "Rank updated successfully." };
                     return Json(response);
                 }
@@ -111,17 +109,16 @@ namespace IMS.WEB.Controllers.IMS
                 return Json(new { success = false, message = "Error occurred while Updating.", ex.Message });
                 throw;
             }
-            
         }
-        
+
         [HttpPost]
-        public ActionResult Delete(DeleteRequest paymentReceiveDeleteReq)
+        public async Task<ActionResult> Delete(DeleteRequest paymentReceiveDeleteReq)
         {
             try
             {
                 using (var session = NHibernateConfig.OpenSession())
                 {
-                    _paymentReceiveService.Delete(paymentReceiveDeleteReq.Key, session);
+                    await _paymentReceiveService.Delete(paymentReceiveDeleteReq.Key, session);
 
                     return Json(new { success = true, message = "Deleted successfully." });
                 }

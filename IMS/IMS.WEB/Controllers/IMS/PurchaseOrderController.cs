@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 using System.Web.Mvc;
 using IMS.BusinessModel.Dto.CommonDtos;
 using IMS.BusinessModel.Dto.GridData;
@@ -17,6 +18,7 @@ namespace IMS.WEB.Controllers.IMS
         {
             _purchaseOrderService = new PurchaseOrderService();
         }
+
         // GET: PurchaseOrder
         public ActionResult Index()
         {
@@ -24,23 +26,22 @@ namespace IMS.WEB.Controllers.IMS
         }
 
         [HttpPost]
-        public ActionResult DataSource(DataRequest request)
+        public async Task<ActionResult> DataSource(DataRequest request)
         {
             using (var session = NHibernateConfig.OpenSession())
             {
                 var result = new DataResult<PurchaseOrderDto>
                 {
-                    count = _purchaseOrderService.GetTotalCount(session),
-                    result = _purchaseOrderService.GetAll(session, request)
+                    count = await _purchaseOrderService.GetTotalCount(session),
+                    result = await _purchaseOrderService.GetAll(session, request)
                 };
-
 
                 return Json(result, JsonRequestBehavior.AllowGet);
             }
         }
-        
+
         [HttpPost]
-        public ActionResult DropDownList()
+        public async Task<ActionResult> DropDownList()
         {
             try
             {
@@ -50,22 +51,22 @@ namespace IMS.WEB.Controllers.IMS
 
                     return Json(result, JsonRequestBehavior.AllowGet);
                 }
-
             }
-            catch(Exception)
+            catch (Exception)
             {
                 throw;
             }
         }
 
         [HttpPost]
-        public ActionResult Insert(CRUDRequest<PurchaseOrderFormDto> purchaseOrderCreateReq)
+        public async Task<ActionResult> Insert(CRUDRequest<PurchaseOrderFormDto> purchaseOrderCreateReq)
         {
             try
             {
                 using (var session = NHibernateConfig.OpenSession())
                 {
-                    _purchaseOrderService.Create(purchaseOrderCreateReq.value, User.Identity.GetUserId<long>(), session);
+                    await _purchaseOrderService.Create(purchaseOrderCreateReq.value, User.Identity.GetUserId<long>(),
+                        session);
 
                     return Json(new { success = true, message = "Added successfully." });
                 }
@@ -74,16 +75,16 @@ namespace IMS.WEB.Controllers.IMS
             {
                 return Json(new { success = false, message = "Error occurred while Adding.", ex.Message });
             }
-        }  
-        
+        }
+
         [HttpPost]
-        public ActionResult Create(PurchaseOrderFormDto purchaseOrderCreateDto)
+        public async Task<ActionResult> Create(PurchaseOrderFormDto purchaseOrderCreateDto)
         {
             try
             {
                 using (var session = NHibernateConfig.OpenSession())
                 {
-                    _purchaseOrderService.Create(purchaseOrderCreateDto, User.Identity.GetUserId<long>(), session);
+                    await _purchaseOrderService.Create(purchaseOrderCreateDto, User.Identity.GetUserId<long>(), session);
 
                     return Json(new { success = true, message = "Added successfully." });
                 }
@@ -92,17 +93,17 @@ namespace IMS.WEB.Controllers.IMS
             {
                 return Json(new { success = false, message = "Error occurred while Adding.", ex.Message });
             }
-        } 
-        
+        }
+
         [HttpPost]
-        public ActionResult Update(CRUDRequest<PurchaseOrderDto> purchaseOrderCreateReq)
+        public async Task<ActionResult> Update(CRUDRequest<PurchaseOrderDto> purchaseOrderCreateReq)
         {
             try
             {
                 using (var session = NHibernateConfig.OpenSession())
                 {
-                    
-                    _purchaseOrderService.Update(purchaseOrderCreateReq.value, User.Identity.GetUserId<long>(), session);
+                    await _purchaseOrderService.Update(purchaseOrderCreateReq.value, User.Identity.GetUserId<long>(),
+                        session);
 
                     return Json(new { success = true, message = "Updated successfully." });
                 }
@@ -111,16 +112,16 @@ namespace IMS.WEB.Controllers.IMS
             {
                 return Json(new { success = false, message = "Error occurred while Updating.", ex.Message });
             }
-        } 
-        
+        }
+
         [HttpPost]
-        public ActionResult UpdateRank(ChangeRankDto changeRankDto)
+        public async Task<ActionResult> UpdateRank(ChangeRankDto changeRankDto)
         {
             try
             {
                 using (var session = NHibernateConfig.OpenSession())
                 {
-                    _purchaseOrderService.UpdateRank(changeRankDto, session);
+                    await _purchaseOrderService.UpdateRank(changeRankDto, session);
                     var response = new { message = "Rank updated successfully." };
                     return Json(response);
                 }
@@ -130,17 +131,16 @@ namespace IMS.WEB.Controllers.IMS
                 return Json(new { success = false, message = "Error occurred while Updating.", ex.Message });
                 throw;
             }
-            
         }
-        
+
         [HttpPost]
-        public ActionResult Archive(DeleteRequest purchaseOrderArchiveReq)
+        public async Task<ActionResult> Archive(DeleteRequest purchaseOrderArchiveReq)
         {
             try
             {
                 using (var session = NHibernateConfig.OpenSession())
                 {
-                    _purchaseOrderService.ArchiveRecord(purchaseOrderArchiveReq.Key, session);
+                    await _purchaseOrderService.ArchiveRecord(purchaseOrderArchiveReq.Key, session);
 
                     return Json(new { success = true, message = "Archived successfully." });
                 }
@@ -150,15 +150,15 @@ namespace IMS.WEB.Controllers.IMS
                 return Json(new { success = false, message = "Error occurred while archiving.", ex.Message });
             }
         }
-        
+
         [HttpPost]
-        public ActionResult Delete(DeleteRequest purchaseOrderCreateReq)
+        public async Task<ActionResult> Delete(DeleteRequest purchaseOrderCreateReq)
         {
             try
             {
                 using (var session = NHibernateConfig.OpenSession())
                 {
-                    _purchaseOrderService.Delete(purchaseOrderCreateReq.Key, session);
+                    await _purchaseOrderService.Delete(purchaseOrderCreateReq.Key, session);
 
                     return Json(new { success = true, message = "Deleted successfully." });
                 }

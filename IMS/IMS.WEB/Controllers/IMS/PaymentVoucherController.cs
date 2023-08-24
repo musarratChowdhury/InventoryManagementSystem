@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 using System.Web.Mvc;
 using IMS.BusinessModel.Dto.CommonDtos;
 using IMS.BusinessModel.Dto.GridData;
@@ -11,12 +12,8 @@ namespace IMS.WEB.Controllers.IMS
 {
     public class PaymentVoucherController : Controller
     {
-        private readonly PaymentVoucherService _paymentVoucherService;
+        private readonly PaymentVoucherService _paymentVoucherService = new PaymentVoucherService();
 
-        public PaymentVoucherController()
-        {
-            _paymentVoucherService = new PaymentVoucherService();
-        }
         // GET: PaymentVoucher
         public ActionResult Index()
         {
@@ -24,14 +21,14 @@ namespace IMS.WEB.Controllers.IMS
         }
 
         [HttpPost]
-        public ActionResult DataSource(DataRequest request)
+        public async Task<ActionResult> DataSource(DataRequest request)
         {
             using (var session = NHibernateConfig.OpenSession())
             {
                 var result = new DataResult<PaymentVoucherDto>
                 {
-                    count = _paymentVoucherService.GetTotalCount(session),
-                    result = _paymentVoucherService.GetAll(session, request)
+                    count = await _paymentVoucherService.GetTotalCount(session),
+                    result = await _paymentVoucherService.GetAll(session, request)
                 };
 
 
@@ -40,13 +37,13 @@ namespace IMS.WEB.Controllers.IMS
         }
 
         [HttpPost]
-        public ActionResult Insert(CRUDRequest<PaymentVoucherFormDto> paymentVoucherCreateReq)
+        public async Task<ActionResult> Insert(CRUDRequest<PaymentVoucherFormDto> paymentVoucherCreateReq)
         {
             try
             {
                 using (var session = NHibernateConfig.OpenSession())
                 {
-                    _paymentVoucherService.Create(paymentVoucherCreateReq.value, User.Identity.GetUserId<long>(), session);
+                    await _paymentVoucherService.Create(paymentVoucherCreateReq.value, User.Identity.GetUserId<long>(), session);
 
                     return Json(new { success = true, message = "Added successfully." });
                 }
@@ -58,13 +55,13 @@ namespace IMS.WEB.Controllers.IMS
         }  
         
         [HttpPost]
-        public ActionResult Create(PaymentVoucherFormDto paymentVoucherCreateDto)
+        public async Task<ActionResult> Create(PaymentVoucherFormDto paymentVoucherCreateDto)
         {
             try
             {
                 using (var session = NHibernateConfig.OpenSession())
                 {
-                    _paymentVoucherService.Create(paymentVoucherCreateDto, User.Identity.GetUserId<long>(), session);
+                    await _paymentVoucherService.Create(paymentVoucherCreateDto, User.Identity.GetUserId<long>(), session);
 
                     return Json(new { success = true, message = "Added successfully." });
                 }
@@ -76,14 +73,14 @@ namespace IMS.WEB.Controllers.IMS
         } 
         
         [HttpPost]
-        public ActionResult Update(CRUDRequest<PaymentVoucherDto> paymentVoucherCreateReq)
+        public async Task<ActionResult> Update(CRUDRequest<PaymentVoucherDto> paymentVoucherCreateReq)
         {
             try
             {
                 using (var session = NHibernateConfig.OpenSession())
                 {
                     
-                    _paymentVoucherService.Update(paymentVoucherCreateReq.value, User.Identity.GetUserId<long>(), session);
+                    await _paymentVoucherService.Update(paymentVoucherCreateReq.value, User.Identity.GetUserId<long>(), session);
 
                     return Json(new { success = true, message = "Updated successfully." });
                 }
@@ -95,13 +92,13 @@ namespace IMS.WEB.Controllers.IMS
         } 
         
         [HttpPost]
-        public ActionResult UpdateRank(ChangeRankDto changeRankDto)
+        public async Task<ActionResult> UpdateRank(ChangeRankDto changeRankDto)
         {
             try
             {
                 using (var session = NHibernateConfig.OpenSession())
                 {
-                    _paymentVoucherService.UpdateRank(changeRankDto, session);
+                    await _paymentVoucherService.UpdateRank(changeRankDto, session);
                     var response = new { message = "Rank updated successfully." };
                     return Json(response);
                 }
@@ -115,13 +112,13 @@ namespace IMS.WEB.Controllers.IMS
         }
         
         [HttpPost]
-        public ActionResult Delete(DeleteRequest paymentVoucherDeleteReq)
+        public async Task<ActionResult> Delete(DeleteRequest paymentVoucherDeleteReq)
         {
             try
             {
                 using (var session = NHibernateConfig.OpenSession())
                 {
-                    _paymentVoucherService.Delete(paymentVoucherDeleteReq.Key, session);
+                    await _paymentVoucherService.Delete(paymentVoucherDeleteReq.Key, session);
 
                     return Json(new { success = true, message = "Deleted successfully." });
                 }

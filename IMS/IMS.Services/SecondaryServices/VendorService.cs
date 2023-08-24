@@ -6,23 +6,20 @@ using NHibernate;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using IMS.BusinessModel.Dto.CommonDtos;
 
 namespace IMS.Services.SecondaryServices
 {
     public class VendorService : BaseSecondaryService<Vendor>
     {
-        private readonly IBaseDao<Vendor> _baseDao;
-        public VendorService()
-        {
-            _baseDao = new BaseDao<Vendor>();
-        }
-
-        public List<VendorDto> GetAll(ISession session, DataRequest dataRequest)
+        private readonly IBaseDao<Vendor> _baseDao = new BaseDao<Vendor>();
+        
+        public async Task<List<VendorDto>> GetAll(ISession session, DataRequest dataRequest)
         {
             try
             {
-                var entities = _baseDao.GetAll(session, dataRequest);
+                var entities =await _baseDao.GetAll(session, dataRequest);
                 return (from t in entities let dto = new VendorDto() select MapToDto(t, dto)).ToList();
             }
             catch (Exception e)
@@ -32,18 +29,12 @@ namespace IMS.Services.SecondaryServices
             }
         }
         
-        public List<DropDownDto> GetDropDownList(ISession session)
+        public async Task<List<DropDownDto>> GetDropDownList(ISession session)
         {
             try
             {
-                var entities = _baseDao.GetAll(session);
-                var result = new List<DropDownDto>();
-                for (int i = 0; i < entities.Count; i++)
-                {
-                    var dto = new DropDownDto();
-                    result.Add(MapToDropDownDto(entities[i], dto));
-                }
-                return result;
+                var entities =await _baseDao.GetAll(session);
+                return (from t in entities let dto = new DropDownDto() select MapToDropDownDto(t, dto)).ToList();
             }
             catch (Exception ex)
             {
@@ -59,7 +50,7 @@ namespace IMS.Services.SecondaryServices
             return dto;
         }
 
-        public void Create(VendorFormDto vendorFormDto, long userId, ISession session)
+        public async Task Create(VendorFormDto vendorFormDto, long userId, ISession session)
         {
             using (var transaction = session.BeginTransaction())
             {
@@ -70,18 +61,18 @@ namespace IMS.Services.SecondaryServices
                     mappedVendor.Rank = GetNextRank(session);
                     mappedVendor.CreatedBy = userId;
                     mappedVendor.CreationDate = DateTime.Now;
-                    _baseDao.Create(mappedVendor, session);
-                    transaction.Commit();
+                    await _baseDao.Create(mappedVendor, session);
+                    await transaction.CommitAsync();
                 }
                 catch (Exception)
                 {
-                    transaction.Rollback();
+                    await transaction.RollbackAsync();
                     throw;
                 }
             }
         }
 
-        public void Update(VendorDto vendorDto, long modifiedById, ISession sess)
+        public async Task Update(VendorDto vendorDto, long modifiedById, ISession sess)
         {
             using (var transaction = sess.BeginTransaction())
             {
@@ -92,13 +83,13 @@ namespace IMS.Services.SecondaryServices
                     mappedVendor.ModificationDate = DateTime.Now;
                     mappedVendor.ModifiedBy = modifiedById;
                     
-                    _baseDao.Update(mappedVendor, sess);
+                    await _baseDao.Update(mappedVendor, sess);
                     
-                    transaction.Commit();
+                    await transaction.CommitAsync();
                 }
                 catch (Exception)
                 {
-                    transaction.Rollback();
+                    await transaction.RollbackAsync();
                     throw;
                 }
             }

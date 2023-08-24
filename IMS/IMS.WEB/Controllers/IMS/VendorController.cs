@@ -1,5 +1,6 @@
 ﻿using IMS.BusinessModel.Dto.GridData;
 using System;
+using System.Threading.Tasks;
 using System.Web.Mvc;
 using IMS.BusinessModel.Dto.CommonDtos;
 using IMS.BusinessModel.Dto.Vendor;
@@ -12,12 +13,8 @@ namespace IMS.WEB.Controllers.IMS
     [Authorize]
     public class VendorController : Controller
     {
-        private readonly VendorService _vendorService;
+        private readonly VendorService _vendorService = new VendorService();
 
-        public VendorController()
-        {
-            _vendorService = new VendorService();
-        }
         // GET: Vendor
         public ActionResult Index()
         {
@@ -25,14 +22,14 @@ namespace IMS.WEB.Controllers.IMS
         }
 
         [HttpPost]
-        public ActionResult DataSource(DataRequest request)
+        public async Task<ActionResult> DataSource(DataRequest request)
         {
             using (var session = NHibernateConfig.OpenSession())
             {
                 var result = new DataResult<VendorDto>
                 {
-                    count = _vendorService.GetTotalCount(session),
-                    result = _vendorService.GetAll(session, request)
+                    count = await _vendorService.GetTotalCount(session),
+                    result = await _vendorService.GetAll(session, request)
                 };
                 
                 return Json(result, JsonRequestBehavior.AllowGet);
@@ -40,7 +37,7 @@ namespace IMS.WEB.Controllers.IMS
         }
         
         [HttpPost]
-        public ActionResult DropDownList()
+        public async Task<ActionResult> DropDownList()
         {
             try
             {
@@ -58,13 +55,13 @@ namespace IMS.WEB.Controllers.IMS
         }
 
         [HttpPost]
-        public ActionResult Insert(CRUDRequest<VendorFormDto> vendorCreateReq)
+        public async Task<ActionResult> Insert(CRUDRequest<VendorFormDto> vendorCreateReq)
         {
             try
             {
                 using (var session = NHibernateConfig.OpenSession())
                 {
-                    _vendorService.Create(vendorCreateReq.value, User.Identity.GetUserId<long>(), session);
+                    await _vendorService.Create(vendorCreateReq.value, User.Identity.GetUserId<long>(), session);
 
                     return Json(new { success = true, message = "Added successfully." });
                 }
@@ -76,14 +73,14 @@ namespace IMS.WEB.Controllers.IMS
         } 
         
         [HttpPost]
-        public ActionResult Update(CRUDRequest<VendorDto> vendorCreateReq)
+        public async Task<ActionResult> Update(CRUDRequest<VendorDto> vendorCreateReq)
         {
             try
             {
                 using (var session = NHibernateConfig.OpenSession())
                 {
                     
-                    _vendorService.Update(vendorCreateReq.value, User.Identity.GetUserId<long>(), session);
+                    await _vendorService.Update(vendorCreateReq.value, User.Identity.GetUserId<long>(), session);
 
                     return Json(new { success = true, message = "Updated successfully." });
                 }
@@ -95,13 +92,13 @@ namespace IMS.WEB.Controllers.IMS
         } 
         
         [HttpPost]
-        public ActionResult UpdateRank(ChangeRankDto changeRankDto)
+        public async Task<ActionResult> UpdateRank(ChangeRankDto changeRankDto)
         {
             try
             {
                 using (var session = NHibernateConfig.OpenSession())
                 {
-                    _vendorService.UpdateRank(changeRankDto, session);
+                    await _vendorService.UpdateRank(changeRankDto, session);
                     var response = new { message = "Rank updated successfully." };
                     return Json(response);
                 }
@@ -115,13 +112,13 @@ namespace IMS.WEB.Controllers.IMS
         }
         
         [HttpPost]
-        public ActionResult Delete(DeleteRequest vendorCreateReq)
+        public async Task<ActionResult> Delete(DeleteRequest vendorCreateReq)
         {
             try
             {
                 using (var session = NHibernateConfig.OpenSession())
                 {
-                    _vendorService.Delete(vendorCreateReq.Key, session);
+                    await _vendorService.Delete(vendorCreateReq.Key, session);
 
                     return Json(new { success = true, message = "Deleted successfully." });
                 }

@@ -5,22 +5,24 @@ using NHibernate.Criterion;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using IMS.BusinessModel.Entity;
+using NHibernate.Linq;
 
 namespace IMS.Dao
 {
     public interface IBaseDao<TEntity> where TEntity : IBaseEntity
     {
-        TEntity GetById(long id, ISession session);
-        IList<TEntity> GetAll(ISession session);
-        void Create(TEntity entity, ISession session);
-        void Update(TEntity entity, ISession session);
-        void Delete(TEntity entity, ISession session);
-        int GetTotalCount(ISession session);
-        IList<TEntity> GetAll( ISession session, DataRequest dataRequest);
+        Task<TEntity> GetById(long id, ISession session);
+        Task<IList<TEntity>> GetAll(ISession session);
+        Task Create(TEntity entity, ISession session);
+        Task Update(TEntity entity, ISession session);
+        Task Delete(TEntity entity, ISession session);
+        Task<int> GetTotalCount(ISession session);
+        Task<IList<TEntity>> GetAll( ISession session, DataRequest dataRequest);
         IList<TEntity> ExecuteRawSqlQuery(ISession session, string sqlQuery);
         void ExecuteRawSqlQuery(ISession session, string sqlQuery, object[] parameters, Type T);
-        void UpdateRank(ISession session, bool isPromoted, int oldRank, int newRank, long id);
+        Task UpdateRank(ISession session, bool isPromoted, int oldRank, int newRank, long id);
         int GetHighestRank(ISession session);
     }
 
@@ -33,35 +35,36 @@ namespace IMS.Dao
           
         }
 
-        public TEntity GetById(long id, ISession session)
+        public async Task<TEntity> GetById(long id, ISession session)
         {
-            return session.Get<TEntity>(id);
+            return await session.GetAsync<TEntity>(id);
         }
 
-        public IList<TEntity> GetAll(ISession session)
+        public async  Task<IList<TEntity>> GetAll(ISession session)
         {
-            return session.Query<TEntity>().ToList();
+            return await session.Query<TEntity>().ToListAsync();
         }
 
-        public void Create(TEntity entity, ISession session)
+        public async Task Create(TEntity entity, ISession session)
         {
-            session.Save(entity);
+            await session.SaveAsync(entity);
         }
 
 
-        public void Update(TEntity entity, ISession session)
+        public async Task Update(TEntity entity, ISession session)
         {
-            session.Update(entity);
+            await session.UpdateAsync(entity);
         }
         
-        public void Delete(TEntity entity, ISession session)
+        public async Task Delete(TEntity entity, ISession session)
         {
-            session.Delete(entity);
+            await session.DeleteAsync(entity);
+            await UpdateRankOnDelete(session, entity.Rank);
         }
 
-        public int GetTotalCount(ISession session)
+        public async Task<int> GetTotalCount(ISession session)
         {
-            return session.Query<TEntity>().Count(x => x.Status!=404);
+            return await session.Query<TEntity>().CountAsync(x => x.Status!=404);
         }
 
         public IList<TEntity> GetDataBySkipTake(int skip, int take, ISession session)
@@ -69,7 +72,7 @@ namespace IMS.Dao
             return session.Query<TEntity>().Where(x=>x.Status!=404).Skip(skip).Take(take).ToList();
         }
 
-        public IList<TEntity> GetAll(ISession session, DataRequest dataRequest)
+        public async Task<IList<TEntity>> GetAll(ISession session, DataRequest dataRequest)
         {
             var criteria = session.CreateCriteria<TEntity>();
            
@@ -178,7 +181,7 @@ namespace IMS.Dao
             criteria.SetFirstResult(dataRequest.Skip)
                     .SetMaxResults(dataRequest.Take);
 
-            return criteria.List<TEntity>();
+            return await criteria.ListAsync<TEntity>();
         }
         
         public IList<TEntity> ExecuteRawSqlQuery(ISession session, string sqlQuery)
@@ -198,7 +201,7 @@ namespace IMS.Dao
             }
         }
 
-        public void UpdateRank(ISession session,bool isPromoted, int oldRank, int newRank, long id)
+        public async Task UpdateRank(ISession session,bool isPromoted, int oldRank, int newRank, long id)
         {
             var  sql = isPromoted ? $@"
                 UPDATE {typeof(TEntity).Name}
@@ -217,7 +220,14 @@ namespace IMS.Dao
             ";
             IQuery query = session.CreateSQLQuery(sql);
             
-            query.ExecuteUpdate();
+            await query.ExecuteUpdateAsync();
+        }
+
+        private async Task UpdateRankOnDelete(ISession session, int deletedRank)
+        {
+            var sql = $"UPDATE {typeof(TEntity).Name} SET Rank = Rank - 1 WHERE Rank > {deletedRank}";
+            IQuery query = session.CreateSQLQuery(sql);
+            await query.ExecuteUpdateAsync();
         }
 
 

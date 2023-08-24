@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using IMS.BusinessModel.Dto.GridData;
 using IMS.BusinessModel.Dto.PaymentVoucher;
 using IMS.BusinessModel.Entity;
@@ -11,17 +12,13 @@ namespace IMS.Services.SecondaryServices
 {
     public class PaymentVoucherService : BaseSecondaryService<PaymentVoucher>
     {
-        private readonly IBaseDao<PaymentVoucher> _baseDao;
-        public PaymentVoucherService()
-        {
-            _baseDao = new BaseDao<PaymentVoucher>();
-        }
+        private readonly IBaseDao<PaymentVoucher> _baseDao = new BaseDao<PaymentVoucher>();
 
-        public List<PaymentVoucherDto> GetAll(ISession session, DataRequest dataRequest)
+        public async Task<List<PaymentVoucherDto>> GetAll(ISession session, DataRequest dataRequest)
         {
             try
             {
-                var entities = _baseDao.GetAll(session, dataRequest);
+                var entities = await _baseDao.GetAll(session, dataRequest);
                 return (from t in entities let dto = new PaymentVoucherDto() select MapToDto(t, dto)).ToList();
             }
             catch (Exception e)
@@ -31,7 +28,7 @@ namespace IMS.Services.SecondaryServices
             }
         }
 
-        public void Create(PaymentVoucherFormDto paymentVoucherFormDto, long userId, ISession session)
+        public async Task Create(PaymentVoucherFormDto paymentVoucherFormDto, long userId, ISession session)
         {
             using (var transaction = session.BeginTransaction())
             {
@@ -42,18 +39,18 @@ namespace IMS.Services.SecondaryServices
                     mappedPaymentVoucher.Rank = GetNextRank(session);
                     mappedPaymentVoucher.CreatedBy = userId;
                     mappedPaymentVoucher.CreationDate = DateTime.Now;
-                    _baseDao.Create(mappedPaymentVoucher, session);
-                    transaction.Commit();
+                    await _baseDao.Create(mappedPaymentVoucher, session);
+                    await transaction.CommitAsync();
                 }
                 catch (Exception)
                 {
-                    transaction.Rollback();
+                    await transaction.RollbackAsync();
                     throw;
                 }
             }
         }
 
-        public void Update(PaymentVoucherDto paymentVoucherDto, long modifiedById, ISession sess)
+        public async Task Update(PaymentVoucherDto paymentVoucherDto, long modifiedById, ISession sess)
         {
             using (var transaction = sess.BeginTransaction())
             {
@@ -63,14 +60,14 @@ namespace IMS.Services.SecondaryServices
                     var mappedPaymentVoucher = MapToEntity(paymentVoucherDto, paymentVoucher);
                     mappedPaymentVoucher.ModificationDate = DateTime.Now;
                     mappedPaymentVoucher.ModifiedBy = modifiedById;
-                    
-                    _baseDao.Update(mappedPaymentVoucher, sess);
-                    
-                    transaction.Commit();
+
+                    await _baseDao.Update(mappedPaymentVoucher, sess);
+
+                    await transaction.CommitAsync();
                 }
                 catch (Exception)
                 {
-                    transaction.Rollback();
+                    await transaction.RollbackAsync();
                     throw;
                 }
             }
@@ -78,7 +75,6 @@ namespace IMS.Services.SecondaryServices
 
         private PaymentVoucherDto MapToDto(PaymentVoucher entity, PaymentVoucherDto dto)
         {
-
             dto.Id = entity.Id;
             dto.SerialNumber = $"#PV{entity.Id}BL{entity.BillId}";
             dto.PaymentDate = entity.PaymentDate;

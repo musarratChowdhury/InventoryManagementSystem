@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 using System.Web.Mvc;
 using IMS.BusinessModel.Dto.Bill;
 using IMS.BusinessModel.Dto.CommonDtos;
@@ -11,12 +12,8 @@ namespace IMS.WEB.Controllers.IMS
 {
     public class BillController : Controller
     {
-        private readonly BillService _billService;
+        private readonly BillService _billService = new BillService();
 
-        public BillController()
-        {
-            _billService = new BillService();
-        }
         // GET: Bill
         public ActionResult Index()
         {
@@ -24,47 +21,47 @@ namespace IMS.WEB.Controllers.IMS
         }
 
         [HttpPost]
-        public ActionResult DataSource(DataRequest request)
+        public async Task<ActionResult> DataSource(DataRequest request)
         {
             using (var session = NHibernateConfig.OpenSession())
             {
                 var result = new DataResult<BillDto>
                 {
-                    count = _billService.GetTotalCount(session),
-                    result = _billService.GetAll(session, request)
+                    count = await _billService.GetTotalCount(session),
+                    result = await _billService.GetAll(session, request)
                 };
 
 
                 return Json(result, JsonRequestBehavior.AllowGet);
             }
         }
-        
+
         [HttpPost]
-        public ActionResult DropDownList()
+        public async Task<ActionResult> DropDownList()
         {
             try
             {
                 using (var session = NHibernateConfig.OpenSession())
                 {
-                    var result = _billService.GetDropDownList(session);
+                    var result = await _billService.GetDropDownList(session);
 
                     return Json(result, JsonRequestBehavior.AllowGet);
                 }
             }
-            catch(Exception)
+            catch (Exception)
             {
                 throw;
             }
         }
 
         [HttpPost]
-        public ActionResult Insert(CRUDRequest<BillFormDto> billCreateReq)
+        public async Task<ActionResult> Insert(CRUDRequest<BillFormDto> billCreateReq)
         {
             try
             {
                 using (var session = NHibernateConfig.OpenSession())
                 {
-                    _billService.Create(billCreateReq.value, User.Identity.GetUserId<long>(), session);
+                    await _billService.Create(billCreateReq.value, User.Identity.GetUserId<long>(), session);
 
                     return Json(new { success = true, message = "Added successfully." });
                 }
@@ -73,17 +70,16 @@ namespace IMS.WEB.Controllers.IMS
             {
                 return Json(new { success = false, message = "Error occurred while Adding.", ex.Message });
             }
-        } 
-        
+        }
+
         [HttpPost]
-        public ActionResult Update(CRUDRequest<BillDto> billCreateReq)
+        public async Task<ActionResult> Update(CRUDRequest<BillDto> billCreateReq)
         {
             try
             {
                 using (var session = NHibernateConfig.OpenSession())
                 {
-                    
-                    _billService.Update(billCreateReq.value, User.Identity.GetUserId<long>(), session);
+                    await _billService.Update(billCreateReq.value, User.Identity.GetUserId<long>(), session);
 
                     return Json(new { success = true, message = "Updated successfully." });
                 }
@@ -92,16 +88,16 @@ namespace IMS.WEB.Controllers.IMS
             {
                 return Json(new { success = false, message = "Error occurred while Updating.", ex.Message });
             }
-        } 
-        
+        }
+
         [HttpPost]
-        public ActionResult UpdateRank(ChangeRankDto changeRankDto)
+        public async Task<ActionResult> UpdateRank(ChangeRankDto changeRankDto)
         {
             try
             {
                 using (var session = NHibernateConfig.OpenSession())
                 {
-                    _billService.UpdateRank(changeRankDto, session);
+                    await _billService.UpdateRank(changeRankDto, session);
                     var response = new { message = "Rank updated successfully." };
                     return Json(response);
                 }
@@ -111,17 +107,16 @@ namespace IMS.WEB.Controllers.IMS
                 return Json(new { success = false, message = "Error occurred while Updating.", ex.Message });
                 throw;
             }
-            
         }
-        
+
         [HttpPost]
-        public ActionResult Delete(DeleteRequest billCreateReq)
+        public async Task<ActionResult> Delete(DeleteRequest billCreateReq)
         {
             try
             {
                 using (var session = NHibernateConfig.OpenSession())
                 {
-                    _billService.Delete(billCreateReq.Key, session);
+                    await _billService.Delete(billCreateReq.Key, session);
 
                     return Json(new { success = true, message = "Deleted successfully." });
                 }
