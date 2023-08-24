@@ -6,6 +6,7 @@ using IMS.BusinessModel.Dto.GridData;
 using IMS.BusinessModel.Dto.Shipment;
 using IMS.BusinessModel.Entity;
 using IMS.Dao;
+using IMS.Services.BaseServices;
 using NHibernate;
 
 namespace IMS.Services.SecondaryServices

@@ -1,12 +1,11 @@
-﻿
-using IMS.Dao;
-using NHibernate;
-using System;
+﻿using System;
 using System.Threading.Tasks;
 using IMS.BusinessModel.Dto.CommonDtos;
 using IMS.BusinessModel.Entity.Common;
+using IMS.Dao;
+using NHibernate;
 
-namespace IMS.Services.SecondaryServices
+namespace IMS.Services.BaseServices
 {
     public class BaseSecondaryService<TEntity> where TEntity :class, IBaseEntity
     {
@@ -101,8 +100,9 @@ namespace IMS.Services.SecondaryServices
                 var highestRank = _baseDao.GetHighestRank(session);
                 return highestRank + 1;
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                Console.WriteLine(ex);
                 throw;
             }
         }

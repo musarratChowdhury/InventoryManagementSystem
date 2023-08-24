@@ -7,6 +7,7 @@ using IMS.BusinessModel.Dto.SalesOrder;
 using IMS.BusinessModel.Dto.GridData;
 using IMS.BusinessModel.Entity;
 using IMS.Dao;
+using IMS.Services.BaseServices;
 using NHibernate;
 
 namespace IMS.Services.SecondaryServices
@@ -94,9 +95,10 @@ namespace IMS.Services.SecondaryServices
                 var entities =await _baseDao.GetAll(session);
                 return (from t in entities let dto = new DropDownDto() select MapToDropDownDto(t, dto)).ToList();
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                throw ;
+                Console.WriteLine(ex);
+                throw;
             }
         }
 

@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using IMS.BusinessModel.Dto.CommonDtos;
+using IMS.Services.BaseServices;
 
 namespace IMS.Services.SecondaryServices
 {
@@ -38,7 +39,8 @@ namespace IMS.Services.SecondaryServices
             }
             catch (Exception ex)
             {
-                throw ex;
+                Console.WriteLine(ex);
+                throw;
             }
         }
         

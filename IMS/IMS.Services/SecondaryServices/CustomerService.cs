@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using IMS.BusinessModel.Dto.CommonDtos;
+using IMS.Services.BaseServices;
 
 namespace IMS.Services.SecondaryServices
 {
@@ -37,17 +38,12 @@ namespace IMS.Services.SecondaryServices
             try
             {
                 var entities = await _baseDao.GetAll(session);
-                var result = new List<DropDownDto>();
-                for (int i = 0; i < entities.Count; i++)
-                {
-                    var dto = new DropDownDto();
-                    result.Add(MapToDropDownDto(entities[i], dto));
-                }
-                return result;
+                return (from t in entities let dto = new DropDownDto() select MapToDropDownDto(t, dto)).ToList();
             }
             catch (Exception ex)
             {
-                throw ex;
+                Console.WriteLine(ex);
+                throw;
             }
         }
 

@@ -7,6 +7,7 @@ using IMS.BusinessModel.Dto.GridData;
 using IMS.BusinessModel.Dto.Product;
 using IMS.BusinessModel.Entity;
 using IMS.Dao;
+using IMS.Services.BaseServices;
 using NHibernate;
 
 namespace IMS.Services.SecondaryServices
@@ -29,9 +30,9 @@ namespace IMS.Services.SecondaryServices
             }
         }
 
-        public async Task<ProductDto> GetProductById(ISession session, long Id)
+        public async Task<ProductDto> GetProductById(ISession session, long id)
         {
-            var product = await _baseDao.GetById(Id, session);
+            var product = await _baseDao.GetById(id, session);
             var productDto = new ProductDto();
             var result = MapToDto(product, productDto);
             return result;
@@ -48,7 +49,7 @@ namespace IMS.Services.SecondaryServices
                     mappedProduct.Rank = GetNextRank(session);
                     mappedProduct.CreatedBy = userId;
                     mappedProduct.CreationDate = DateTime.Now;
-                    _baseDao.Create(mappedProduct, session);
+                    await _baseDao.Create(mappedProduct, session);
                     await transaction.CommitAsync();
                 }
                 catch (Exception)
@@ -66,9 +67,10 @@ namespace IMS.Services.SecondaryServices
                 var entities = await _baseDao.GetAll(session);
                 return (from t in entities let dto = new DropDownDto() select MapToDropDownDto(t, dto)).ToList();
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                throw ;
+                Console.WriteLine(ex);
+                throw;
             }
         }
         
