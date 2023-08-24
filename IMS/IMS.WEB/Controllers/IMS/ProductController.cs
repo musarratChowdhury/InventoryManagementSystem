@@ -6,6 +6,7 @@ using IMS.BusinessModel.Dto.CommonDtos;
 using IMS.BusinessModel.Dto.Product;
 using IMS.Services.SecondaryServices;
 using IMS.Services.Helpers;
+using log4net;
 using Microsoft.AspNet.Identity;
 
 namespace IMS.WEB.Controllers.IMS
@@ -13,6 +14,7 @@ namespace IMS.WEB.Controllers.IMS
     public class ProductController : Controller
     {
          private readonly ProductService _productService = new ProductService();
+         private readonly ILog _logger = LogManager.GetLogger("IMS.WEB");
 
          // GET: Product
         public ActionResult Index()
@@ -23,38 +25,61 @@ namespace IMS.WEB.Controllers.IMS
         [HttpPost]
         public async Task<ActionResult> DataSource(DataRequest request)
         {
-            using (var session = NHibernateConfig.OpenSession())
+            try
             {
-                var result = new DataResult<ProductDto>
+                using (var session = NHibernateConfig.OpenSession())
                 {
-                    count = await _productService.GetTotalCount(session),
-                    result = await _productService.GetAll(session, request)
-                };
-
-
-                return Json(result, JsonRequestBehavior.AllowGet);
+                    var result = new DataResult<ProductDto>
+                    {
+                        count = await _productService.GetTotalCount(session),
+                        result = await _productService.GetAll(session, request)
+                    };
+                    
+                    return Json(result, JsonRequestBehavior.AllowGet);
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.Error(ex.Message, ex);
+                throw;
             }
         }
 
         [HttpPost]
         public async Task<ActionResult> GetProductById(DropDownDto req)
         {
-            using (var session = NHibernateConfig.OpenSession())
+            try
             {
-                var result = await _productService.GetProductById(session, req.Id);
-                
-                return Json(result, JsonRequestBehavior.AllowGet);
+                using (var session = NHibernateConfig.OpenSession())
+                {
+                    var result = await _productService.GetProductById(session, req.Id);
+                    
+                    return Json(result, JsonRequestBehavior.AllowGet);
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.Error(ex.Message, ex);
+                throw;
             }
         }
         
         [HttpPost]
         public async Task<ActionResult> DropDownList()
         {
-            using (var session = NHibernateConfig.OpenSession())
+            try
             {
-                var result = await _productService.GetDropDownList(session);
+                using (var session = NHibernateConfig.OpenSession())
+                {
+                    var result = await _productService.GetDropDownList(session);
 
-                return Json(result, JsonRequestBehavior.AllowGet);
+                    return Json(result, JsonRequestBehavior.AllowGet);
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.Error(ex.Message, ex);
+                throw;
             }
         }
 
@@ -72,6 +97,7 @@ namespace IMS.WEB.Controllers.IMS
             }
             catch (Exception ex)
             {
+                _logger.Error(ex.Message, ex);
                 return Json(new { success = false, message = "Error occurred while Adding.", ex.Message });
             }
         } 
@@ -89,6 +115,7 @@ namespace IMS.WEB.Controllers.IMS
             }
             catch (Exception ex)
             {
+                _logger.Error(ex.Message, ex);
                 return Json(new { success = false, message = "Error occurred while Updating.", ex.Message });
             }
         } 
@@ -107,6 +134,7 @@ namespace IMS.WEB.Controllers.IMS
             }
             catch (Exception ex)
             {
+                _logger.Error(ex.Message, ex);
                 return Json(new { success = false, message = "Error occurred while Updating.", ex.Message });
             }
             
@@ -125,6 +153,7 @@ namespace IMS.WEB.Controllers.IMS
             }
             catch (Exception ex)
             {
+                _logger.Error(ex.Message, ex);
                 return Json(new { success = false, message = "Error occurred while deleting.", ex.Message });
             }
         }

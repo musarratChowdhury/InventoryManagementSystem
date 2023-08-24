@@ -6,6 +6,7 @@ using IMS.BusinessModel.Dto.GridData;
 using IMS.BusinessModel.Dto.PaymentReceive;
 using IMS.Services.Helpers;
 using IMS.Services.SecondaryServices;
+using log4net;
 using Microsoft.AspNet.Identity;
 
 namespace IMS.WEB.Controllers.IMS
@@ -13,7 +14,7 @@ namespace IMS.WEB.Controllers.IMS
     public class PaymentReceiveController : Controller
     {
         private readonly PaymentReceiveService _paymentReceiveService = new PaymentReceiveService();
-
+        private readonly ILog _logger = LogManager.GetLogger("IMS.WEB");
         // GET: PaymentReceive
         public ActionResult Index()
         {
@@ -23,15 +24,23 @@ namespace IMS.WEB.Controllers.IMS
         [HttpPost]
         public async Task<ActionResult> DataSource(DataRequest request)
         {
-            using (var session = NHibernateConfig.OpenSession())
+            try
             {
-                var result = new DataResult<PaymentReceiveDto>
+                using (var session = NHibernateConfig.OpenSession())
                 {
-                    count = await _paymentReceiveService.GetTotalCount(session),
-                    result = await _paymentReceiveService.GetAll(session, request)
-                };
+                    var result = new DataResult<PaymentReceiveDto>
+                    {
+                        count = await _paymentReceiveService.GetTotalCount(session),
+                        result = await _paymentReceiveService.GetAll(session, request)
+                    };
 
-                return Json(result, JsonRequestBehavior.AllowGet);
+                    return Json(result, JsonRequestBehavior.AllowGet);
+                }
+            }
+            catch (Exception e)
+            {
+                _logger.Error(e.Message, e);
+                throw;
             }
         }
 
@@ -50,6 +59,7 @@ namespace IMS.WEB.Controllers.IMS
             }
             catch (Exception ex)
             {
+                _logger.Error(ex.Message, ex);
                 return Json(new { success = false, message = "Error occurred while Adding.", ex.Message });
             }
         }
@@ -69,6 +79,7 @@ namespace IMS.WEB.Controllers.IMS
             }
             catch (Exception ex)
             {
+                _logger.Error(ex.Message, ex);
                 return Json(new { success = false, message = "Error occurred while Adding.", ex.Message });
             }
         }
@@ -88,6 +99,7 @@ namespace IMS.WEB.Controllers.IMS
             }
             catch (Exception ex)
             {
+                _logger.Error(ex.Message, ex);
                 return Json(new { success = false, message = "Error occurred while Updating.", ex.Message });
             }
         }
@@ -106,6 +118,7 @@ namespace IMS.WEB.Controllers.IMS
             }
             catch (Exception ex)
             {
+                _logger.Error(ex.Message, ex);
                 return Json(new { success = false, message = "Error occurred while Updating.", ex.Message });
             }
         }
@@ -124,6 +137,7 @@ namespace IMS.WEB.Controllers.IMS
             }
             catch (Exception ex)
             {
+                _logger.Error(ex.Message, ex);
                 return Json(new { success = false, message = "Error occurred while deleting.", ex.Message });
             }
         }

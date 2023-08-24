@@ -6,6 +6,7 @@ using System.Web.Mvc;
 using IMS.BusinessModel.Dto.CommonDtos;
 using IMS.Services.SecondaryServices;
 using IMS.Services.Helpers;
+using log4net;
 using Microsoft.AspNet.Identity;
 
 namespace IMS.WEB.Controllers.IMS
@@ -14,7 +15,8 @@ namespace IMS.WEB.Controllers.IMS
     public class CustomerController : Controller
     {
         private readonly CustomerService _customerService = new CustomerService();
-
+        private readonly ILog _logger = LogManager.GetLogger("IMS.WEB");
+        
         // GET: Customer
         public ActionResult Index()
         {
@@ -24,25 +26,41 @@ namespace IMS.WEB.Controllers.IMS
         [HttpPost]
         public async Task<ActionResult> DataSource(DataRequest request)
         {
-            using (var session = NHibernateConfig.OpenSession())
+            try
             {
-                var result = new DataResult<CustomerDto>
+                using (var session = NHibernateConfig.OpenSession())
                 {
-                    count = await _customerService.GetTotalCount(session),
-                    result = await _customerService.GetAll(session, request)
-                };
-                
-                return Json(result, JsonRequestBehavior.AllowGet);
+                    var result = new DataResult<CustomerDto>
+                    {
+                        count = await _customerService.GetTotalCount(session),
+                        result = await _customerService.GetAll(session, request)
+                    };
+                    
+                    return Json(result, JsonRequestBehavior.AllowGet);
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.Error(ex.Message, ex);
+                throw;
             }
         }
 
         [HttpPost]
         public async Task<ActionResult> DropDownList()
         {
-            using (var session = NHibernateConfig.OpenSession())
+            try
             {
-                var result = await _customerService.GetDropDownList(session);
-                return Json(result, JsonRequestBehavior.AllowGet);
+                using (var session = NHibernateConfig.OpenSession())
+                {
+                    var result = await _customerService.GetDropDownList(session);
+                    return Json(result, JsonRequestBehavior.AllowGet);
+                }
+            }
+            catch (Exception e)
+            {
+                _logger.Error(e.Message, e);
+                throw;
             }
         }
 

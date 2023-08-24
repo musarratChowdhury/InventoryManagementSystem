@@ -6,6 +6,7 @@ using IMS.BusinessModel.Dto.GridData;
 using IMS.BusinessModel.Dto.SalesOrder;
 using IMS.Services.Helpers;
 using IMS.Services.SecondaryServices;
+using log4net;
 using Microsoft.AspNet.Identity;
 
 namespace IMS.WEB.Controllers.IMS
@@ -13,6 +14,7 @@ namespace IMS.WEB.Controllers.IMS
     public class SalesOrderController : Controller
     {
          private readonly SalesOrderService _salesOrderService = new SalesOrderService();
+         private readonly ILog _logger = LogManager.GetLogger("IMS.WEB");
 
          // GET: SalesOrder
         public ActionResult Index()
@@ -23,27 +25,44 @@ namespace IMS.WEB.Controllers.IMS
         [HttpPost]
         public async Task<ActionResult> DataSource(DataRequest request)
         {
-            using (var session = NHibernateConfig.OpenSession())
+            try
             {
-                var result = new DataResult<SalesOrderDto>
+                using (var session = NHibernateConfig.OpenSession())
                 {
-                    count = await _salesOrderService.GetTotalCount(session),
-                    result = await _salesOrderService.GetAll(session, request)
-                };
-
-
-                return Json(result, JsonRequestBehavior.AllowGet);
+                    var result = new DataResult<SalesOrderDto>
+                    {
+                        count = await _salesOrderService.GetTotalCount(session),
+                        result = await _salesOrderService.GetAll(session, request)
+                    };
+                    
+                    return Json(result, JsonRequestBehavior.AllowGet);
+                }
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                _logger.Error(e.Message,e);
+                throw;
             }
         }
         
         [HttpPost]
         public async Task<ActionResult> DropDownList()
         {
-            using (var session = NHibernateConfig.OpenSession())
+            try
             {
-                var result = await _salesOrderService.GetDropDownList(session);
+                using (var session = NHibernateConfig.OpenSession())
+                {
+                    var result = await _salesOrderService.GetDropDownList(session);
 
-                return Json(result, JsonRequestBehavior.AllowGet);
+                    return Json(result, JsonRequestBehavior.AllowGet);
+                }
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                _logger.Error(e.Message,e);
+                throw;
             }
         }
 
@@ -61,6 +80,7 @@ namespace IMS.WEB.Controllers.IMS
             }
             catch (Exception ex)
             {
+                _logger.Error(ex.Message, ex);
                 return Json(new { success = false, message = "Error occurred while Adding.", ex.Message });
             }
         }  
@@ -79,6 +99,7 @@ namespace IMS.WEB.Controllers.IMS
             }
             catch (Exception ex)
             {
+                _logger.Error(ex.Message, ex);
                 return Json(new { success = false, message = "Error occurred while Adding.", ex.Message });
             }
         } 
@@ -98,6 +119,7 @@ namespace IMS.WEB.Controllers.IMS
             }
             catch (Exception ex)
             {
+                _logger.Error(ex.Message, ex);
                 return Json(new { success = false, message = "Error occurred while Updating.", ex.Message });
             }
         } 
@@ -116,6 +138,7 @@ namespace IMS.WEB.Controllers.IMS
             }
             catch (Exception ex)
             {
+                _logger.Error(ex.Message, ex);
                 return Json(new { success = false, message = "Error occurred while Updating.", ex.Message });
             }
             
@@ -135,6 +158,7 @@ namespace IMS.WEB.Controllers.IMS
             }
             catch (Exception ex)
             {
+                _logger.Error(ex.Message, ex);
                 return Json(new { success = false, message = "Error occurred while archiving.", ex.Message });
             }
         }
@@ -153,6 +177,7 @@ namespace IMS.WEB.Controllers.IMS
             }
             catch (Exception ex)
             {
+                _logger.Error(ex.Message, ex);
                 return Json(new { success = false, message = "Error occurred while deleting.", ex.Message });
             }
         }

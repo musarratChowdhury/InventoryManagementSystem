@@ -6,6 +6,7 @@ using IMS.BusinessModel.Dto.CommonDtos;
 using IMS.BusinessModel.Dto.Vendor;
 using IMS.Services.SecondaryServices;
 using IMS.Services.Helpers;
+using log4net;
 using Microsoft.AspNet.Identity;
 
 namespace IMS.WEB.Controllers.IMS
@@ -14,6 +15,7 @@ namespace IMS.WEB.Controllers.IMS
     public class VendorController : Controller
     {
         private readonly VendorService _vendorService = new VendorService();
+        private readonly ILog _logger = LogManager.GetLogger("IMS.WEB");
 
         // GET: Vendor
         public ActionResult Index()
@@ -24,26 +26,44 @@ namespace IMS.WEB.Controllers.IMS
         [HttpPost]
         public async Task<ActionResult> DataSource(DataRequest request)
         {
-            using (var session = NHibernateConfig.OpenSession())
+            try
             {
-                var result = new DataResult<VendorDto>
+                using (var session = NHibernateConfig.OpenSession())
                 {
-                    count = await _vendorService.GetTotalCount(session),
-                    result = await _vendorService.GetAll(session, request)
-                };
-                
-                return Json(result, JsonRequestBehavior.AllowGet);
+                    var result = new DataResult<VendorDto>
+                    {
+                        count = await _vendorService.GetTotalCount(session),
+                        result = await _vendorService.GetAll(session, request)
+                    };
+                    
+                    return Json(result, JsonRequestBehavior.AllowGet);
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex);
+                _logger.Error(ex.Message, ex);
+                throw;
             }
         }
         
         [HttpPost]
         public async Task<ActionResult> DropDownList()
         {
-            using (var session = NHibernateConfig.OpenSession())
+            try
             {
-                var result = await _vendorService.GetDropDownList(session);
+                using (var session = NHibernateConfig.OpenSession())
+                {
+                    var result = await _vendorService.GetDropDownList(session);
 
-                return Json(result, JsonRequestBehavior.AllowGet);
+                    return Json(result, JsonRequestBehavior.AllowGet);
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex);
+                _logger.Error(ex.Message, ex);
+                throw;
             }
         }
 
@@ -61,6 +81,7 @@ namespace IMS.WEB.Controllers.IMS
             }
             catch (Exception ex)
             {
+                _logger.Error(ex.Message, ex);
                 return Json(new { success = false, message = "Error occurred while Adding.", ex.Message });
             }
         } 
@@ -80,6 +101,7 @@ namespace IMS.WEB.Controllers.IMS
             }
             catch (Exception ex)
             {
+                _logger.Error(ex.Message, ex);
                 return Json(new { success = false, message = "Error occurred while Updating.", ex.Message });
             }
         } 
@@ -98,6 +120,7 @@ namespace IMS.WEB.Controllers.IMS
             }
             catch (Exception ex)
             {
+                _logger.Error(ex.Message, ex);
                 return Json(new { success = false, message = "Error occurred while Updating.", ex.Message });
             }
             
@@ -117,6 +140,7 @@ namespace IMS.WEB.Controllers.IMS
             }
             catch (Exception ex)
             {
+                _logger.Error(ex.Message, ex);
                 return Json(new { success = false, message = "Error occurred while deleting.", ex.Message });
             }
         }

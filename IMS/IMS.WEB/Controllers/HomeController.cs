@@ -24,14 +24,7 @@ namespace IMS.WEB.Controllers
                     var paymentTypes = session.Query<PaymentType>().ToList();
 
                     // Check if any payment types were retrieved
-                    if (paymentTypes.Any())
-                    {
-                        ViewBag.Message = "Connection to the database is successful.";
-                    }
-                    else
-                    {
-                        ViewBag.Message = "No data found. Check your database and mappings.";
-                    }
+                    ViewBag.Message = paymentTypes.Any() ? "Connection to the database is successful." : "No data found. Check your database and mappings.";
                 }
             }
             catch (Exception ex)
@@ -40,8 +33,7 @@ namespace IMS.WEB.Controllers
             }
             Console.WriteLine("hello");
             _logger.Info("hello from home");
-
-
+            
             return View();
         }
 
