@@ -226,6 +226,7 @@ VALUES
 use MyInventoryDb;
 select * from SalesOrder;
 select * from Invoice;
+select * from Bill;
 select * from SalesOrderLine;
 select * from Customer;
 select * from Product;
