@@ -40,6 +40,7 @@ namespace IMS.Services.SecondaryServices
             {
                 try
                 {
+                    var productDao = new BaseDao<Product>();
                     var salesOrder = new SalesOrder();
                     var mappedSalesOrder = MapToEntity(salesOrderFormDto, salesOrder);
                     mappedSalesOrder.Rank = GetNextRank(session);
@@ -48,10 +49,9 @@ namespace IMS.Services.SecondaryServices
                     foreach (var salesOrderLine in mappedSalesOrder.SalesOrderLines)
                     {
                         salesOrderLine.SalesOrder = mappedSalesOrder;
-                        salesOrderLine.Product = new Product
-                        {
-                            Id = salesOrderLine.ProductId
-                        };
+                        salesOrderLine.Product = await productDao.GetById(salesOrderLine.ProductId, session);
+                        salesOrderLine.Product .StockQuantity -= salesOrderLine.Quantity;
+                        await productDao.Update(salesOrderLine.Product , session);
                     }
                     
                     await _baseDao.Create(mappedSalesOrder, session);
