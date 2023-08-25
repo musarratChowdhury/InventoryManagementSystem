@@ -15,6 +15,7 @@ namespace IMS.Services.SecondaryServices
     {
         private readonly IBaseDao<PaymentReceived> _baseDao = new BaseDao<PaymentReceived>();
         private readonly IBaseDao<SalesOrder> _salesOrderDao = new BaseDao<SalesOrder>();
+        private readonly IBaseDao<Invoice> _invoiceDao = new BaseDao<Invoice>();
 
         public async Task<List<PaymentReceiveDto>> GetAll(ISession session, DataRequest dataRequest)
         {
@@ -41,7 +42,25 @@ namespace IMS.Services.SecondaryServices
                     mappedPaymentReceive.Rank = GetNextRank(session);
                     mappedPaymentReceive.CreatedBy = userId;
                     mappedPaymentReceive.CreationDate = DateTime.Now;
+                    var relatedInvoice = await _invoiceDao.GetById(mappedPaymentReceive.InvoiceId, session);
+                    mappedPaymentReceive.Invoice = relatedInvoice;
                     await _baseDao.Create(mappedPaymentReceive, session);
+                    var relatedSalesOrder =
+                        await _salesOrderDao.GetById(mappedPaymentReceive.Invoice.SalesOrderId, session);
+                    relatedSalesOrder.DueAmount = relatedSalesOrder.TotalAmount - mappedPaymentReceive.PaymentAmount;
+                    if (relatedSalesOrder.DueAmount > 1)
+                    {
+                        relatedSalesOrder.PaymentStatus = 2;
+                    }else if (relatedSalesOrder.DueAmount == 0)
+                    {
+                        relatedSalesOrder.PaymentStatus = 1;
+                    }
+                    else
+                    {
+                        relatedSalesOrder.PaymentStatus = 0;
+                    }
+
+                    await _salesOrderDao.Update(relatedSalesOrder, session);
                     await transaction.CommitAsync();
                 }
                 catch (Exception)

@@ -42,8 +42,9 @@ namespace IMS.Services.SecondaryServices
                     mappedInvoice.Rank = GetNextRank(session);
                     mappedInvoice.CreatedBy = userId;
                     mappedInvoice.CreationDate = DateTime.Now;
-                    await _baseDao.Create(mappedInvoice, session);
                     var salesOrder = await _salesOrderDao.GetById(mappedInvoice.SalesOrderId, session);
+                    mappedInvoice.SalesOrder = salesOrder;
+                    await _baseDao.Create(mappedInvoice, session);
                     salesOrder.InvoiceId = mappedInvoice.Id;
                     await _salesOrderDao.Update(salesOrder, session);
                     await transaction.CommitAsync();

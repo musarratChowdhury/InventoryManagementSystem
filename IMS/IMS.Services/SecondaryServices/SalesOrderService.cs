@@ -162,7 +162,7 @@ namespace IMS.Services.SecondaryServices
         private SalesOrder MapToEntity(SalesOrderFormDto dto, SalesOrder salesOrder)
         {
             salesOrder.TotalAmount = dto.TotalAmount;
-            salesOrder.DueAmount = 0;
+            salesOrder.DueAmount = dto.TotalAmount;
             salesOrder.CustomerId = dto.CustomerId;
             salesOrder.SalesOrderLines = dto.SalesOrderLines;
             salesOrder.Version = 1;

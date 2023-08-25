@@ -14,6 +14,7 @@ namespace IMS.Services.SecondaryServices
     public class PaymentVoucherService : BaseSecondaryService<PaymentVoucher>
     {
         private readonly IBaseDao<PaymentVoucher> _baseDao = new BaseDao<PaymentVoucher>();
+        private readonly IBaseDao<Bill> _billDao = new BaseDao<Bill>();
         private readonly IBaseDao<PurchaseOrder> _purchaseOrderDao = new BaseDao<PurchaseOrder>();
 
         public async Task<List<PaymentVoucherDto>> GetAll(ISession session, DataRequest dataRequest)
@@ -41,7 +42,24 @@ namespace IMS.Services.SecondaryServices
                     mappedPaymentVoucher.Rank = GetNextRank(session);
                     mappedPaymentVoucher.CreatedBy = userId;
                     mappedPaymentVoucher.CreationDate = DateTime.Now;
+                    mappedPaymentVoucher.Bill = await _billDao.GetById(mappedPaymentVoucher.BillId, session);
                     await _baseDao.Create(mappedPaymentVoucher, session);
+                    var relatedSalesOrder =
+                        await _purchaseOrderDao.GetById(mappedPaymentVoucher.Bill.PurchaseOrderId, session);
+                    relatedSalesOrder.DueAmount = relatedSalesOrder.TotalAmount - mappedPaymentVoucher.PaymentAmount;
+                    if (relatedSalesOrder.DueAmount > 1)
+                    {
+                        relatedSalesOrder.PaymentStatus = 2;
+                    }else if (relatedSalesOrder.DueAmount == 0)
+                    {
+                        relatedSalesOrder.PaymentStatus = 1;
+                    }
+                    else
+                    {
+                        relatedSalesOrder.PaymentStatus = 0;
+                    }
+
+                    await _purchaseOrderDao.Update(relatedSalesOrder, session);
                     await transaction.CommitAsync();
                 }
                 catch (Exception)

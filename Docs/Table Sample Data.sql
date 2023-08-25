@@ -241,7 +241,7 @@ delete from SalesOrderLine;
 delete from SalesOrder;
 
 delete from shipment;
-
+delete from bill;
 delete from invoice;
 delete from PaymentReceived;
 Update SalesOrder
@@ -249,3 +249,7 @@ Update SalesOrder
 	ShipmentStatus = 1,
 	InvoiceId = 4
 WHERE Id =16; 
+
+ALTER TABLE PurchaseOrder
+
+ADD DueAmount DECIMAL(10,2) NOT NULL DEFAULT(0);

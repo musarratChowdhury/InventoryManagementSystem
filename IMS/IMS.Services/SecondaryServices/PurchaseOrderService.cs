@@ -161,7 +161,7 @@ namespace IMS.Services.SecondaryServices
         private PurchaseOrder MapToEntity(PurchaseOrderFormDto dto, PurchaseOrder purchaseOrder)
         {
             purchaseOrder.TotalAmount = dto.TotalAmount;
-            purchaseOrder.DueAmount = 0;
+            purchaseOrder.DueAmount = dto.TotalAmount;
             purchaseOrder.VendorId = dto.VendorId;
             purchaseOrder.PurchaseOrderLines = dto.PurchaseOrderLines;
             purchaseOrder.Version = 1;
