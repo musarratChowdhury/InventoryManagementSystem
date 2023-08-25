@@ -14,6 +14,7 @@ namespace IMS.Services.SecondaryServices
     public class PaymentVoucherService : BaseSecondaryService<PaymentVoucher>
     {
         private readonly IBaseDao<PaymentVoucher> _baseDao = new BaseDao<PaymentVoucher>();
+        private readonly IBaseDao<PurchaseOrder> _purchaseOrderDao = new BaseDao<PurchaseOrder>();
 
         public async Task<List<PaymentVoucherDto>> GetAll(ISession session, DataRequest dataRequest)
         {

@@ -15,6 +15,7 @@ namespace IMS.Services.SecondaryServices
     public class InvoiceService : BaseSecondaryService<Invoice>
     {
         private readonly IBaseDao<Invoice> _baseDao = new BaseDao<Invoice>();
+        private readonly IBaseDao<SalesOrder> _salesOrderDao = new BaseDao<SalesOrder>();
 
         public async Task<List<InvoiceDto>> GetAll(ISession session, DataRequest dataRequest)
         {
@@ -42,6 +43,9 @@ namespace IMS.Services.SecondaryServices
                     mappedInvoice.CreatedBy = userId;
                     mappedInvoice.CreationDate = DateTime.Now;
                     await _baseDao.Create(mappedInvoice, session);
+                    var salesOrder = await _salesOrderDao.GetById(mappedInvoice.SalesOrderId, session);
+                    salesOrder.InvoiceId = mappedInvoice.Id;
+                    await _salesOrderDao.Update(salesOrder, session);
                     await transaction.CommitAsync();
                 }
                 catch (Exception)

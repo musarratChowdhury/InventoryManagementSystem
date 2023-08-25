@@ -14,6 +14,7 @@ namespace IMS.Services.SecondaryServices
     public class ShipmentService : BaseSecondaryService<Shipment>
     {
          private readonly IBaseDao<Shipment> _baseDao = new BaseDao<Shipment>();
+         private readonly IBaseDao<SalesOrder> _salesOrderDao = new BaseDao<SalesOrder>();
 
          public async Task<List<ShipmentDto>> GetAll(ISession session, DataRequest dataRequest)
         {
@@ -41,6 +42,10 @@ namespace IMS.Services.SecondaryServices
                     mappedShipment.CreatedBy = userId;
                     mappedShipment.CreationDate = DateTime.Now;
                     await _baseDao.Create(mappedShipment, session);
+                    var salesOrder = await _salesOrderDao.GetById(shipment.SalesOrderId, session);
+                    salesOrder.ShipmentStatus = 1;
+                    salesOrder.Shipments.Add(mappedShipment);
+                    await _salesOrderDao.Update(salesOrder, session);
                     await transaction.CommitAsync();
                 }
                 catch (Exception)

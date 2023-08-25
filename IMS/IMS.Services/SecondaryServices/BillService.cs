@@ -15,6 +15,7 @@ namespace IMS.Services.SecondaryServices
     public class BillService : BaseSecondaryService<Bill>
     {
         private readonly IBaseDao<Bill> _baseDao = new BaseDao<Bill>();
+        private readonly IBaseDao<PurchaseOrder> _purchaseOrderDao = new BaseDao<PurchaseOrder>();
 
         public async Task<List<BillDto>> GetAll(ISession session, DataRequest dataRequest)
         {
@@ -42,6 +43,9 @@ namespace IMS.Services.SecondaryServices
                     mappedBill.CreatedBy = userId;
                     mappedBill.CreationDate = DateTime.Now;
                     await _baseDao.Create(mappedBill, session);
+                    var po = await _purchaseOrderDao.GetById(mappedBill.PurchaseOrderId, session);
+                    po.BillId = mappedBill.Id;
+                    await _purchaseOrderDao.Update(po, session);
                     await transaction.CommitAsync();
                 }
                 catch (Exception)
