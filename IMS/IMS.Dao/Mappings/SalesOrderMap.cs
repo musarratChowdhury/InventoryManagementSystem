@@ -13,6 +13,7 @@ namespace IMS.Dao.Mappings
             Map(x => x.CustomerId).Column("CustomerId").Not.Nullable();
             Map(x => x.InvoiceId).Column("InvoiceId");
             Map(x => x.TotalAmount).Column("TotalAmount").Not.Nullable();
+            Map(x => x.DueAmount).Column("DueAmount").Not.Nullable();
             Map(x => x.IsArchived).Column("IsArchived").Not.Nullable();
             Map(x => x.ShipmentStatus).Column("ShipmentStatus").Not.Nullable();
             Map(x => x.PaymentStatus).Column("PaymentStatus").Not.Nullable();

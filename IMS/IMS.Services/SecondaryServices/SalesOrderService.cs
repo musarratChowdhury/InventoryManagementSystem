@@ -141,6 +141,7 @@ namespace IMS.Services.SecondaryServices
             dto.PaymentStatus = entity.PaymentStatus;
             dto.IsArchived = entity.IsArchived;
             dto.TotalAmount = entity.TotalAmount;
+            dto.DueAmount = entity.DueAmount;
             dto.CustomerId = entity.CustomerId;
             dto.CustomerName = entity.Customer.FirstName + " " + entity.Customer.LastName;
             dto.InvoiceId = entity.InvoiceId;
@@ -161,6 +162,7 @@ namespace IMS.Services.SecondaryServices
         private SalesOrder MapToEntity(SalesOrderFormDto dto, SalesOrder salesOrder)
         {
             salesOrder.TotalAmount = dto.TotalAmount;
+            salesOrder.DueAmount = 0;
             salesOrder.CustomerId = dto.CustomerId;
             salesOrder.SalesOrderLines = dto.SalesOrderLines;
             salesOrder.Version = 1;
@@ -183,6 +185,7 @@ namespace IMS.Services.SecondaryServices
             salesOrder.IsArchived = dto.IsArchived;
             salesOrder.InvoiceId = dto.InvoiceId;
             salesOrder.TotalAmount = dto.TotalAmount;
+            salesOrder.DueAmount = dto.DueAmount;
             salesOrder.SalesOrderLines = dto.SalesOrderLines;
             salesOrder.Version = 1;
             salesOrder.BusinessId = "IMS-1";

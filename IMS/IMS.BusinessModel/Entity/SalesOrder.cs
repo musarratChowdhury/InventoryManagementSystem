@@ -9,6 +9,7 @@ namespace IMS.BusinessModel.Entity
     public class SalesOrder : BaseEntity
     {
         public virtual decimal TotalAmount { get; set; }
+        public virtual decimal DueAmount { get; set; }
         public virtual bool IsArchived { get; set; }
         public virtual int ShipmentStatus { get; set; }
         public virtual int PaymentStatus { get; set; }

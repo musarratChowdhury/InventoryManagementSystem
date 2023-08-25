@@ -19,6 +19,7 @@ namespace IMS.Dao.Mappings
             Map(x => x.BillId).Column("BillId");
             Map(x => x.PaymentStatus).Column("PaymentStatus").Not.Nullable();
             Map(x => x.TotalAmount).Column("TotalAmount").Not.Nullable();
+            Map(x => x.DueAmount).Column("DueAmount").Not.Nullable();
             Map(x => x.IsArchived).Column("IsArchived").Not.Nullable();
 
             References(x => x.Vendor) 
