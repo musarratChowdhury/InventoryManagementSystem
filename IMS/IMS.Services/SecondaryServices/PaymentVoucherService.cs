@@ -46,7 +46,7 @@ namespace IMS.Services.SecondaryServices
                     await _baseDao.Create(mappedPaymentVoucher, session);
                     var relatedSalesOrder =
                         await _purchaseOrderDao.GetById(mappedPaymentVoucher.Bill.PurchaseOrderId, session);
-                    relatedSalesOrder.DueAmount = relatedSalesOrder.TotalAmount - mappedPaymentVoucher.PaymentAmount;
+                    relatedSalesOrder.DueAmount -= mappedPaymentVoucher.PaymentAmount;
                     if (relatedSalesOrder.DueAmount > 1)
                     {
                         relatedSalesOrder.PaymentStatus = 2;

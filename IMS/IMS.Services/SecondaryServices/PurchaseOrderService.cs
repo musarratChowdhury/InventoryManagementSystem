@@ -135,7 +135,7 @@ namespace IMS.Services.SecondaryServices
         
         private PurchaseOrderDto MapToDto(PurchaseOrder entity, PurchaseOrderDto dto)
         {
-            dto.SerialNumber =  $"#SO{entity.Id}C{entity.VendorId}";
+            dto.SerialNumber =  $"#PO{entity.Id}V{entity.VendorId}";
             dto.Id = entity.Id;
             dto.PaymentStatus = entity.PaymentStatus;
             dto.IsArchived = entity.IsArchived;
