@@ -98,6 +98,7 @@ namespace IMS.Services.SecondaryServices
         {
             dto.Id = entity.Id;
             dto.SerialNumber = $"#IN{entity.Id}SO{entity.SalesOrderId}";
+            dto.DueAmount = entity.SalesOrder.DueAmount;
             return dto;
         }
 
