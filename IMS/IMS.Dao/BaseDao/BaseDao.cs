@@ -15,6 +15,7 @@ namespace IMS.Dao
     {
         Task<TEntity> GetById(long id, ISession session);
         Task<IList<TEntity>> GetAll(ISession session);
+        Task<List<(int Month, decimal Total)>> GetMonthlyTotalSales(ISession session);
         Task Create(TEntity entity, ISession session);
         Task Update(TEntity entity, ISession session);
         Task Delete(TEntity entity, ISession session);
@@ -49,7 +50,25 @@ namespace IMS.Dao
         {
             await session.SaveAsync(entity);
         }
+        
+        public async Task<List<(int Month, decimal Total)>> GetMonthlyTotalSales(ISession session)
+        {
+            try
+            {
+                var result = await session.Query<SalesOrder>()
+                    .Where(order => !order.IsArchived)
+                    .GroupBy(order => order.CreationDate.Month)
+                    .Select(group => new { Month = group.Key, Total = group.Sum(order => order.TotalAmount) })
+                    .ToListAsync();
 
+                return result.Select(item => (Month: item.Month, Total: item.Total)).ToList();
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                throw;
+            }
+        }
 
         public async Task Update(TEntity entity, ISession session)
         {

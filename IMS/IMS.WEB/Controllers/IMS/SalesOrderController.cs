@@ -68,6 +68,26 @@ namespace IMS.WEB.Controllers.IMS
         }
 
         [HttpPost]
+        public async Task<ActionResult> GetMonthlyTotalSales()
+        {
+            try
+            {
+                using (var session = NHibernateConfig.OpenSession())
+                {
+                    var result = await _salesOrderService.GetMonthlyTotalSales(session);
+
+                    return Json(result, JsonRequestBehavior.AllowGet);
+                }
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                _logger.Error(e.Message,e);
+                throw;
+            } 
+        }
+        
+        [HttpPost]
         public async Task<ActionResult> Insert(CRUDRequest<SalesOrderFormDto> salesOrderCreateReq)
         {
             try

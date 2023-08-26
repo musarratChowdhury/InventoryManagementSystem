@@ -250,7 +250,24 @@ Update SalesOrder
 	ShipmentStatus = 1,
 	InvoiceId = 4
 WHERE Id =16; 
+UPDATE SalesOrder
+SET CreationDate = '2023-06-12'
+WHERE Id = 49;
+select * from SalesOrder;
 
-ALTER TABLE PurchaseOrder
+ALTER TABLE SalesOrder
 
 ADD DueAmount DECIMAL(10,2) NOT NULL DEFAULT(0);
+
+use MyInventoryDb;
+   SELECT
+    MONTH(CreationDate) AS Month,
+    SUM(TotalAmount) AS TotalSales
+FROM
+    SalesOrder
+WHERE
+    IsArchived = 0
+GROUP BY
+    MONTH(CreationDate)
+ORDER BY
+    Month;

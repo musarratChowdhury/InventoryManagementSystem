@@ -101,6 +101,20 @@ namespace IMS.Services.SecondaryServices
                 throw;
             }
         }
+        
+        public async Task<List<(int Month, decimal Total)>> GetMonthlyTotalSales(ISession session)
+        {
+            try
+            {
+                var listOfMonthlySales = await _baseDao.GetMonthlyTotalSales(session);
+                return listOfMonthlySales;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex);
+                throw;
+            }
+        }
 
         public async Task ArchiveRecord(long entityId, ISession session)
         {
