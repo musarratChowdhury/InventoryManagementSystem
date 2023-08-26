@@ -2,7 +2,7 @@ project.lock.json
 .DS_Store
 *.pyc
 nupkg/
-packages/
+IMS/packages/
 # Visual Studio Code
 .vscode
 
