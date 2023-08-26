@@ -229,7 +229,7 @@
         {
             public const string PageName = "Dashboard Main";
             public const string RoleName = "Dashboard Main";
-            public const string Path = "/Dashboard/Index";
+            public const string Path = "/Home/Index";
             public const string ControllerName = "Dashboard";
             public const string ActionName = "Index";
         }

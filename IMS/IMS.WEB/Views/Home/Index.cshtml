@@ -5,7 +5,12 @@
 <div class="content-wrapper">
     <!-- Main content -->
     <section class="content">
-        <canvas id="myChart"></canvas>
+        <div id="sales-chart-container">
+            <canvas id="myChart"></canvas>  
+        </div> 
+        <div id="purchases-chart-container">
+            <canvas id="myChart2"></canvas>  
+        </div>
         <svg id="visualization" width="400" height="300"></svg>
         <div id="container"></div>
     </section>
@@ -15,8 +20,13 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.5.0/Chart.min.js"></script>
 <script>
 const salesOrderUrl = '/SalesOrder/GetMonthlyTotalSales';
-const purchaseOrderUrl = '/PurchaseOrder/GetAll';
-const productUrl = '/Product/GetAll';
+const purchaseOrderUrl = '/PurchaseOrder/GetMonthlyTotalPurchases';
+const productUrl = '/Product/GetAllProductsQuantity';
+
+$("#sales-chart-container").css("height", "300px");
+$("#sales-chart-container").css("width", "100%");
+$("#purchases-chart-container").css("height", "300px");
+$("#purchases-chart-container").css("width", "100%");
 
 const months = [
     'January', 'February', 'March', 'April', 'May', 'June',
@@ -83,6 +93,8 @@ const config = {
   type: 'bar',
   data: data,
   options: {
+    maintainAspectRatio: false, // Allow chart to resize without maintaining aspect ratio
+    responsive: true, // Allow chart to be responsive to container size
     scales: {
       y: {
         beginAtZero: true
@@ -92,9 +104,10 @@ const config = {
 };
 
 
+var chartElement = $('#myChart');
 
 var myChart = new Chart(
-    document.getElementById('myChart'),
+    chartElement,
     config
   );
 

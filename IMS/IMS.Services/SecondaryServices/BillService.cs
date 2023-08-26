@@ -42,8 +42,9 @@ namespace IMS.Services.SecondaryServices
                     mappedBill.Rank = GetNextRank(session);
                     mappedBill.CreatedBy = userId;
                     mappedBill.CreationDate = DateTime.Now;
-                    await _baseDao.Create(mappedBill, session);
                     var po = await _purchaseOrderDao.GetById(mappedBill.PurchaseOrderId, session);
+                    mappedBill.PurchaseOrder = po;
+                    await _baseDao.Create(mappedBill, session);
                     po.BillId = mappedBill.Id;
                     await _purchaseOrderDao.Update(po, session);
                     await transaction.CommitAsync();

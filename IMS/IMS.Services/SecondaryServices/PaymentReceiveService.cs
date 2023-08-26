@@ -100,6 +100,7 @@ namespace IMS.Services.SecondaryServices
             dto.SerialNumber = $"#PR{entity.Id}IN{entity.InvoiceId}";
             dto.PaymentDate = entity.PaymentDate;
             dto.PaymentAmount = entity.PaymentAmount;
+            dto.DueAmount = entity.Invoice.SalesOrder.DueAmount;
             dto.InvoiceId = entity.InvoiceId;
             dto.InvoiceSerialNumber = $"#IN{entity.Invoice.Id}SO{entity.Invoice.SalesOrderId}";
             dto.PaymentTypeId = entity.PaymentTypeId;
