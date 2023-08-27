@@ -212,7 +212,6 @@ function renderEjGrid(api) {
               //customMessage: "Description must be at least 5 characters long.",
             },
             allowSorting: false,
-            width: 220,
           },
           {
             field: "Status",
