@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using IMS.BusinessModel.Dto.CommonDtos;
+using IMS.BusinessModel.Dto.DashBoard;
 using IMS.BusinessModel.Dto.GridData;
 using IMS.BusinessModel.Dto.Product;
 using IMS.BusinessModel.Entity;
@@ -49,6 +50,7 @@ namespace IMS.Services.SecondaryServices
                     mappedProduct.Rank = GetNextRank(session);
                     mappedProduct.CreatedBy = userId;
                     mappedProduct.CreationDate = DateTime.Now;
+                    mappedProduct.SKU = new Random().Next(1000, 9999) * 100 + mappedProduct.Rank;
                     await _baseDao.Create(mappedProduct, session);
                     await transaction.CommitAsync();
                 }
@@ -73,7 +75,26 @@ namespace IMS.Services.SecondaryServices
                 throw;
             }
         }
-        
+
+        public async Task<List<CategoryBasedProductCount>> GetCategoryBasedProductsCount(ISession session)
+        {
+            try
+            {
+                var sql = @"
+                        SELECT C.Name AS CategoryName, SUM(P.StockQuantity) AS NumberOfProducts
+                        FROM ProductCategory C
+                        LEFT JOIN Product P ON C.Id = P.ProductCategoryId
+                        GROUP BY C.Name";
+
+                var result = await _baseDao.GetCategoryBasedProductCount(session, sql);
+                return result.ToList();
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                throw;
+            }
+        }
         private DropDownDto MapToDropDownDto(Product entity, DropDownDto dto)
         {
             dto.Id = entity.Id;
@@ -142,7 +163,6 @@ namespace IMS.Services.SecondaryServices
             product.BuyingUnitPrice = dto.BuyingUnitPrice;
             product.SellingUnitPrice = dto.SellingUnitPrice;
             product.StockQuantity = dto.StockQuantity;
-            product.SKU = dto.SKU;
             product.ManufacturingDate = dto.ManufacturingDate;
             product.Version = 1;
             product.BusinessId = "IMS-1";

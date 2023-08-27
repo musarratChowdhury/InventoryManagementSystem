@@ -8,25 +8,22 @@
         <div id="sales-chart-container">
             <canvas id="myChart"></canvas>  
         </div> 
-        <div id="purchases-chart-container">
-            <canvas id="myChart2"></canvas>  
+        <div id="pie-chart-container">
+             <div id="container"></div>
         </div>
-        <svg id="visualization" width="400" height="300"></svg>
-        <div id="container"></div>
     </section>
     <!-- /.content -->
 </div>
  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.5.0/Chart.min.js"></script>
+<script src="~/Scripts/IMS/Dashboard/dashboard.js"></script>
 <script>
 const salesOrderUrl = '/SalesOrder/GetMonthlyTotalSales';
 const purchaseOrderUrl = '/PurchaseOrder/GetMonthlyTotalPurchases';
 const productUrl = '/Product/GetAllProductsQuantity';
 
-$("#sales-chart-container").css("height", "300px");
+$("#sales-chart-container").css("height", "350px");
 $("#sales-chart-container").css("width", "100%");
-$("#purchases-chart-container").css("height", "300px");
-$("#purchases-chart-container").css("width", "100%");
 
 const months = [
     'January', 'February', 'March', 'April', 'May', 'June',

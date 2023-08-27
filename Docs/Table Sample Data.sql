@@ -271,3 +271,19 @@ GROUP BY
     MONTH(CreationDate)
 ORDER BY
     Month;
+
+
+Select * from Product;
+Select * from ProductCategory;
+
+SELECT ProductCategoryId, COUNT(*) AS NUMBEROFProducts
+FROM Product 
+GROUP BY ProductCategoryId;
+
+use MyInventoryDb;
+SELECT C.Name AS CategoryName, SUM(P.StockQuantity) AS TotalStockQuantity
+FROM ProductCategory C
+LEFT JOIN Product P ON C.Id = P.ProductCategoryId
+GROUP BY C.Name;
+
+select StockQuantity from Product;

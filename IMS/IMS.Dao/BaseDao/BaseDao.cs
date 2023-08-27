@@ -6,8 +6,11 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using IMS.BusinessModel.Dto.DashBoard;
 using IMS.BusinessModel.Entity;
+using IMS.BusinessModel.Entity.Configuration;
 using NHibernate.Linq;
+using NHibernate.Transform;
 
 namespace IMS.Dao
 {
@@ -21,6 +24,7 @@ namespace IMS.Dao
         Task Delete(TEntity entity, ISession session);
         Task<int> GetTotalCount(ISession session);
         Task<IList<TEntity>> GetAll( ISession session, DataRequest dataRequest);
+        Task<IList<CategoryBasedProductCount>> GetCategoryBasedProductCount(ISession session, string sql);
         IList<TEntity> ExecuteRawSqlQuery(ISession session, string sqlQuery);
         void ExecuteRawSqlQuery(ISession session, string sqlQuery, object[] parameters, Type T);
         Task UpdateRank(ISession session, bool isPromoted, int oldRank, int newRank, long id);
@@ -89,6 +93,15 @@ namespace IMS.Dao
         public IList<TEntity> GetDataBySkipTake(int skip, int take, ISession session)
         {
             return session.Query<TEntity>().Where(x=>x.Status!=404).Skip(skip).Take(take).ToList();
+        }
+
+        public async Task<IList<CategoryBasedProductCount>> GetCategoryBasedProductCount(ISession session, string sql)
+        {
+            return await session.CreateSQLQuery(sql)
+                .AddScalar("CategoryName", NHibernateUtil.String)
+                .AddScalar("NumberOfProducts", NHibernateUtil.Int32)
+                .SetResultTransformer(Transformers.AliasToBean<CategoryBasedProductCount>())
+                .ListAsync<CategoryBasedProductCount>();  
         }
 
         public async Task<IList<TEntity>> GetAll(ISession session, DataRequest dataRequest)

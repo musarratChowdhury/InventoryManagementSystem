@@ -140,6 +140,24 @@ namespace IMS.WEB.Controllers.IMS
             }
             
         }
+
+        [HttpPost]
+        public async Task<ActionResult> GetCategoryBasedProductsCount()
+        {
+            try
+            {
+                using (var session = NHibernateConfig.OpenSession())
+                {
+                    var result  = await _productService.GetCategoryBasedProductsCount(session);
+                    return Json(result, JsonRequestBehavior.AllowGet);
+                }
+            }
+            catch (Exception e)
+            {
+                _logger.Error(e.Message, e);
+                return Json(new { success = false, message = "Error occurred while deleting.", e.Message });
+            }
+        }
         
         [HttpPost]
         public async Task<ActionResult> Delete(DeleteRequest productCreateReq)
