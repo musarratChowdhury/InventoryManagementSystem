@@ -105,7 +105,7 @@ namespace IMS.Services.SecondaryServices
             dto.PaymentTypeId = entity.PaymentTypeId;
             dto.PaymentTypeName = entity.PaymentType.Name;
             dto.CashBankId = entity.CashBankId;
-            dto.CashBankName = entity.CashBank.Name;
+            dto.CashBankName = entity.CashBank!=null? entity.CashBank.Name : "Cash Payment";
             dto.Status = entity.Status;
             dto.Rank = entity.Rank;
             dto.CreatedBy = entity.CreatedBy;
