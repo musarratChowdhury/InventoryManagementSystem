@@ -231,7 +231,6 @@ select * from SalesOrderLine;
 select * from Customer;
 select * from Product;
 select * from AspNetUsers;
-delete  from AspNetUsers;
 
 select * from PurchaseOrder;
 select * from PurchaseOrderLine;
