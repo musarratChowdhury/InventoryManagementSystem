@@ -86,5 +86,5 @@ function extractReturnUrlFromQueryString() {
   }
 
   // Return null if ReturnUrl parameter is not found
-  return "Home/Index";
+  return "/Home/Index";
 }

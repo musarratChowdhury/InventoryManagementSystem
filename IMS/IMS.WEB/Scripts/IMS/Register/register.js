@@ -23280,6 +23280,7 @@ registrationForm.addEventListener("submit", (e) => {
                 if (response.success == true) {
                     notification.element.style.color = "green";
                     showNotification("Registration Successfull!", "Success", true);
+                    window.location.href = "/Account/Login";
                 }
                 else {
                     console.log(response);
