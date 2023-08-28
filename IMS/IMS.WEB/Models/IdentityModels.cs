@@ -7,27 +7,71 @@ using Microsoft.AspNet.Identity.EntityFramework;
 namespace IMS.WEB.Models
 {
     // You can add profile data for the user by adding more properties to your ApplicationUser class, please visit https://go.microsoft.com/fwlink/?LinkID=317594 to learn more.
-    public class ApplicationUser : IdentityUser
+    public class ApplicationUser : IdentityUser<long, UserLoginLongPk, UserRoleLongPk, UserClaimLongPk>
     {
-        public async Task<ClaimsIdentity> GenerateUserIdentityAsync(UserManager<ApplicationUser> manager)
+        public async Task<ClaimsIdentity> GenerateUserIdentityAsync(ApplicationUserManager manager)
         {
-            // Note the authenticationType must match the one defined in CookieAuthenticationOptions.AuthenticationType
-            var userIdentity = await manager.CreateIdentityAsync(this, DefaultAuthenticationTypes.ApplicationCookie);
+            var userIdentity = await manager.CreateIdentityAsync(this, 
+                DefaultAuthenticationTypes.ApplicationCookie);
+
             // Add custom user claims here
             return userIdentity;
         }
     }
 
-    public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
+    public class UserRoleLongPk : IdentityUserRole<long>
     {
-        public ApplicationDbContext()
-            : base("DefaultConnection", throwIfV1Schema: false)
-        {
-        }
+        
+    }
 
-        public static ApplicationDbContext Create()
+    public class UserClaimLongPk : IdentityUserClaim<long>
+    {
+        
+    }
+    
+    public class UserLoginLongPk : IdentityUserLogin<long>
+    {        
+    }
+    
+    public class RoleLongPk : IdentityRole<long, UserRoleLongPk>
+    {
+        public RoleLongPk() {}
+
+        public RoleLongPk(string name)
         {
-            return new ApplicationDbContext();
+            Name = name;
         }
     }
+    
+    
+    public class UserStoreLongPk : UserStore<ApplicationUser, RoleLongPk, long, 
+        UserLoginLongPk, UserRoleLongPk, UserClaimLongPk>
+    {
+        public UserStoreLongPk(ApplicationDbContext context)
+            : base(context)
+        {
+        }
+    }
+
+    public class RoleStoreLongPk : RoleStore<RoleLongPk, long, UserRoleLongPk>
+    {
+        public RoleStoreLongPk(ApplicationDbContext context)
+            : base(context)
+        {
+        }
+    }
+
+    public class ApplicationDbContext : IdentityDbContext<ApplicationUser, RoleLongPk, long, 
+            UserLoginLongPk, UserRoleLongPk, UserClaimLongPk>
+        {
+            public ApplicationDbContext()
+                : base("DefaultConnection")
+            {
+            }
+
+            public static ApplicationDbContext Create()
+            {
+                return new ApplicationDbContext();
+            }
+        }
 }

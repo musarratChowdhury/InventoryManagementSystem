@@ -62,17 +62,28 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Class1.cs" />
+    <Compile Include="BaseDao\BaseDao.cs" />
     <Compile Include="Mappings\BillMap.cs" />
-    <Compile Include="Mappings\BillTypeMap.cs" />
-    <Compile Include="Mappings\CashBankMap.cs" />
-    <Compile Include="Mappings\CustomerTypeMap.cs" />
-    <Compile Include="Mappings\InvoiceTypeMap.cs" />
-    <Compile Include="Mappings\PaymentTypeMap.cs" />
-    <Compile Include="Mappings\ProductCategoryMap.cs" />
-    <Compile Include="Mappings\ShipmentTypeMap.cs" />
-    <Compile Include="Mappings\UnitOfMeasurementMap.cs" />
-    <Compile Include="Mappings\VendorTypeMap.cs" />
+    <Compile Include="Mappings\Configuration\BillTypeMap.cs" />
+    <Compile Include="Mappings\Configuration\CashBankMap.cs" />
+    <Compile Include="Mappings\CustomerMap.cs" />
+    <Compile Include="Mappings\Configuration\CustomerTypeMap.cs" />
+    <Compile Include="Mappings\Configuration\InvoiceTypeMap.cs" />
+    <Compile Include="Mappings\Configuration\PaymentTypeMap.cs" />
+    <Compile Include="Mappings\Configuration\ProductCategoryMap.cs" />
+    <Compile Include="Mappings\Configuration\ShipmentTypeMap.cs" />
+    <Compile Include="Mappings\Configuration\UnitOfMeasurementMap.cs" />
+    <Compile Include="Mappings\InvoiceMap.cs" />
+    <Compile Include="Mappings\OrderDetails\PurchaseOrderLineMap.cs" />
+    <Compile Include="Mappings\OrderDetails\SalesOrderLineMap.cs" />
+    <Compile Include="Mappings\PaymentReceivedMap.cs" />
+    <Compile Include="Mappings\PaymentVoucherMap.cs" />
+    <Compile Include="Mappings\ProductMap.cs" />
+    <Compile Include="Mappings\PurchaseOrderMap.cs" />
+    <Compile Include="Mappings\SalesOrderMap.cs" />
+    <Compile Include="Mappings\ShipmentMap.cs" />
+    <Compile Include="Mappings\VendorMap.cs" />
+    <Compile Include="Mappings\Configuration\VendorTypeMap.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

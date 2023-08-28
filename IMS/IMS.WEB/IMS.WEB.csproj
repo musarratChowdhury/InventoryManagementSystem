@@ -55,6 +55,9 @@
     <Reference Include="Iesi.Collections, Version=4.0.0.4000, Culture=neutral, PublicKeyToken=aa95f207798dfdb4, processorArchitecture=MSIL">
       <HintPath>..\packages\Iesi.Collections.4.0.4\lib\net461\Iesi.Collections.dll</HintPath>
     </Reference>
+    <Reference Include="log4net, Version=2.0.15.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a, processorArchitecture=MSIL">
+      <HintPath>..\packages\log4net.2.0.15\lib\net45\log4net.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="NHibernate, Version=5.3.0.0, Culture=neutral, PublicKeyToken=aa95f207798dfdb4, processorArchitecture=MSIL">
       <HintPath>..\packages\NHibernate.5.3.3\lib\net461\NHibernate.dll</HintPath>
@@ -184,19 +187,38 @@
     <Compile Include="App_Start\IdentityConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\Startup.Auth.cs" />
+    <Compile Include="Areas\Admin\AdminAreaRegistration.cs" />
+    <Compile Include="Areas\Admin\Controllers\BaseControllers\BaseConfigurationController.cs" />
+    <Compile Include="Areas\Admin\Controllers\BillTypeController.cs" />
+    <Compile Include="Areas\Admin\Controllers\CashBankController.cs" />
+    <Compile Include="Areas\Admin\Controllers\CustomerTypeController.cs" />
+    <Compile Include="Areas\Admin\Controllers\InvoiceTypeController.cs" />
+    <Compile Include="Areas\Admin\Controllers\PaymentTypeController.cs" />
+    <Compile Include="Areas\Admin\Controllers\ProductCategoryController.cs" />
+    <Compile Include="Areas\Admin\Controllers\ShipmentTypeController.cs" />
+    <Compile Include="Areas\Admin\Controllers\UOMController.cs" />
+    <Compile Include="Areas\Admin\Controllers\VendorTypeController.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\IMS\BillController.cs" />
+    <Compile Include="Controllers\IMS\CustomerController.cs" />
+    <Compile Include="Controllers\IMS\InvoiceController.cs" />
+    <Compile Include="Controllers\IMS\PaymentReceiveController.cs" />
+    <Compile Include="Controllers\IMS\PaymentVoucherController.cs" />
+    <Compile Include="Controllers\IMS\ProductController.cs" />
+    <Compile Include="Controllers\IMS\PurchaseOrderController.cs" />
+    <Compile Include="Controllers\IMS\SalesOrderController.cs" />
+    <Compile Include="Controllers\IMS\ShipmentController.cs" />
+    <Compile Include="Controllers\IMS\VendorController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\202308010510432_Initial.cs" />
-    <Compile Include="Migrations\202308010510432_Initial.designer.cs">
-      <DependentUpon>202308010510432_Initial.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\202308010513253_SeedAdmin.cs" />
-    <Compile Include="Migrations\202308010513253_SeedAdmin.designer.cs">
-      <DependentUpon>202308010513253_SeedAdmin.cs</DependentUpon>
+    <Compile Include="Helpers\HtmlHelpers.cs" />
+    <Compile Include="Helpers\MainMenu.cs" />
+    <Compile Include="Migrations\202308120510180_AddIdentityTable.cs" />
+    <Compile Include="Migrations\202308120510180_AddIdentityTable.designer.cs">
+      <DependentUpon>202308120510180_AddIdentityTable.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
@@ -231,6 +253,26 @@
     <Content Include="Scripts\bootstrap.esm.min.js" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
+    <Content Include="Areas\Admin\Views\web.config" />
+    <Content Include="Areas\Admin\Views\_ViewStart.cshtml" />
+    <Content Include="Areas\Admin\Views\CustomerType\Index.cshtml" />
+    <Content Include="Areas\Admin\Views\Shared\_AdminLTE.cshtml" />
+    <Content Include="Areas\Admin\Views\Shared\_AdminlteBlank.cshtml" />
+    <Content Include="Areas\Admin\Views\Shared\_AdminlteControlSidebar.cshtml" />
+    <Content Include="Areas\Admin\Views\Shared\_AdminlteFooter.cshtml" />
+    <Content Include="Areas\Admin\Views\Shared\_AdminlteLayoutBoxed.cshtml" />
+    <Content Include="Areas\Admin\Views\Shared\_AdminlteLayoutCollapsed.cshtml" />
+    <Content Include="Areas\Admin\Views\Shared\_AdminlteLayoutFixed.cshtml" />
+    <Content Include="Areas\Admin\Views\Shared\_AdminlteMainHeader.cshtml" />
+    <Content Include="Areas\Admin\Views\Shared\_AdminlteMainSidebar.cshtml" />
+    <Content Include="Areas\Admin\Views\Shared\_ValidationScriptsPartial.cshtml" />
+    <Content Include="Areas\Admin\Views\VendorType\Index.cshtml" />
+    <Content Include="Areas\Admin\Views\UOM\Index.cshtml" />
+    <Content Include="Areas\Admin\Views\ProductCategory\Index.cshtml" />
+    <Content Include="Areas\Admin\Views\CashBank\Index.cshtml" />
+    <Content Include="Areas\Admin\Views\InvoiceType\Index.cshtml" />
+    <Content Include="Areas\Admin\Views\BillType\Index.cshtml" />
+    <Content Include="Areas\Admin\Views\ShipmentType\Index.cshtml" />
     <None Include="Scripts\jquery-3.4.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.4.1.js" />
     <Content Include="Scripts\jquery-3.4.1.min.js" />
@@ -242,6 +284,15 @@
     <Content Include="Scripts\jquery.validate.unobtrusive.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
     <Content Include="Scripts\modernizr-2.8.3.js" />
+    <Content Include="Views\Bill\Index.cshtml" />
+    <Content Include="Views\Invoice\Index.cshtml" />
+    <Content Include="Views\PaymentReceive\Index.cshtml" />
+    <Content Include="Views\PaymentVoucher\Index.cshtml" />
+    <Content Include="Views\Product\Index.cshtml" />
+    <Content Include="Views\PurchaseOrder\Index.cshtml" />
+    <Content Include="Views\SalesOrder\Index.cshtml" />
+    <Content Include="Views\Shipment\Index.cshtml" />
+    <Content Include="Views\Vendor\Index.cshtml" />
     <Content Include="Web.config" />
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
@@ -252,9 +303,6 @@
     <Content Include="Views\Web.config" />
     <Content Include="Views\_ViewStart.cshtml" />
     <Content Include="Views\Shared\Error.cshtml" />
-    <Content Include="Views\Shared\_Layout.cshtml" />
-    <Content Include="Views\Home\About.cshtml" />
-    <Content Include="Views\Home\Contact.cshtml" />
     <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Views\Account\_ExternalLoginsListPartial.cshtml" />
     <Content Include="Views\Account\ConfirmEmail.cshtml" />
@@ -276,9 +324,22 @@
     <Content Include="Views\Manage\VerifyPhoneNumber.cshtml" />
     <Content Include="Views\Shared\Lockout.cshtml" />
     <Content Include="Views\Shared\_LoginPartial.cshtml" />
+    <Content Include="Areas\Admin\Views\PaymentType\Index.cshtml" />
+    <Content Include="Views\Shared\_AdminLTE.cshtml" />
+    <Content Include="Views\Shared\_AdminlteBlank.cshtml" />
+    <Content Include="Views\Shared\_AdminlteControlSidebar.cshtml" />
+    <Content Include="Views\Shared\_AdminlteFooter.cshtml" />
+    <Content Include="Views\Shared\_AdminlteLayoutBoxed.cshtml" />
+    <Content Include="Views\Shared\_AdminlteLayoutCollapsed.cshtml" />
+    <Content Include="Views\Shared\_AdminlteLayoutFixed.cshtml" />
+    <Content Include="Views\Shared\_AdminlteMainHeader.cshtml" />
+    <Content Include="Views\Shared\_AdminlteMainSidebar.cshtml" />
+    <Content Include="Views\Shared\_ValidationScriptsPartial.cshtml" />
+    <Content Include="Views\Customer\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Views\Base\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\bootstrap.rtl.min.css.map" />
@@ -308,14 +369,6 @@
     <Content Include="Scripts\jquery-3.4.1.min.map" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Migrations\202308010510432_Initial.resx">
-      <DependentUpon>202308010510432_Initial.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\202308010513253_SeedAdmin.resx">
-      <DependentUpon>202308010513253_SeedAdmin.cs</DependentUpon>
-    </EmbeddedResource>
-  </ItemGroup>
-  <ItemGroup>
     <ProjectReference Include="..\IMS.BusinessModel\IMS.BusinessModel.csproj">
       <Project>{077AD203-18E3-4803-8BFD-2C83E5561D1F}</Project>
       <Name>IMS.BusinessModel</Name>
@@ -324,6 +377,11 @@
       <Project>{8B0F2CED-1206-4438-A5F9-E9B5F57AAEAF}</Project>
       <Name>IMS.Services</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Migrations\202308120510180_AddIdentityTable.resx">
+      <DependentUpon>202308120510180_AddIdentityTable.cs</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
