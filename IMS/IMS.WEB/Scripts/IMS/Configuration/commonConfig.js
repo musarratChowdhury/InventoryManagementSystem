@@ -10,10 +10,10 @@ function rowBound(args) {
   } else {
     args.row[0].cells[3].innerText = "Inactive";
   }
-  if (args.data["CreationDate"] != null && args.row[0].cells[6]) {
-    var jsonDate = args.row[0].cells[6].innerText;
+  if (args.data["CreationDate"] != null && args.row[0].cells[5]) {
+    var jsonDate = args.row[0].cells[5].innerText;
     var dateObject = parseJsonDate(jsonDate);
-    args.row[0].cells[6].innerText = dateObject;
+    args.row[0].cells[5].innerText = dateObject;
     // console.log(dateObject);
   }
 }
@@ -102,6 +102,7 @@ function complete(args) {
       $("#" + this._id + "_dialogEdit").ejDialog({
         title: "Add New  Type",
       });
+      $("#GridStatus").parent().parent().parent().parent().hide();
       $("#GridCreatedBy").parent().parent().hide();
       $("#GridCreationDate").parent().parent().hide();
       $("#GridRank").parent().parent().parent().parent().hide();
@@ -111,8 +112,11 @@ function complete(args) {
         title: "Edit  Type",
       });
       // console.log("Edit Action Triggered", args);
-      $("#GridCreatedBy").parent().parent().hide();
+      $("#GridStatus").parent().parent().parent().parent().hide();
+      $("#GridStatus").parent().parent().parent().hide();
       $("#GridCreationDate").parent().parent().hide();
+      $("#GridRank").parent().parent().parent().parent().hide();
+
       currentAction = "edit";
     }
   }
@@ -208,7 +212,6 @@ function renderEjGrid(api) {
               //customMessage: "Description must be at least 5 characters long.",
             },
             allowSorting: false,
-            width: 220,
           },
           {
             field: "Status",
@@ -224,7 +227,11 @@ function renderEjGrid(api) {
             defaultValue: 1,
             visible: false,
           },
-          { field: "CreatedBy", headerText: "CreatedBy", allowSorting: false },
+          // {
+          //   field: "CreatedBy",
+          //   headerText: "CreatedBy",
+          //   allowSorting: false,
+          // },
           { field: "CreationDate", headerText: "Creation Date" },
         ],
         actionComplete: "complete",
